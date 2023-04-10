@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Database</title>
+  <h1>Database</h1>
+  <h3 id="data"></h3>
+  <script>
+    var data = document.getElementById('data');
+    async function fetchData(el) {
+      await fetch('http://localhost:8080/flights', {
+        method: "GET"})
+      .then(response => response.text())
+      .then(text => {
+        console.log(text);
+        data.innerHTML = text;
+      });
+    }
+  </script>
+</head>
+<body onload="fetchData()">
+<button id="go-to-reserve-page">
+  <a href="/reserve"> Go to reservation page </a>
+</button>
+
+</body>
+</html>

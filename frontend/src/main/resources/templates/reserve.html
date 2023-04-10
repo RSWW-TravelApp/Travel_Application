@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello motherfuckers</title>
+    <h1>Hello motherfuckers</h1>
+</head>
+<body>
+    <button id="reserve-button" onclick="reserveTrip()"> Reserve trip </button>
+    <button id="go-to-db">
+        <a href="/database"> Go to database </a>
+    </button>
+    <script>
+        async function reserveTrip() {
+            let data = '{\"id\": \"4\",\"price\": 123,\"destinationCity\": \"Poland\",\"sourceCountry\": \"Gdansk\",\"sourceCity": \"Poland\",\"destinationCountry": \"Poznan\" }'
+            await fetch('http://localhost:8080/reserve', {
+                method: "POST",
+                body: data,
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                }
+            }).then(result => result.text())
+                .then(text => alert(text));
+        }
+    </script>
+</body>
+</html>
