@@ -1,4 +1,4 @@
-package com.rsww.project;
+package com.rsww.project.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public class FrontendController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Mono<String> homePage() {
-        Mono<String> monoObject = Mono.just("reserve");
+        Mono<String> monoObject = Mono.just("home");
         monoObject.subscribe(
                 value -> onStart(value),
                 error -> onError(error),

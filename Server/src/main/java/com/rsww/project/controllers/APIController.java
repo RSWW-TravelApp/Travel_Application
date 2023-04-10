@@ -7,18 +7,28 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @CrossOrigin
 @RestController
 public class APIController {
+    //-------------------------------- MOCK DATA --------------------------------//
     private Map<String, Flight> flights = new HashMap<>() {{
         put("1", new Flight("1", "Poland", "Gdańsk", "Germany", "Berlin", 120));
     }};
+
+    private List<String> destinations = Arrays.asList("Poland", "Germany", "Italy", "USA", "Spain", "France");
+    //-------------------------------- MOCK ENDPOINTS FOR DEVELOPMENT PURPOSES --------------------------------//
+    @GetMapping("/destinations")
+    public Flux<Map<String, String>> getDestinations() {
+        // Communication with Flight service via RabbitMQ
+        return Flux.fromIterable(destinations).map(destination -> Collections.singletonMap("name", destination));
+    }
+
+
+
+
+    //-------------------------------- DESIRED ENDPOINTS --------------------------------//
     @GetMapping("/")
     public Mono<String> hello() {
         // Communication with API

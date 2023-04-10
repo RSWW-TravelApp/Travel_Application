@@ -1,4 +1,4 @@
-package com.rsww.project;
+package com.rsww.project.dataobjects;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
