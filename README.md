@@ -1,7 +1,9 @@
 # Travel_Application
 
 To run just clone this repo
-`git clone git@github.com:RSWW-TravelApp/Travel_Application.git`
+```
+git clone git@github.com:RSWW-TravelApp/Travel_Application.git
+```
 
 Fetch this branch
 ```
