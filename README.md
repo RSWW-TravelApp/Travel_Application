@@ -4,9 +4,9 @@ To run just clone this repo
 `git clone git@github.com:RSWW-TravelApp/Travel_Application.git`
 
 Fetch this branch
-`git fetch origin frontend-Kacper
+```git fetch origin frontend-Kacper
 git branch FETCH_HEAD
-git checkout frontend-Kacper`
+git checkout frontend-Kacper```
 
 Open it via IntelliJ IDE
 Open Services tab at the left down corner
