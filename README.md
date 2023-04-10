@@ -13,6 +13,9 @@ git checkout frontend-Kacper
 ```
 
 Open it via IntelliJ IDE
+
 Open Services tab at the left down corner
+
 Click Add service -> Run Configuration Type -> Application
+
 Click Run at the left side of Services tab
