@@ -1,6 +1,5 @@
 package data;
 
-
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
@@ -22,6 +21,7 @@ public class Offer {
    //@JsonProperty("id")
     @Id
     private String offerId;
+
     private String hotel_name;
     private String image;
     private String country;
@@ -40,6 +40,7 @@ public class Offer {
     private String meals;
     // max price
     private double price;
+    private boolean available;
 
 
     public Optional<String> getRoom_type(){
@@ -72,9 +73,12 @@ public class Offer {
     public Optional<Double> getPrice() {
         return Optional.ofNullable(price);
     }
+    public Optional<Boolean> getAvailable() { return Optional.ofNullable(available);}
 
 
-
+    public void setRoom_type(String room_type) {
+        this.room_type = room_type;
+    }
     public void setImage(String image) {
         this.image = image;
     }
@@ -102,7 +106,6 @@ public class Offer {
     public void setPrice(double price) {
         this.price = price;
     }
-    public void setRoom_type(String room_type) {
-        this.room_type = room_type;
-    }
+    public void setAvailable(boolean available) { this.available = available; }
+
 }

@@ -41,8 +41,9 @@ public class OfferService {
                         .then(Mono.just(existingOffer)));
     }
 
-    public Mono<Offer> updateOffer(String offerId,  Offer offer){
-        return offerRepository.findById(offerId)
+    // updating the specific offer with the given parameters (null parameters - don't update the field)
+    public Mono<Offer> updateOffer(Offer offer){
+        return offerRepository.findById(offer.getOfferId())
                 .flatMap(dbOffers -> {
                     offer.getRoom_type().ifPresent(dbOffers::setRoom_type);   //room_type -> { dbOffers.setRoom_type(room_type);  });
 
@@ -64,18 +65,23 @@ public class OfferService {
 
                     offer.getImage().ifPresent(dbOffers::setImage);
 
+                    offer.getAvailable().ifPresent(dbOffers::setAvailable);
+
                     return offerRepository.save(dbOffers);
                 });
     }
 
+    // finding all offers that have specific parameters chosen in the Web filter
     public Flux<Offer> fetchOffers(int stars, String room_type, int adults, int children_to_3, int children_to_10,
                                   int children_to_18, String meals, double price, String country, LocalDate start_date,
-                                   LocalDate end_date){
+                                   LocalDate end_date, boolean available){
 
         Query query = new Query()
                 .with(Sort
                         .by(Collections.singletonList(Sort.Order.asc("price")))
                 );
+
+        // parameters that have default value - 0, except "available" with default value - True
         query.addCriteria(
                 Criteria.where("stars").gte(stars)
                         .and("price").gte(price)
@@ -83,8 +89,10 @@ public class OfferService {
                         .and("children_to_3").gte(children_to_3)
                         .and("children_to_10").gte(children_to_10)
                         .and("children_to_18").gte(children_to_18)
+                        .and("available").regex(String.valueOf(available))
         );
 
+        // parameters that cannot have default values, either null or not null
         if(meals != null) {
             query.addCriteria(Criteria.where("meals").regex(meals));
         }
