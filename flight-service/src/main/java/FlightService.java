@@ -1,31 +1,26 @@
 import data.Flight;
 import data.FlightRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.*;
 
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
-@Transactional
 public class FlightService {
 
     private final ReactiveMongoTemplate reactiveMongoTemplate;
     private final FlightRepository flightRepository;
+
+    public FlightService(ReactiveMongoTemplate reactiveMongoTemplate, FlightRepository flightRepository) {
+        this.reactiveMongoTemplate = reactiveMongoTemplate;
+        this.flightRepository = flightRepository;
+    }
 
     public Mono<Flight> createFlight(Flight flight){
         return flightRepository.save(flight);
@@ -39,7 +34,7 @@ public class FlightService {
         return flightRepository.findById(flightId);
     }
 
-    public Mono<Flight> deleteOffer(String flightId){
+    public Mono<Flight> deleteFlight(String flightId){
         return flightRepository.findById(flightId)
                 .flatMap(existingFlight -> flightRepository.delete(existingFlight)
                         .then(Mono.just(existingFlight)));

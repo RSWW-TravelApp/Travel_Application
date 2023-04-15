@@ -1,5 +1,3 @@
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import data.Offer;
 import data.OfferRepository;
 import org.springframework.data.domain.Sort;
@@ -7,7 +5,6 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -15,13 +12,15 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
-@Transactional
 public class OfferService {
 
     private final ReactiveMongoTemplate reactiveMongoTemplate;
     private final OfferRepository offerRepository;
+
+    public OfferService(ReactiveMongoTemplate reactiveMongoTemplate, OfferRepository offerRepository) {
+        this.reactiveMongoTemplate = reactiveMongoTemplate;
+        this.offerRepository = offerRepository;
+    }
 
     public Mono<Offer> createOffer(Offer offer){
         return offerRepository.save(offer);
