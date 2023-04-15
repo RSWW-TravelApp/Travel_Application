@@ -1,5 +1,7 @@
-import data.Flight;
-import data.FlightRepository;
+package flight;
+
+import flight.data.Flight;
+import flight.data.FlightRepository;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

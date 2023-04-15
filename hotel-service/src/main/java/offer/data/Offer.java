@@ -1,4 +1,4 @@
-package data;
+package offer.data;
 
 import lombok.Data;
 import lombok.ToString;

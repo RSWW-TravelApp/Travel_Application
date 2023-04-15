@@ -1,5 +1,7 @@
-import data.Offer;
-import data.OfferRepository;
+package offer;
+
+import offer.data.Offer;
+import offer.data.OfferRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

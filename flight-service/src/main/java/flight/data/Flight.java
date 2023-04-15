@@ -1,4 +1,4 @@
-package data;
+package flight.data;
 
 import lombok.Data;
 import lombok.ToString;
