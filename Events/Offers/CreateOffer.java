@@ -1,7 +1,6 @@
 package Events.Offers;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 public class CreateOffer {
     private final String hotel_name;
@@ -17,8 +16,9 @@ public class CreateOffer {
     private final Integer max_children_to_18;
     private final String meals;
     private final Double price;
+    private final Boolean available;
 
-    public CreateOffer(String hotel_name, String image, String country, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price) {
+    public CreateOffer(String hotel_name, String image, String country, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
         this.hotel_name = hotel_name;
         this.image = image;
         this.country = country;
@@ -32,6 +32,7 @@ public class CreateOffer {
         this.max_children_to_18 = max_children_to_18;
         this.meals = meals;
         this.price = price;
+        this.available = available;
     }
 
     public String getHotel_name() {
@@ -84,5 +85,9 @@ public class CreateOffer {
 
     public Double getPrice() {
         return price;
+    }
+
+    public Boolean getAvailable() {
+        return available;
     }
 }

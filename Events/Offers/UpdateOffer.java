@@ -18,8 +18,9 @@ public class UpdateOffer {
     private final Integer max_children_to_18;
     private final String meals;
     private final Double price;
+    private final Boolean available;
 
-    public UpdateOffer(String id, String hotel_name, String image, String country, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price) {
+    public UpdateOffer(String id, String hotel_name, String image, String country, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
         this.id = id;
         this.hotel_name = hotel_name;
         this.image = image;
@@ -34,6 +35,7 @@ public class UpdateOffer {
         this.max_children_to_18 = max_children_to_18;
         this.meals = meals;
         this.price = price;
+        this.available = available;
     }
 
     public String getId() {
@@ -90,5 +92,9 @@ public class UpdateOffer {
 
     public Optional<Double> getPrice() {
         return Optional.ofNullable(price);
+    }
+
+    public Optional<Boolean> getAvailable() {
+        return Optional.ofNullable(available);
     }
 }
