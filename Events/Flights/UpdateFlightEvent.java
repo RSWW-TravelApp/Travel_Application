@@ -3,7 +3,7 @@ package Events.Flights;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class UpdateFlight{
+public class UpdateFlightEvent {
     private final String id;
     private final String airline_name;
     private final String departure_country;
@@ -13,7 +13,7 @@ public class UpdateFlight{
     private final String arrival_city;
     private final Integer available_seats;
 
-    public UpdateFlight(String id, String airline_name, String departure_country, String departure_city, LocalDate date, String arrival_country, String arrival_city, Integer available_seats) {
+    public UpdateFlightEvent(String id, String airline_name, String departure_country, String departure_city, LocalDate date, String arrival_country, String arrival_city, Integer available_seats) {
         this.id = id;
         this.airline_name = airline_name;
         this.departure_country = departure_country;

@@ -2,7 +2,7 @@ package Events.Flights;
 
 import java.time.LocalDate;
 
-public class CreateFlight{
+public class CreateFlightEvent {
     private final String airline_name;
     private final String departure_country;
     private final String departure_city;
@@ -11,7 +11,7 @@ public class CreateFlight{
     private final String arrival_city;
     private final Integer available_seats;
 
-    public CreateFlight(String airline_name, String departure_country, String departure_city, LocalDate date, String arrival_country, String arrival_city, Integer available_seats) {
+    public CreateFlightEvent(String airline_name, String departure_country, String departure_city, LocalDate date, String arrival_country, String arrival_city, Integer available_seats) {
         this.airline_name = airline_name;
         this.departure_country = departure_country;
         this.departure_city = departure_city;
