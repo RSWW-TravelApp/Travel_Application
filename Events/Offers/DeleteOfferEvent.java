@@ -1,9 +1,9 @@
 package Events.Offers;
 
-public class DeleteOffer {
+public class DeleteOfferEvent {
     private final String id;
 
-    public DeleteOffer(String id) {
+    public DeleteOfferEvent(String id) {
         this.id = id;
     }
 

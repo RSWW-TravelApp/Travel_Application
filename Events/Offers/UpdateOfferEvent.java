@@ -3,7 +3,7 @@ package Events.Offers;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class UpdateOffer {
+public class UpdateOfferEvent {
     private final String id;
     private final String hotel_name;
     private final String image;
@@ -20,7 +20,7 @@ public class UpdateOffer {
     private final Double price;
     private final Boolean available;
 
-    public UpdateOffer(String id, String hotel_name, String image, String country, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
+    public UpdateOfferEvent(String id, String hotel_name, String image, String country, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
         this.id = id;
         this.hotel_name = hotel_name;
         this.image = image;

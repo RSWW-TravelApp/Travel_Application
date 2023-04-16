@@ -2,7 +2,7 @@ package Events.Offers;
 
 import java.time.LocalDate;
 
-public class CreateOffer {
+public class CreateOfferEvent {
     private final String hotel_name;
     private final String image;
     private final String country;
@@ -18,7 +18,7 @@ public class CreateOffer {
     private final Double price;
     private final Boolean available;
 
-    public CreateOffer(String hotel_name, String image, String country, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
+    public CreateOfferEvent(String hotel_name, String image, String country, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
         this.hotel_name = hotel_name;
         this.image = image;
         this.country = country;
