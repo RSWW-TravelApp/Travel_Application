@@ -1,7 +1,7 @@
 package flight.data;
 
-import lombok.Data;
-import lombok.ToString;
+//import lombok.Data;
+//import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -10,10 +10,10 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 
-@ToString
+//@ToString
 //@AllArgsConstructor
 //@NoArgsConstructor
-@Data
+//@Data
 @Document(collection = "flights")
 public class Flight {
 
@@ -28,11 +28,24 @@ public class Flight {
     private String arrival_country;
     private String arrival_city;
 
-    private int available_seats;
+    private Integer available_seats;
 
     private LocalDate date;
 
+    public Flight(String flightId, String airline_name, String departure_country, String departure_city, String arrival_country, String arrival_city, int available_seats, LocalDate date) {
+        this.flightId = flightId;
+        this.airline_name = airline_name;
+        this.departure_country = departure_country;
+        this.departure_city = departure_city;
+        this.arrival_country = arrival_country;
+        this.arrival_city = arrival_city;
+        this.available_seats = available_seats;
+        this.date = date;
+    }
 
+    public String getFlightId() {
+        return flightId;
+    }
     public Optional<String> getAirline_name() {
         return Optional.ofNullable(airline_name);
     }

@@ -1,7 +1,7 @@
 package offer.data;
 
-import lombok.Data;
-import lombok.ToString;
+//import lombok.Data;
+//import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -10,39 +10,77 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 
-@ToString
+//@ToString
 //@AllArgsConstructor
 //@NoArgsConstructor
-@Data
+//@Data
 @Document(collection = "offers")
 public class Offer {
 
-    @Field("_id")
+
+
+    @Field("id")
    //@JsonProperty("id")
     @Id
-    private String offerId;
+    private final String offerId;
 
-    private String hotel_name;
+    private final String hotel_name;
     private String image;
-    private String country;
-    private String city;
-    private int stars;
+    private final String country;
+    private final String city;
+
+
+    private final Integer stars;
 
     private LocalDate start_date;
     private LocalDate end_date;
     private String room_type;
 
-    private int max_adults;
-    private int max_children_to_3;
-    private int max_children_to_10;
-    private int max_children_to_18;
+    private Integer max_adults;
+    private Integer max_children_to_3;
+    private Integer max_children_to_10;
+    private Integer max_children_to_18;
 
     private String meals;
     // max price
-    private double price;
-    private boolean available;
+    private Double price;
+    private Boolean available;
+
+    public Offer(String id, String hotel_name, String image, String country, String city, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
+        this.offerId = id;
+        this.hotel_name = hotel_name;
+        this.image = image;
+        this.country = country;
+        this.city = city;
+        this.stars = stars;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.room_type = room_type;
+        this.max_adults = max_adults;
+        this.max_children_to_3 = max_children_to_3;
+        this.max_children_to_10 = max_children_to_10;
+        this.max_children_to_18 = max_children_to_18;
+        this.meals = meals;
+        this.price = price;
+        this.available = available;
+    }
 
 
+    public String getOfferId() {
+        return offerId;
+    }
+    public Optional<String> getHotel_name() {
+        return Optional.ofNullable(hotel_name);
+    }
+    public Optional<String> getCountry() {
+        return Optional.ofNullable(country);
+    }
+    public Optional<String> getCity() {
+        return Optional.ofNullable(city);
+    }
+    public Optional<Integer> getStars() {
+        return Optional.ofNullable(stars);
+    }
     public Optional<String> getRoom_type(){
         return Optional.ofNullable(room_type);
     }
@@ -88,24 +126,25 @@ public class Offer {
     public void setEnd_date(LocalDate end_date) {
         this.end_date = end_date;
     }
-    public void setMax_adults(int max_adults) {
+    public void setMax_adults(Integer max_adults) {
         this.max_adults = max_adults;
     }
-    public void setMax_children_to_3(int max_children_to_3) {
+    public void setMax_children_to_3(Integer max_children_to_3) {
         this.max_children_to_3 = max_children_to_3;
     }
-    public void setMax_children_to_10(int max_children_to_10) {
+    public void setMax_children_to_10(Integer max_children_to_10) {
         this.max_children_to_10 = max_children_to_10;
     }
-    public void setMax_children_to_18(int max_children_to_18) {
+    public void setMax_children_to_18(Integer max_children_to_18) {
         this.max_children_to_18 = max_children_to_18;
     }
     public void setMeals(String meals) {
         this.meals = meals;
     }
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
-    public void setAvailable(boolean available) { this.available = available; }
+    public void setAvailable(Boolean available) { this.available = available; }
+
 
 }
