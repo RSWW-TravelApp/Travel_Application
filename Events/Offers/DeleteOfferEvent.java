@@ -1,11 +1,6 @@
 package Events.Offers;
 
-public class DeleteOfferEvent {
-    private final String id;
-
-    public DeleteOfferEvent(String id) {
-        this.id = id;
-    }
+public record DeleteOfferEvent(String id) {
 
     public String getId() {
         return id;
