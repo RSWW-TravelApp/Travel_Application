@@ -1,7 +1,7 @@
 package offer;
 
-import Events.Flights.DeleteFlightEvent;
 import Events.Offers.CreateOfferEvent;
+import Events.Offers.DeleteOfferEvent;
 import Events.Offers.UpdateOfferEvent;
 import offer.data.Offer;
 import org.springframework.context.annotation.Bean;
@@ -44,7 +44,7 @@ public class OfferEvent {
     }
 
     @Bean
-    public Function<Flux<DeleteFlightEvent>, Mono<Void>> deleteOfferHandle() {
+    public Function<Flux<DeleteOfferEvent>, Mono<Void>> deleteOfferHandle() {
         return flux -> flux.doOnNext(
                 event ->
                         offerService.deleteOffer(event.getId())
