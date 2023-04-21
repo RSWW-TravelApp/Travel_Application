@@ -19,7 +19,7 @@
 <!--        <module>frontend</module>-->
 <!--        <module>server</module>-->
         <module>hotel-service</module>
-        <module>flight-service</module>
+<!--        <module>flight-service</module>-->
     </modules>
 
     <properties>
@@ -63,19 +63,19 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
-            <version>RELEASE</version>
+<!--            <version>RELEASE</version>-->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+<!--            <version>3.0.4</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
-            <version>4.0.4</version>
-            <scope>compile</scope>
+            <version>4.0.3</version>
+<!--            <scope>compile</scope>-->
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.projectlombok</groupId>-->
-<!--            <artifactId>lombok</artifactId>-->
-<!--            <version>1.18.26</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>

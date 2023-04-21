@@ -14,12 +14,12 @@ import java.util.Optional;
 //@AllArgsConstructor
 //@NoArgsConstructor
 //@Data
-@Document(collection = "flights")
+@Document(collection = "trips")
 public class Flight {
 
-    @Field("_id")
-    //@JsonProperty("id")
-    @Id
+//    @Field("_id")
+//    //@JsonProperty("id")
+//    @Id
     private String flightId;
 
     private String airline_name;
@@ -28,7 +28,7 @@ public class Flight {
     private String arrival_country;
     private String arrival_city;
 
-    private Integer available_seats;
+    private int available_seats;
 
     private LocalDate date;
 

@@ -1,36 +1,19 @@
 package offer.data;
 
-//import lombok.Data;
-//import lombok.ToString;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-
 import java.time.LocalDate;
 import java.util.Optional;
 
-
-//@ToString
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Data
 @Document(collection = "offers")
 public class Offer {
+    private String offerId;
 
-
-
-    @Field("id")
-   //@JsonProperty("id")
-    @Id
-    private final String offerId;
-
-    private final String hotel_name;
+    private String hotel_name;
     private String image;
-    private final String country;
-    private final String city;
+    private String country;
+    private String city;
 
-
-    private final Integer stars;
+    private Integer stars;
 
     private LocalDate start_date;
     private LocalDate end_date;
@@ -46,8 +29,11 @@ public class Offer {
     private Double price;
     private Boolean available;
 
-    public Offer(String id, String hotel_name, String image, String country, String city, Integer stars, LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
-        this.offerId = id;
+    public Offer(String offerId, String hotel_name, String image, String country, String city, Integer stars,
+                 LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults,
+                 Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18,
+                 String meals, Double price, Boolean available) {
+        this.offerId = offerId;
         this.hotel_name = hotel_name;
         this.image = image;
         this.country = country;
@@ -113,9 +99,21 @@ public class Offer {
     }
     public Optional<Boolean> getAvailable() { return Optional.ofNullable(available);}
 
-
+    public void setOfferId(String offerId) {
+        this.offerId = offerId;
+    }
     public void setRoom_type(String room_type) {
         this.room_type = room_type;
+    }
+    public void setHotel_name(String hotel_name){this.hotel_name = hotel_name;}
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public void setStars(Integer stars) {
+        this.stars = stars;
     }
     public void setImage(String image) {
         this.image = image;
