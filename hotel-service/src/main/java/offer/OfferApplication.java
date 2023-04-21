@@ -46,7 +46,7 @@ public class OfferApplication implements CommandLineRunner{
 
         // Create a new offer
         /*
-        Offer newOffer = new Offer("4550", "Hotel ABC", "image_url", "Bułgaria", "New York", 4,
+        Offer newOffer = new Offer("3", "Hotel ABC", "image_url", "Bułgaria", "New York", 4,
                 LocalDate.of(2022, 1, 2),   LocalDate.of(2022, 1, 12), "villa", 2,
                 1, 2, 1, "breakfast_only", 1000.0, true);
         offerService.createOffer(newOffer).subscribe(System.out::println);
@@ -92,7 +92,7 @@ public class OfferApplication implements CommandLineRunner{
         // Delete offer with id 1
         /*
         System.out.println("Delete offer with offerId 5:");
-        offerService.deleteByOfferId("5")
+        offerService.deleteByOfferId("1")
                 .subscribe(offer -> {
                     System.out.println("Offer deleted: " + offer);
                 }, error -> {
@@ -105,7 +105,7 @@ public class OfferApplication implements CommandLineRunner{
 
         // Create an offer
         /*
-        Offer newOffer = new Offer("4151", "Hotel ABC", "image_url", "Bułgaria", "New York", 4,
+        Offer newOffer = new Offer("2", "Hotel ABC", "image_url", "Bułgaria", "New York", 4,
                 LocalDate.of(2022, 1, 2),   LocalDate.of(2022, 1, 12), "villa", 2,
                 1, 2, 1, "breakfast_only", 1000.0, true);
 
@@ -116,28 +116,9 @@ public class OfferApplication implements CommandLineRunner{
 
 
         // Update an offer
-        // first, find an existing offer by its offerId
-//        Offer existingOffer = offerService.findByOfferId("4550").block();
-//
-//        // update the offer properties
-//        assert existingOffer != null;
-//        existingOffer.setHotel_name("HOTEL NAME UPDATE");
-//        existingOffer.setCountry("COUNTRY UPDATE");
-//
-//        // call the updateOffer method to save the changes to the database
-//        offerService.updateOffer(existingOffer)
-//                .subscribe(updatedOffer -> {
-//                    System.out.println("Updated offer: " + updatedOffer);
-//                }, error -> {
-//                    System.err.println("Error updating offer: " + error.getMessage());
-//                });
-
-
-
-//        Mono<Offer> offerToUpdate = offerService.findByOfferId("140");
-
-//
-//        Offer offerToUpdate = new Offer("4550", "HOTEL NAME UPDATE","countryValue UPDATE",
+        // TODO fix the update function
+        /*
+//        Offer offerToUpdate = new Offer("2", "HOTEL NAME UPDATE","countryValue UPDATE",
 //                null, null, null, null, null, null, null,
 //                null, null, null, null, null, null);
 
@@ -145,16 +126,13 @@ public class OfferApplication implements CommandLineRunner{
         offerToUpdate.setHotel_name("AAAA");
         offerToUpdate.setCountry("COUNTRY UPDATE");
 
-//        offerService.update("4550", offerToUpdate)
-//                .subscribe(existingOffer -> {
-//                    System.out.println("Updated offer: " + existingOffer);
-//                    }, error -> {
-//                    System.err.println("Error updating offer: " + error.getMessage());
-//                    });
-
-
-
-
+       offerService.update("0", offerToUpdate)
+               .subscribe(existingOffer -> {
+                   System.out.println("Updated offer: " + existingOffer);
+                   }, error -> {
+                   System.err.println("Error updating offer: " + error.getMessage());
+                   });
+         */
 
 
     }
