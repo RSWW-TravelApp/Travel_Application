@@ -1,4 +1,4 @@
-package Events.Flights;
+package Events.CQRS.Flights;
 
 public class CreateFlightEvent {
     private final String id;

@@ -1,4 +1,4 @@
-package Events.Offers;
+package Events.CQRS.Offers;
 
 public class CreateOfferEvent{
     private final String id;

@@ -1,8 +1,8 @@
 package flight;
 
-import Events.Flights.CreateFlightEvent;
-import Events.Flights.DeleteFlightEvent;
-import Events.Flights.UpdateFlightEvent;
+import Events.CQRS.Flights.CreateFlightEvent;
+import Events.CQRS.Flights.DeleteFlightEvent;
+import Events.CQRS.Flights.UpdateFlightEvent;
 
 import flight.data.Flight;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package Events.Offers;
+package Events.CQRS.Offers;
 
 import java.util.Optional;
 
