@@ -27,12 +27,12 @@ public class Offer {
     private String meals;
     // max price
     private Double price;
-    private Boolean available;
+    private String available;
 
     public Offer(String offerId, String hotel_name, String image, String country, String city, Integer stars,
                  LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults,
                  Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18,
-                 String meals, Double price, Boolean available) {
+                 String meals, Double price, String available) {
         this.offerId = offerId;
         this.hotel_name = hotel_name;
         this.image = image;
@@ -51,6 +51,25 @@ public class Offer {
         this.available = available;
     }
 
+    @Override
+    public String toString() {
+        return "Offer{" +
+                "id='" + offerId + '\'' +
+                ", hotel_name='" + hotel_name + '\'' +
+                ", stars=" + stars +
+                ", price=" + price +
+                ", room_type='" + room_type + '\'' +
+                ", adults=" + max_adults +
+                ", children_to_3=" + max_children_to_3 +
+                ", children_to_10=" + max_children_to_10 +
+                ", children_to_18=" + max_children_to_18 +
+                ", meals='" + meals + '\'' +
+                ", country='" + country + '\'' +
+                ", start_date=" + start_date +
+                ", end_date=" + end_date +
+                ", available=" + available +
+                '}';
+    }
 
     public String getOfferId() {
         return offerId;
@@ -97,7 +116,7 @@ public class Offer {
     public Optional<Double> getPrice() {
         return Optional.ofNullable(price);
     }
-    public Optional<Boolean> getAvailable() { return Optional.ofNullable(available);}
+    public Optional<String> getAvailable() { return Optional.ofNullable(available);}
 
     public void setOfferId(String offerId) {
         this.offerId = offerId;
@@ -142,7 +161,7 @@ public class Offer {
     public void setPrice(Double price) {
         this.price = price;
     }
-    public void setAvailable(Boolean available) { this.available = available; }
+    public void setAvailable(String available) { this.available = available; }
 
 
 }

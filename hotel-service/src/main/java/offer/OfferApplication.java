@@ -1,36 +1,14 @@
 package offer;
 
-//import com.mongodb.client.MongoClients;
-//import com.mongodb.client.MongoCollection;
-//import com.mongodb.client.MongoCursor;
-//import com.mongodb.client.MongoDatabase;
-
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import offer.data.Offer;
-import offer.data.OfferRepository;
 import offer.data.OfferService;
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.core.publisher.Hooks;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @SpringBootApplication
 @EnableReactiveMongoRepositories
-
 public class OfferApplication implements CommandLineRunner{
 
     @Autowired
@@ -43,6 +21,7 @@ public class OfferApplication implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("Hotels Service Running...");
 
         // Create a new offer
         /*
@@ -76,6 +55,20 @@ public class OfferApplication implements CommandLineRunner{
                         System.out::println,
                         error -> System.err.println("Error: " + error),
                         () -> System.out.println("Search completed by id 0")
+                );
+         */
+
+
+        // Find by parameters
+        /*
+        offerService.findByParameters(1, 1, 2, 1, 1, null,
+                        "Studio", 1, "Bułgaria", LocalDate.of(2023, 6, 1),
+                        LocalDate.of(2023, 6, 30), "true")
+                .log()
+                .subscribe(
+                        System.out::println,
+                        error -> System.err.println("Error: " + error),
+                        () -> System.out.println("Search completed 1 stars")
                 );
          */
 
@@ -116,46 +109,26 @@ public class OfferApplication implements CommandLineRunner{
 
 
         // Update an offer
-        // first, find an existing offer by its offerId
-//        Offer existingOffer = offerService.findByOfferId("4550").block();
-//
-//        // update the offer properties
-//        assert existingOffer != null;
-//        existingOffer.setHotel_name("HOTEL NAME UPDATE");
-//        existingOffer.setCountry("COUNTRY UPDATE");
-//
-//        // call the updateOffer method to save the changes to the database
-//        offerService.updateOffer(existingOffer)
-//                .subscribe(updatedOffer -> {
-//                    System.out.println("Updated offer: " + updatedOffer);
-//                }, error -> {
-//                    System.err.println("Error updating offer: " + error.getMessage());
-//                });
-
-
-
-//        Mono<Offer> offerToUpdate = offerService.findByOfferId("140");
-
-//
-//        Offer offerToUpdate = new Offer("4550", "HOTEL NAME UPDATE","countryValue UPDATE",
+        // TODO fix the update function
+        /*
+//        Offer offerToUpdate = new Offer("2", "HOTEL NAME UPDATE","countryValue UPDATE",
 //                null, null, null, null, null, null, null,
 //                null, null, null, null, null, null);
 
         Offer offerToUpdate = offerService.findByOfferId("4550").block();
         offerToUpdate.setHotel_name("AAAA");
         offerToUpdate.setCountry("COUNTRY UPDATE");
-
-//        offerService.update("4550", offerToUpdate)
-//                .subscribe(existingOffer -> {
-//                    System.out.println("Updated offer: " + existingOffer);
-//                    }, error -> {
-//                    System.err.println("Error updating offer: " + error.getMessage());
-//                    });
-
-
+       offerService.update("0", offerToUpdate)
+               .subscribe(existingOffer -> {
+                   System.out.println("Updated offer: " + existingOffer);
+                   }, error -> {
+                   System.err.println("Error updating offer: " + error.getMessage());
+                   });
+         */
 
 
 
+        } //run
 
-    }
-}
+
+    }//class
