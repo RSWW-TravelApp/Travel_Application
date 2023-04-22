@@ -1,0 +1,20 @@
+server:
+  port: 0
+spring:
+  cloud:
+    stream:
+      function:
+        definition: createOfferHandle;deleteOfferHandle;updateOfferHandle
+      bindings:
+        createFlightHandle-in-0:
+          destination: cqrs_offers_create
+        deleteFlightHandle-in-0:
+          destination: cqrs_offers_delete
+        updateFlightHandle-in-0:
+          destination: cqrs_offers_update
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 127.0.0.1
+    port: 5672

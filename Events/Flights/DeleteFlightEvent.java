@@ -1,6 +1,11 @@
 package Events.Flights;
 
-public record DeleteFlightEvent(String id) {
+public class DeleteFlightEvent{
+    private final String id;
+
+    public DeleteFlightEvent(String id) {
+        this.id = id;
+    }
 
     public String getId() {
         return id;
