@@ -21,3 +21,11 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Intelij project files
+*.idea
+*.iml
+*/target/maven-archiver/*
+*/target/maven-status/*
+/flight-service/target/
+/hotel-service/target/

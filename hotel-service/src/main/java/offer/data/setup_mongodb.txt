@@ -1,0 +1,51 @@
+1. Download and install mongodb
+2. Create manually folders for offers db (C:\data\db is created by default)
+3. Run Server:
+    cd C:\Program Files\MongoDB\Server\6.0\bin
+    mongod --dbpath c:\data\db\offers --port 27017
+4. Run mongo shell
+    cd C:\Program Files\MongoDB\Server\6.0\bin
+    mongo
+
+    use hotels      # Switch to the "hotels" database (this will create it if it doesn't exist yet)
+    db.createCollection("offers")
+
+    db.offers.insert({
+      offerId: "0",
+      hotelName: "Hilton",
+      image: "httpshthhpthp.com",
+      stars: 4,
+      country: "Bułgaria",
+      city: "Gdynia",
+      start_date: new Date("2023-06-12"),
+      end_date: new Date("2023-06-20")
+      max_adults: 5,
+      max_children_to_3: 2,
+      max_children_to_10: 0,
+      max_children_to_18: 5,
+      meals: "breakfast_lunch",
+      price: 1.00,
+      room_type: "Villa",
+      discount: 0,
+      available: true
+    })
+
+    db.offers.insert({
+      offerId: "1",
+      hotelName: "Abrakadabra",
+      image: "httpshthhpthp.pl",
+      stars: 3,
+      country: "Bułgaria",
+      city: "Gdynia",
+      start_date: new Date("2022-08-1"),
+      end_date: new Date("2022-08-15")
+      max_adults: 6,
+      max_children_to_3: 1,
+      max_children_to_10: 3,
+      max_children_to_18: 2,
+      meals: "breakfast_lunch",
+      price: 1.00,
+      room_type: "Villa",
+      discount: 0,
+      available: true
+    })
