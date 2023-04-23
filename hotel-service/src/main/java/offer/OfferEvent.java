@@ -4,6 +4,7 @@ import Events.Offers.CreateOfferEvent;
 import Events.Offers.DeleteOfferEvent;
 import Events.Offers.UpdateOfferEvent;
 import offer.data.Offer;
+import offer.data.OfferService;
 import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -47,7 +48,7 @@ public class OfferEvent {
     public Function<Flux<DeleteOfferEvent>, Mono<Void>> deleteOfferHandle() {
         return flux -> flux.doOnNext(
                 event ->
-                        offerService.deleteOffer(event.getId())
+                        offerService.deleteByOfferId(event.getId())
                 )
                 .then();
     }
