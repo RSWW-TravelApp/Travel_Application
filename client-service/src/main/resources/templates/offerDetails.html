@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Offer details</title>
+  <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
+  <script type="text/javascript" th:src="@{/js/src/offerDetails.js}"></script>
+</head>
+<body onload="createUserInfoBox(); fetchOfferDetails(); fetchFlightDetails()">
+  <div>
+    <form action="/offers">
+      <input type="hidden" id="flightId" name="flightId" value="">
+      <input type="hidden" id="flightDstCountry" name="dstCountry" value="">
+      <input type="hidden" id="flightStartDate" name="startDate" value="">
+      <button> Go back </button>
+    </form>
+  </div>
+  <div id="container">
+    <div id="userInfo" style="float:right"></div>
+    <h2>Offer details</h2>
+    <div id="offerDetails"></div>
+    <h2>Flight details</h2>
+    <div id="flightData">
+      <div id="flightDataFrom"></div>
+      <div id="flightDataTo"></div>
+      <div id="flightDataStartDate"></div>
+    </div>
+    <div id="actionButtons">
+      <br>
+      <button onclick="reserveOffer()">Reserve offer</button><br>
+      <button onclick="purchaseOffer()">Purchase offer</button>
+    </div>
+  </div>
+  <style>
+      .svg-button:hover path{
+          fill: lightgray;
+      }
+  </style>
+</body>
+</html>

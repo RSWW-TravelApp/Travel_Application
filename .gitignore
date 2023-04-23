@@ -27,5 +27,3 @@ hs_err_pid*
 *.iml
 */target/maven-archiver/*
 */target/maven-status/*
-/flight-service/target/
-/hotel-service/target/

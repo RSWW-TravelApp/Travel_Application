@@ -12,6 +12,8 @@
     <modules>
         <module>hotel-service</module>
         <module>flight-service</module>
+        <module>client-service</module>
+        <module>api-gateway-service</module>
         <module>events</module>
         <!--add new modules here -->
     </modules>

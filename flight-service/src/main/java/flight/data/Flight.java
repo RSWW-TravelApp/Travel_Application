@@ -28,14 +28,14 @@ public class Flight {
     private String arrival_country;
     private String arrival_city;
 
-    private String available_seats;
+    private Integer available_seats;
 
     private LocalDate date;
 
     public Flight() {
     }
 
-    public Flight(String flightId, String airline_name, String departure_country, String departure_city, String arrival_country, String arrival_city, String available_seats, LocalDate date) {
+    public Flight(String flightId, String airline_name, String departure_country, String departure_city, String arrival_country, String arrival_city, Integer available_seats, LocalDate date) {
         this.flightId = flightId;
         this.airline_name = airline_name;
         this.departure_country = departure_country;
@@ -78,8 +78,8 @@ public class Flight {
     public Optional<String> getArrival_city() {
         return Optional.ofNullable(arrival_city);
     }
-    public Optional<String> getAvailable_seats() {
-        return Optional.of(available_seats);
+    public Optional<Integer> getAvailable_seats() {
+        return Optional.ofNullable(available_seats);
     }
     public Optional<LocalDate> getDate() {
         return Optional.ofNullable(date);
@@ -102,7 +102,7 @@ public class Flight {
     public void setArrival_city(String arrival_city) {
         this.arrival_city = arrival_city;
     }
-    public void setAvailable_seats(String available_seats) {
+    public void setAvailable_seats(Integer available_seats) {
         this.available_seats = available_seats;
     }
     public void setDate(LocalDate date) {
