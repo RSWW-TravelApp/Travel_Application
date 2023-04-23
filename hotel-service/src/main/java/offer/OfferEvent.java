@@ -1,9 +1,10 @@
 package offer;
 
-import Events.Offers.CreateOfferEvent;
-import Events.Offers.DeleteOfferEvent;
-import Events.Offers.UpdateOfferEvent;
+import offer.events.CreateOfferEvent;
+import offer.events.DeleteOfferEvent;
+import offer.events.UpdateOfferEvent;
 import offer.data.Offer;
+import offer.data.OfferService;
 import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,7 +23,7 @@ public class OfferEvent {
     public Function<Flux<CreateOfferEvent>, Mono<Void>> createOfferHandle() {
         return flux -> flux.doOnNext(
                 event ->
-                        offerService.updateOffer(new Offer(event.getId(),
+                        offerService.createOffer(new Offer(event.getId(),
                                 event.getHotel_name(),
                                 event.getImage(),
                                 event.getCountry(),
@@ -47,7 +48,7 @@ public class OfferEvent {
     public Function<Flux<DeleteOfferEvent>, Mono<Void>> deleteOfferHandle() {
         return flux -> flux.doOnNext(
                 event ->
-                        offerService.deleteOffer(event.getId())
+                        offerService.deleteByOfferId(event.getId())
                 )
                 .then();
     }
@@ -56,7 +57,7 @@ public class OfferEvent {
     public Function<Flux<UpdateOfferEvent>, Mono<Void>> updateOfferHandle() {
         return flux -> flux.doOnNext(
                         event ->
-                                offerService.updateOffer(new Offer(event.getId(),
+                                offerService.update(new Offer(event.getId(),
                                         event.getHotel_name().orElse(null),
                                         event.getImage().orElse(null),
                                         event.getCountry().orElse(null),

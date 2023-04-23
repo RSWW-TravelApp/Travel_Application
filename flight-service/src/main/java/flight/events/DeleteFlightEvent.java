@@ -1,4 +1,4 @@
-package Events.Flights;
+package flight.events;
 
 public class DeleteFlightEvent{
     private final String id;

@@ -1,4 +1,4 @@
-package Events.Flights;
+package flight.events;
 
 import java.util.Optional;
 

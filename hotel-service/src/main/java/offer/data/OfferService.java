@@ -23,7 +23,7 @@ public class OfferService {
         this.reactiveMongoTemplate = reactiveMongoTemplate;
     }
 
-    public Mono<Offer> createOffer(Offer offer){
+    public Mono<Offer> createOffer(Offer offer) {
         return offerRepository.save(offer);
     }
 
@@ -87,11 +87,9 @@ public class OfferService {
                 .find(query, Offer.class);
     }
 
-
-
     // TODO fix the update functions
-    public Mono<Offer> update(String offerId, Offer offer){
-        return offerRepository.findByOfferId(offerId)
+    public Mono<Offer> update(Offer offer){
+        return offerRepository.findByOfferId(offer.getOfferId())
                 .flatMap(existingOffer -> {
                     offer.getHotel_name().ifPresent(existingOffer::setHotel_name);
                     offer.getCountry().ifPresent(existingOffer::setCountry);
