@@ -98,7 +98,7 @@ public class OfferService {
                     return offerRepository.save(existingOffer);});}
 
     // updating the specific offer with the given parameters (null parameters - don't update the field)
-    /*
+
     public Mono<Offer> updateOffer(Offer offer){
         return offerRepository.findByOfferId(offer.getOfferId())
                 .flatMap(existingOffer -> {
@@ -127,6 +127,6 @@ public class OfferService {
                     return offerRepository.save(existingOffer);
                 });
     }
-     */
+
 
 }
