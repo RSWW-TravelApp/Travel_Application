@@ -14,7 +14,7 @@ import java.util.Optional;
 //@AllArgsConstructor
 //@NoArgsConstructor
 //@Data
-@Document(collection = "trips")
+@Document(collection = "flights")
 public class Flight {
 
 //    @Field("_id")
@@ -28,11 +28,14 @@ public class Flight {
     private String arrival_country;
     private String arrival_city;
 
-    private int available_seats;
+    private String available_seats;
 
     private LocalDate date;
 
-    public Flight(String flightId, String airline_name, String departure_country, String departure_city, String arrival_country, String arrival_city, int available_seats, LocalDate date) {
+    public Flight() {
+    }
+
+    public Flight(String flightId, String airline_name, String departure_country, String departure_city, String arrival_country, String arrival_city, String available_seats, LocalDate date) {
         this.flightId = flightId;
         this.airline_name = airline_name;
         this.departure_country = departure_country;
@@ -41,6 +44,20 @@ public class Flight {
         this.arrival_city = arrival_city;
         this.available_seats = available_seats;
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Offer{" +
+                "id='" + flightId + '\'' +
+                ", airline_name='" + airline_name + '\'' +
+                ", departure_country=" + departure_country +
+                ", departure_city=" + departure_city +
+                ", arrival_country='" + arrival_country + '\'' +
+                ", arrival_city=" + arrival_city +
+                ", available_seats=" + available_seats +
+                ", date=" + date +
+                '}';
     }
 
     public String getFlightId() {
@@ -61,7 +78,7 @@ public class Flight {
     public Optional<String> getArrival_city() {
         return Optional.ofNullable(arrival_city);
     }
-    public Optional<Integer> getAvailable_seats() {
+    public Optional<String> getAvailable_seats() {
         return Optional.of(available_seats);
     }
     public Optional<LocalDate> getDate() {
@@ -69,6 +86,7 @@ public class Flight {
     }
 
 
+    public void setFlightId(String flightId) { this.flightId = flightId; }
     public void setAirline_name(String airline_name) {
         this.airline_name = airline_name;
     }
@@ -84,7 +102,7 @@ public class Flight {
     public void setArrival_city(String arrival_city) {
         this.arrival_city = arrival_city;
     }
-    public void setAvailable_seats(int available_seats) {
+    public void setAvailable_seats(String available_seats) {
         this.available_seats = available_seats;
     }
     public void setDate(LocalDate date) {

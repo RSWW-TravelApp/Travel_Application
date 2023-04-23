@@ -11,6 +11,8 @@
 
     <modules>
         <module>hotel-service</module>
+        <module>flight-service</module>
+        <module>events</module>
         <!--add new modules here -->
     </modules>
 
@@ -38,9 +40,15 @@
             <version>3.0.5</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>6.0.8</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.xbean</groupId>
             <artifactId>xbean-reflect</artifactId>
-            <version>3.4</version>
+            <version>4.22</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

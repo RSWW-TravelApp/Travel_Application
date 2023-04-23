@@ -1,4 +1,4 @@
-package flight.events;
+package events.flights;
 
 public class CreateFlightEvent {
     private final String id;
@@ -8,9 +8,9 @@ public class CreateFlightEvent {
     private final String date;
     private final String arrival_country;
     private final String arrival_city;
-    private final Integer available_seats;
+    private final String available_seats;
 
-    public CreateFlightEvent(String id, String airline_name, String departure_country, String departure_city, String date, String arrival_country, String arrival_city, Integer available_seats) {
+    public CreateFlightEvent(String id, String airline_name, String departure_country, String departure_city, String date, String arrival_country, String arrival_city, String available_seats) {
         this.id = id;
         this.airline_name = airline_name;
         this.departure_country = departure_country;
@@ -49,7 +49,7 @@ public class CreateFlightEvent {
         return arrival_city;
     }
 
-    public Integer getAvailable_seats() {
+    public String getAvailable_seats() {
         return available_seats;
     }
 }
