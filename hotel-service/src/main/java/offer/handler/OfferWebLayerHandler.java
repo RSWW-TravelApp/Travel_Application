@@ -50,7 +50,6 @@ public class OfferWebLayerHandler {
     public Mono<ServerResponse> updateOfferById(ServerRequest request) {
         String id = request.pathVariable("offerId");
         Mono<Offer> updatedOffer = request.bodyToMono(Offer.class);
-
         return updatedOffer
                 .flatMap(offerObject -> ServerResponse
                         .ok()

@@ -1,6 +1,6 @@
 package events.Saga;
 
-public class SagaEvent {
+public abstract class SagaEvent {
     private final Double price;
     private final String offer_id;
     private final String flight_id;
