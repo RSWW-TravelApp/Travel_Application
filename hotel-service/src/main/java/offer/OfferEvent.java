@@ -38,7 +38,7 @@ public class OfferEvent {
                                 event.getMax_children_to_18(),
                                 event.getMeals(),
                                 event.getPrice(),
-                                event.getAvailable()
+                                Boolean.parseBoolean(event.getAvailable())
                         ))
                 )
                 .then();
@@ -72,7 +72,7 @@ public class OfferEvent {
                                         event.getMax_children_to_18().orElse(null),
                                         event.getMeals().orElse(null),
                                         event.getPrice().orElse(null),
-                                        event.getAvailable().orElse(null)
+                                        Boolean.parseBoolean(event.getAvailable().orElse(null))
                                 ))
                 )
                 .then();
