@@ -1,8 +1,8 @@
 package offer;
 
-import events.offers.CreateOfferEvent;
-import events.offers.DeleteOfferEvent;
-import events.offers.UpdateOfferEvent;
+import events.CQRS.offers.CreateOfferEvent;
+import events.CQRS.offers.DeleteOfferEvent;
+import events.CQRS.offers.UpdateOfferEvent;
 import offer.data.Offer;
 import offer.data.OfferService;
 import org.springframework.context.annotation.Bean;

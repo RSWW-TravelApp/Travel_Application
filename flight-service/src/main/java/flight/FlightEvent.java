@@ -1,8 +1,8 @@
 package flight;
 
-import events.flights.CreateFlightEvent;
-import events.flights.DeleteFlightEvent;
-import events.flights.UpdateFlightEvent;
+import events.CQRS.flights.CreateFlightEvent;
+import events.CQRS.flights.DeleteFlightEvent;
+import events.CQRS.flights.UpdateFlightEvent;
 
 import flight.data.Flight;
 import flight.data.FlightService;
