@@ -1,10 +1,11 @@
 package flight;
 
-import Events.Flights.CreateFlightEvent;
-import Events.Flights.DeleteFlightEvent;
-import Events.Flights.UpdateFlightEvent;
+import events.flights.CreateFlightEvent;
+import events.flights.DeleteFlightEvent;
+import events.flights.UpdateFlightEvent;
 
 import flight.data.Flight;
+import flight.data.FlightService;
 import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -40,7 +41,7 @@ public class FlightEvent {
     public Function<Flux<DeleteFlightEvent>, Mono<Void>> deleteFlightHandle() {
         return flux -> flux.doOnNext(
             event ->
-                flightService.deleteFlight(event.getId())
+                flightService.deleteFlightById(event.getId())
             )
         .then();
     }

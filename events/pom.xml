@@ -9,16 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>flight-service</artifactId>
+    <artifactId>events</artifactId>
     <packaging>jar</packaging>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.rsww.project</groupId>
-            <artifactId>events</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

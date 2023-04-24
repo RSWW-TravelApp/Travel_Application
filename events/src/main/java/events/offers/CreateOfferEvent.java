@@ -1,4 +1,4 @@
-package Events.Offers;
+package events.offers;
 
 public class CreateOfferEvent{
     private final String id;

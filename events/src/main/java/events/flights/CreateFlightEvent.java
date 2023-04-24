@@ -1,4 +1,4 @@
-package Events.Flights;
+package events.flights;
 
 public class CreateFlightEvent {
     private final String id;

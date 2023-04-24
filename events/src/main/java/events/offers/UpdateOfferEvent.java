@@ -1,4 +1,4 @@
-package Events.Offers;
+package events.offers;
 
 import java.util.Optional;
 

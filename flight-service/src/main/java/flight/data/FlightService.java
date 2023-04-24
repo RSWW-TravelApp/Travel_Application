@@ -1,9 +1,5 @@
-package flight;
+package flight.data;
 
-import flight.data.Flight;
-import flight.data.FlightRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -33,17 +29,17 @@ public class FlightService {
         return flightRepository.findAll();
     }
 
-    public Mono<Flight> findById(String flightId){
+    public Mono<Flight> findFlightById(String flightId){
         return flightRepository.findById(flightId);
     }
 
-    public Mono<Flight> deleteFlight(String flightId){
+    public Mono<Flight> deleteFlightById(String flightId){
         return flightRepository.findById(flightId)
                 .flatMap(existingFlight -> flightRepository.delete(existingFlight)
                         .then(Mono.just(existingFlight)));
     }
 
-    // updating the specific offer with the given parameters (null parameters - don't update the field)
+    // updating the specific flight with the given parameters (null parameters - don't update the field)
     public Mono<Flight> updateFlight(Flight flight){
         return flightRepository.findById(flight.getFlightId())
                 .flatMap(dbFlights -> {

@@ -25,7 +25,7 @@ hs_err_pid*
 # Intelij project files
 *.idea
 *.iml
-*/target/maven-archiver/*
-*/target/maven-status/*
-/flight-service/target/
-/hotel-service/target/
+*/target/*
+
+# local mongo databases
+*/databases/*
