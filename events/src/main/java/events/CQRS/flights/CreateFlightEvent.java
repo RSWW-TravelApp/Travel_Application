@@ -1,4 +1,4 @@
-package events.flights;
+package events.CQRS.flights;
 
 public class CreateFlightEvent {
     private final String id;

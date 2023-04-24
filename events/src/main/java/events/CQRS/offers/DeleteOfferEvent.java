@@ -1,9 +1,9 @@
-package events.flights;
+package events.CQRS.offers;
 
-public class DeleteFlightEvent{
+public class DeleteOfferEvent{
     private final String id;
 
-    public DeleteFlightEvent(String id) {
+    public DeleteOfferEvent(String id) {
         this.id = id;
     }
 

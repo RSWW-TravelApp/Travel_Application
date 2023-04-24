@@ -1,4 +1,4 @@
-package events.offers;
+package events.CQRS.offers;
 
 import java.util.Optional;
 
@@ -18,9 +18,9 @@ public class UpdateOfferEvent{
     private final Integer max_children_to_18;
     private final String meals;
     private final Double price;
-    private final Boolean available;
+    private final String available;
 
-    public UpdateOfferEvent(String id, String hotel_name, String image, String country, String city, Integer stars, String start_date, String end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, Boolean available) {
+    public UpdateOfferEvent(String id, String hotel_name, String image, String country, String city, Integer stars, String start_date, String end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, String available) {
         this.id = id;
         this.hotel_name = hotel_name;
         this.image = image;
@@ -99,7 +99,7 @@ public class UpdateOfferEvent{
         return Optional.ofNullable(price);
     }
 
-    public Optional<Boolean> getAvailable() {
+    public Optional<String> getAvailable() {
         return Optional.ofNullable(available);
     }
 }

@@ -1,4 +1,4 @@
-package events.flights;
+package events.CQRS.flights;
 
 import java.util.Optional;
 
