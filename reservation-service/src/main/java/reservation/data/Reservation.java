@@ -1,34 +1,43 @@
 package reservation.data;
 
-import lombok.Data;
-import lombok.ToString;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-
-import java.time.LocalDate;
 import java.util.Optional;
 
-
-@ToString
-//@AllArgsConstructor
-//@NoArgsConstructor
-@Data
 @Document(collection = "reservations")
 public class Reservation {
-
-    @Field("_id")
-    //@JsonProperty("id")
-    @Id
     private String reservationID;
 
     private String userID;
     private String hotelID;
     private String flightID;
 
-    private boolean isPaid;
+    private Boolean isPaid;
 
+    public Reservation() {
+    }
 
+    public Reservation(String reservationID, String userID, String hotelID, String flightID, Boolean isPaid) {
+        this.reservationID = reservationID;
+        this.userID = userID;
+        this.hotelID = hotelID;
+        this.flightID = flightID;
+        this.isPaid = isPaid;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "reservationID='" + reservationID + '\'' +
+                ", userID='" + userID + '\'' +
+                ", hotelID=" + hotelID +
+                ", flightID=" + flightID +
+                ", isPaid='" + isPaid + '\'' +
+                '}';
+    }
+
+    public String getReservationID() {
+        return reservationID;
+    }
     public Optional<String> getUserID() {
         return Optional.ofNullable(userID);
     }
@@ -42,7 +51,9 @@ public class Reservation {
         return Optional.ofNullable(isPaid);
     }
 
-
+    public void setReservationID(String reservationID) {
+        this.reservationID = reservationID;
+    }
     public void setUserID(String userID) {
         this.userID = userID;
     }
@@ -52,7 +63,7 @@ public class Reservation {
     public void setFlightID(String flightID) {
         this.flightID = flightID;
     }
-    public void setIsPaid(boolean isPaid) {
+    public void setIsPaid(Boolean isPaid) {
         this.isPaid = isPaid;
     }
 }

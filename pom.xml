@@ -15,6 +15,7 @@
         <module>client-service</module>
         <module>api-gateway-service</module>
         <module>events</module>
+        <module>reservation-service</module>
         <!--add new modules here -->
     </modules>
 

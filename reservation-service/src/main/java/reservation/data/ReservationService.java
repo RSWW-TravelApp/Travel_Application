@@ -1,23 +1,16 @@
-package reservation;
-
-import reservation.data.Reservation;
-import reservation.data.ReservationRepository;
+package reservation.data;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.LocalDate;
 
 
 @Service
 public class ReservationService {
 
-    private final ReactiveMongoTemplate reactiveMongoTemplate;
-    private final ReservationRepository reservationRepository;
+    private ReactiveMongoTemplate reactiveMongoTemplate;
+    private ReservationRepository reservationRepository;
 
     public ReservationService(ReactiveMongoTemplate reactiveMongoTemplate, ReservationRepository reservationRepository) {
         this.reactiveMongoTemplate = reactiveMongoTemplate;
@@ -29,19 +22,19 @@ public class ReservationService {
     }
 
     public Flux<Reservation> getAllReservations(){
-        return reservationRepository.findAll();
+        return reservationRepository.findAll().switchIfEmpty(Flux.empty());
     }
 
-    public Mono<Reservation> findById(String reservationID){
-        return reservationRepository.findById(reservationID);
+    public Mono<Reservation> findByReservationId(String reservationID){
+        return reservationRepository.findByReservationId(reservationID).switchIfEmpty(Mono.empty());
     }
 
-    public Mono<Reservation> deleteReservation(String reservationID){
-        return reservationRepository.findById(reservationID)
+    public Mono<Reservation> deleteByReservationId(String reservationID){
+        return reservationRepository.findByReservationId(reservationID)
                 .flatMap(existingReservation -> reservationRepository.delete(existingReservation)
                         .then(Mono.just(existingReservation)));
     }
-
+    /*
     // updating the specific offer with the given parameters (null parameters - don't update the field)
     public Mono<Reservation> updateReservation(Reservation reservation){
         return reservationRepository.findById(reservation.getReservationID())
@@ -58,5 +51,5 @@ public class ReservationService {
                 });
     }
 
-
+*/
 }
