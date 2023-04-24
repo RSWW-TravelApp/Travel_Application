@@ -18,6 +18,8 @@
         <module>reservation-service</module>
         <module>reservation-master-service</module>
         <module>payment-service</module>
+        <module>travel-agency</module>
+        <module>tour-operator</module>
         <!--add new modules here -->
     </modules>
 
