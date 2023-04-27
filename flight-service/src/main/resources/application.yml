@@ -1,0 +1,23 @@
+server:
+  port: 8082
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/flights
+  cloud:
+    stream:
+      function:
+        definition: createFlightHandle;deleteFlightHandle;updateFlightHandle
+      bindings:
+        createFlightHandle-in-0:
+          destination: cqrs_flights_create
+        deleteFlightHandle-in-0:
+          destination: cqrs_flights_delete
+        updateFlightHandle-in-0:
+          destination: cqrs_flights_update
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 127.0.0.1
+    port: 5672

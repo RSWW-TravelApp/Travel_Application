@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <h1> Please fill in your credentials </h1>
+  <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
+  <script type="text/javascript" th:src="@{/js/src/login.js}"></script>
+</head>
+<body>
+  <form id="form">
+    <input type="text" id="login" value="" placeholder="login">
+    <input type="password" id="password" value="" placeholder="password">
+    <h2 id="actionResult"></h2>
+  </form>
+  <button onclick="loginUser(); cleanForm()"> Login </button>
+  <button onclick="registerUser(); cleanForm()"> Register </button><br><br><br>
+  <a href="/">
+    <button> Go Home </button>
+  </a>
+</body>
+</html>
