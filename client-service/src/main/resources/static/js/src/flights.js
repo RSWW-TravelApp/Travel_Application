@@ -1,6 +1,6 @@
 async function fetchDestinations(el) {
   await fetch('http://localhost:8080/flights' + window.location.search, {method: "GET"})
-  .then(response => response.json())
+  .then(response => checkResponse(response))
   .then(data => {
     const listOfFlights = createElement('div');
     data.forEach(item => {
@@ -33,5 +33,9 @@ async function fetchDestinations(el) {
     flightsCounter.textContent = `${data.length} flights found`;
     const container = document.getElementById('container');
     appendChildren(container, [listOfFlights]);
+  })
+  .catch(error => {
+        const flightsCounter = document.getElementById('flightsCounter');
+        flightsCounter.textContent = "0 flights found";
   });
 }
