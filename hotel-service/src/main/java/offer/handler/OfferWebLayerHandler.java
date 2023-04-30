@@ -31,7 +31,7 @@ public class OfferWebLayerHandler {
                 .flatMap(offer -> ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(offer, Offer.class)
+                        .body(Mono.just(offer), Offer.class)
                 )
                 .switchIfEmpty(ServerResponse.notFound().build());
     }

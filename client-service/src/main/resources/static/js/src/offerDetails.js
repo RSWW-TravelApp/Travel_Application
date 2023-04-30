@@ -5,14 +5,14 @@ async function fetchOfferDetails() {
   .then(offerItem => {
     const offerDetailsContainer = document.getElementById('offerDetails');
     appendChildren(offerDetailsContainer, [
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.country}`, {'class': 'svg-button', 'id': 'dstCountryInfo'}, "Country"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.city}`, {'class': 'svg-button', 'id': 'dstCityInfo'}, "City"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.name}`, {'class': 'svg-button', 'id': 'hotelNameInfo'}, "Hotel name"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.startDate}`, {'class': 'svg-button', 'id': 'startDateInfo'}, "Starting date"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.adults}`, {'class': 'svg-button', 'id': 'adultsInfo'}, "Adults"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.ppl3plus}`, {'class': 'svg-button', 'id': 'ppl3plusInfo'}, "Max people 3+"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.ppl10plus}`, {'class': 'svg-button', 'id': 'ppl10plusInfo'}, "Max people 10+"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.ppl18plus}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "Max people 18+")
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.country}`, {'class': 'svg-button', 'id': 'arrivalCountryInfo'}, "Country"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.city}`, {'class': 'svg-button', 'id': 'arrivalCityInfo'}, "City"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.hotel_name}`, {'class': 'svg-button', 'id': 'hotelNameInfo'}, "Hotel name"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.start_date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Starting date"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_adults}`, {'class': 'svg-button', 'id': 'adultsInfo'}, "Adults"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_3}`, {'class': 'svg-button', 'id': 'ppl3plusInfo'}, "Max people 3+"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_10}`, {'class': 'svg-button', 'id': 'ppl10plusInfo'}, "Max people 10+"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_18}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "Max people 18+")
     ])
 
   });
@@ -25,24 +25,24 @@ async function fetchFlightDetails() {
   .then(flightItem => {
         const flightDataFromContainer = document.getElementById('flightDataFrom');
         appendChildren(flightDataFromContainer, [
-            createLabel("From", {'for': 'srcCountryInfo'}, 1),
-            squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.srcCountry}`, {'class': 'svg-button', 'id': 'srcCountryInfo'}),
-            squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.srcCity}`, {'class': 'svg-button', 'id': 'srcCityInfo'})
+            createLabel("From", {'for': 'departureCountryInfo'}, 1),
+            squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.departure_country}`, {'class': 'svg-button', 'id': 'departureCountryInfo'}),
+            squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.departure_city}`, {'class': 'svg-button', 'id': 'departureCityInfo'})
         ]);
         const flightDataToContainer = document.getElementById('flightDataTo');
         appendChildren(flightDataToContainer, [
-            createLabel("To", {'for': 'dstCountryInfo'}, 1),
-            squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.dstCountry}`, {'class': 'svg-button', 'id': 'dstCountryInfo'}),
-            squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.dstCity}`, {'class': 'svg-button', 'id': 'dstCityInfo'})
+            createLabel("To", {'for': 'arrivalCountryInfo'}, 1),
+            squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.arrival_country}`, {'class': 'svg-button', 'id': 'arrivalCountryInfo'}),
+            squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.arrival_city}`, {'class': 'svg-button', 'id': 'arrivalCityInfo'})
         ]);
-        const flightDataStartDateContainer = document.getElementById('flightDataStartDate');
-        appendChildren(flightDataStartDateContainer, [
-            labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${flightItem.startDate}`, {'class': 'svg-button', 'id': 'startDateInfo'}, "Flight date")
+        const flightDataDateContainer = document.getElementById('flightDataDate');
+        appendChildren(flightDataDateContainer, [
+            labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${flightItem.date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Flight date")
         ]);
 
-        setAttributes(document.getElementById("flightId"), {'value': flightItem.id});
-        setAttributes(document.getElementById("flightDstCountry"), {'value': flightItem.dstCountry});
-        setAttributes(document.getElementById("flightStartDate"), {'value': flightItem.startDate});
+        setAttributes(document.getElementById("flightId"), {'value': flightItem.flightId});
+        setAttributes(document.getElementById("flightArrivalCountry"), {'value': flightItem.arrival_country});
+        setAttributes(document.getElementById("flightDate"), {'value': flightItem.date});
     });
 }
 
