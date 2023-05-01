@@ -83,14 +83,13 @@ public class FlightService {
     // finding all flights that have specific parameters chosen in the Web filter
     // TODO: check
     public Flux<Flight> fetchFlights(String departure_country, String departure_city,
-                                     String arrival_country, String arrival_city, int total_people, LocalDate date){
+                                     String arrival_country, String arrival_city){ //, int available_seats, LocalDate date){
 
         Query query = new Query();
 
         // available_seats has to be >= total number of people of the trip
         // total_people are taken from the Web filter and by default are 0
-        query.addCriteria(Criteria.where("available_seats").gte(total_people));
-
+//        query.addCriteria(Criteria.where("available_seats").gte(available_seats));
 
         if(departure_country != null){
             query.addCriteria(Criteria.where("departure_country").regex(departure_country));
@@ -98,9 +97,9 @@ public class FlightService {
         if(arrival_country != null){
             query.addCriteria(Criteria.where("arrival_country").regex(arrival_country));
         }
-        if(date != null){
-            query.addCriteria(Criteria.where("date").is(date)); // TODO check if "is()" works with the LocalDate type
-        }
+//        if(date != null){
+//            query.addCriteria(Criteria.where("date").is(date)); // TODO check if "is()" works with the LocalDate type
+//        }
 
         return reactiveMongoTemplate
                 .find(query, Flight.class);

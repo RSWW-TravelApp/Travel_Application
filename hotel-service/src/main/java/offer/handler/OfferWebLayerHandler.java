@@ -3,11 +3,15 @@ package offer.handler;
 import offer.data.OfferService;
 import offer.data.Offer;
 
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
@@ -88,4 +92,39 @@ public class OfferWebLayerHandler {
                 .flatMap(offer -> ServerResponse.ok().body(offer, Offer.class))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
+
+    public Mono<ServerResponse> getOffers(ServerRequest request) {
+        String hotel_name = request.queryParam("hotel_name").orElse(null);
+        String image = request.queryParam("image").orElse(null);
+        String country = request.queryParam("country").orElse(null);
+        String city = request.queryParam("city").orElse(null);
+        String room_type = request.queryParam("room_type").orElse(null);
+        String meals = request.queryParam("meals").orElse(null);
+
+        LocalDate start_date = LocalDate.parse(request.queryParam("start_date").orElse("2020-01-01"));
+        LocalDate end_date = LocalDate.parse(request.queryParam("end_date").orElse("2025-01-01"));
+
+        int stars = Integer.parseInt(request.queryParam("stars").orElse("0"));
+        int max_adults = Integer.parseInt(request.queryParam("max_adults").orElse("0"));
+        int max_children_to_3 = Integer.parseInt(request.queryParam("max_children_to_3").orElse("0"));
+        int max_children_to_10 = Integer.parseInt(request.queryParam("max_children_to_10").orElse("0"));
+        int max_children_to_18 = Integer.parseInt(request.queryParam("max_children_to_18").orElse("0"));
+
+        Flux<Offer> offers = offerService.fetchOffers(hotel_name, image, country, city, stars, start_date, end_date,
+                room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals);
+
+        offers.doOnNext(element -> System.out.println("Element: " + element))
+                .subscribe();
+
+
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(offers, Offer.class);
+    }
+
+
+
+
+
+
+
+
 }
