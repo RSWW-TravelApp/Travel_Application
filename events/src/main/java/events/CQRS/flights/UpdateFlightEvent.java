@@ -4,31 +4,27 @@ import java.util.Optional;
 
 public class UpdateFlightEvent{
     private final String id;
-    private final String airline_name;
     private final String departure_country;
     private final String departure_city;
     private final String date;
     private final String arrival_country;
     private final String arrival_city;
     private final Integer available_seats;
+    private final Double price;
 
-    public UpdateFlightEvent(String id, String airline_name, String departure_country, String departure_city, String date, String arrival_country, String arrival_city, Integer available_seats) {
+    public UpdateFlightEvent(String id, String departure_country, String departure_city, String date, String arrival_country, String arrival_city, Integer available_seats, Double price) {
         this.id = id;
-        this.airline_name = airline_name;
         this.departure_country = departure_country;
         this.departure_city = departure_city;
         this.date = date;
         this.arrival_country = arrival_country;
         this.arrival_city = arrival_city;
         this.available_seats = available_seats;
+        this.price = price;
     }
 
     public String getId() {
         return id;
-    }
-
-    public Optional<String> getAirline_name() {
-        return Optional.ofNullable(airline_name);
     }
 
     public Optional<String> getDeparture_country() {
@@ -54,4 +50,9 @@ public class UpdateFlightEvent{
     public Optional<Integer> getAvailable_seats() {
         return Optional.ofNullable(available_seats);
     }
+
+    public Optional<Double> getPrice() {
+        return Optional.ofNullable(price);
+    }
+
 }

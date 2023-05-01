@@ -30,7 +30,8 @@ public class FlightEvent {
                     event.getArrival_country(),
                     event.getArrival_city(),
                     event.getAvailable_seats(),
-                    LocalDate.parse(event.getDate()))
+                    LocalDate.parse(event.getDate()),
+                    event.getPrice())
                 )
         )
         .then();
@@ -40,7 +41,7 @@ public class FlightEvent {
     public Function<Flux<DeleteFlightEvent>, Mono<Void>> deleteFlightHandle() {
         return flux -> flux.doOnNext(
             event ->
-                flightService.deleteFlightById(event.getId())
+                flightService.deleteByFlightId(event.getId())
             )
         .then();
     }
@@ -49,14 +50,14 @@ public class FlightEvent {
     public Function<Flux<UpdateFlightEvent>, Mono<Void>> updateFlightHandle() {
         return flux -> flux.doOnNext(
             event ->
-                flightService.updateFlight(new Flight(event.getId(),
+                flightService.updateFlight(event.getId(),
                     event.getDeparture_country().orElse(null),
                     event.getDeparture_city().orElse(null),
                     event.getArrival_country().orElse(null),
                     event.getArrival_city().orElse(null),
-                    event.getAvailable_seats().orElse(null),
-                    event.getDate().map(LocalDate::parse).orElse(null)
-                    )
+                    event.getAvailable_seats().orElse(0),
+                    event.getDate().map(LocalDate::parse).orElse(null),
+                    event.getPrice().orElse(0.0)
                 )
         )
         .then();

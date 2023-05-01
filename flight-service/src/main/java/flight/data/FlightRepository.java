@@ -10,6 +10,5 @@ import reactor.core.publisher.Mono;
 @EnableReactiveMongoRepositories
 public interface FlightRepository extends ReactiveMongoRepository<Flight, String> {
 
-    Flux<Flight> findByCountry(String country);
-    Mono<Flight> findFlightById(String flightId);
+    Mono<Flight> findByFlightId(String flightId);
 }

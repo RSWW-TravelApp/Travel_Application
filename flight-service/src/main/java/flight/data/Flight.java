@@ -19,10 +19,13 @@ public class Flight {
 
     private LocalDate date;
 
+    private Double price;
+
     public Flight() {
     }
 
-    public Flight(String flightId, String departure_country, String departure_city, String arrival_country, String arrival_city, Integer available_seats, LocalDate date) {
+    public Flight(String flightId, String departure_country, String departure_city, String arrival_country,
+                  String arrival_city, Integer available_seats, LocalDate date, Double price) {
         this.flightId = flightId;
         this.departure_country = departure_country;
         this.departure_city = departure_city;
@@ -30,6 +33,7 @@ public class Flight {
         this.arrival_city = arrival_city;
         this.available_seats = available_seats;
         this.date = date;
+        this.price = price;
     }
 
     @Override
@@ -42,6 +46,7 @@ public class Flight {
                 ", arrival_city=" + arrival_city +
                 ", available_seats=" + available_seats +
                 ", date=" + date +
+                ", price=" + price +
                 '}';
     }
 
@@ -66,6 +71,9 @@ public class Flight {
     public Optional<LocalDate> getDate() {
         return Optional.ofNullable(date);
     }
+    public Optional<Double> getPrice() {
+        return Optional.ofNullable(price);
+    }
 
 
     public void setFlightId(String flightId) { this.flightId = flightId; }
@@ -86,5 +94,8 @@ public class Flight {
     }
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

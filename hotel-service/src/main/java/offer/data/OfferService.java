@@ -56,6 +56,7 @@ public class OfferService {
     }
 
     // finding all offers that have specific parameters chosen in the Web filter
+    // TODO: check
     public Flux<Offer> findByParameters(int stars, int adults, int children_to_3, int children_to_10,
                                         int children_to_18, String meals, String room_type, double price,
                                         String country, LocalDate start_date, LocalDate end_date, String available){
@@ -95,7 +96,7 @@ public class OfferService {
 
     // updating the specific offer with the given parameters (null parameters - don't update the field)
     public Mono<Offer> updateOffer(String offerId, String hotel_name, String image, String country, String city,
-                                   int stars, String room_type, int max_adults, int max_children_to_3,
+                                   int stars, LocalDate start_date, LocalDate end_date, String room_type, int max_adults, int max_children_to_3,
                                    int max_children_to_10, int max_children_to_18, String meals,
                                    double price, boolean available) {
         Query query = new Query();
@@ -116,6 +117,12 @@ public class OfferService {
         }
         if (stars != 0) {
             update.set("stars", stars);
+        }
+        if (start_date != null) {
+            update.set("start_date", start_date);
+        }
+        if (end_date != null) {
+            update.set("end_date", end_date);
         }
         if (room_type != null) {
             update.set("room_type", room_type);
