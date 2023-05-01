@@ -16,10 +16,7 @@ import java.util.Optional;
 //@Data
 @Document(collection = "flights")
 public class Flight {
-
-//    @Field("_id")
-//    //@JsonProperty("id")
-//    @Id
+    @Id
     private String flightId;
 
     private String airline_name;
