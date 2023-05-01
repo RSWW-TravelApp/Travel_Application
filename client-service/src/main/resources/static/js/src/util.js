@@ -1,3 +1,16 @@
+function checkResponse(response) {
+    if (response.status === 404) {
+        throw new Error("Not found");
+    }
+    if (response.status === 500) {
+        throw new Error("Service not found");
+    }
+    if (response.status !== 200)  {
+        throw new Error("Not known error occurred");
+    }
+    return response.json()
+}
+
 function getSearchRequestParams(paramNames) {
     const searchParams = new URLSearchParams(window.location.search);
     returnParams = {}

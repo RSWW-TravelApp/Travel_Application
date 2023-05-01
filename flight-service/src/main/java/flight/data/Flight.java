@@ -1,12 +1,13 @@
 package flight.data;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Document(collection = "flights")
 public class Flight {
-
+    @Id
     private String flightId;
 
     private String departure_country;
