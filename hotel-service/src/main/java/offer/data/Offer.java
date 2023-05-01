@@ -32,6 +32,7 @@ public class Offer {
     public Offer() {
     }
 
+
     public Offer(String offerId, String hotel_name, String image, String country, String city, Integer stars,
                  LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults,
                  Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18,

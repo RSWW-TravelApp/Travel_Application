@@ -30,7 +30,7 @@ public class FlightService {
     }
 
     public Mono<Flight> findFlightById(String flightId){
-        return flightRepository.findById(flightId);
+        return flightRepository.findFlightById(flightId);
     }
 
     public Mono<Flight> deleteFlightById(String flightId){
@@ -43,8 +43,6 @@ public class FlightService {
     public Mono<Flight> updateFlight(Flight flight){
         return flightRepository.findById(flight.getFlightId())
                 .flatMap(dbFlights -> {
-                    flight.getAirline_name().ifPresent(dbFlights::setAirline_name);
-
                     flight.getArrival_country().ifPresent(dbFlights::setArrival_country);
 
                     flight.getArrival_city().ifPresent(dbFlights::setArrival_city);
@@ -62,7 +60,7 @@ public class FlightService {
     }
 
     // finding all flights that have specific parameters chosen in the Web filter
-    public Flux<Flight> fetchFlights(String airline_name, String departure_country, String departure_city,
+    public Flux<Flight> fetchFlights(String departure_country, String departure_city,
                                      String arrival_country, String arrival_city, int total_people, LocalDate date){
 
         Query query = new Query();

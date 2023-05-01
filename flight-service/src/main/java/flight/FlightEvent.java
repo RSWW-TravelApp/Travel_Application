@@ -25,7 +25,6 @@ public class FlightEvent {
         return flux -> flux.doOnNext(
             event ->
                 flightService.createFlight(new Flight(event.getId(),
-                    event.getAirline_name(),
                     event.getDeparture_country(),
                     event.getDeparture_city(),
                     event.getArrival_country(),
@@ -51,7 +50,6 @@ public class FlightEvent {
         return flux -> flux.doOnNext(
             event ->
                 flightService.updateFlight(new Flight(event.getId(),
-                    event.getAirline_name().orElse(null),
                     event.getDeparture_country().orElse(null),
                     event.getDeparture_city().orElse(null),
                     event.getArrival_country().orElse(null),

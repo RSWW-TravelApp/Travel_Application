@@ -1,15 +1,21 @@
 package offer.data;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.UpdateDefinition;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.swing.text.StyledEditorKit;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Optional;
 
 
 @Service
@@ -87,44 +93,57 @@ public class OfferService {
                 .find(query, Offer.class);
     }
 
-    // TODO fix the update functions
-    public Mono<Offer> update(Offer offer){
-        return offerRepository.findByOfferId(offer.getOfferId())
-                .flatMap(existingOffer -> {
-                    offer.getHotel_name().ifPresent(existingOffer::setHotel_name);
-                    offer.getCountry().ifPresent(existingOffer::setCountry);
-                    return offerRepository.save(existingOffer);});}
-
     // updating the specific offer with the given parameters (null parameters - don't update the field)
+    public Mono<Offer> updateOffer(String offerId, String hotel_name, String image, String country, String city,
+                                   int stars, String room_type, int max_adults, int max_children_to_3,
+                                   int max_children_to_10, int max_children_to_18, String meals,
+                                   double price, boolean available) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("offerId").is(offerId));
 
-    public Mono<Offer> updateOffer(Offer offer){
-        return offerRepository.findByOfferId(offer.getOfferId())
-                .flatMap(existingOffer -> {
-                    offer.getRoom_type().ifPresent(existingOffer::setRoom_type);   //room_type -> { dbOffers.setRoom_type(room_type);  });
+        Update update = new Update();
+        if (hotel_name != null) {
+            update.set("hotel_name", hotel_name);
+        }
+        if (image != null) {
+            update.set("image", image);
+        }
+        if (country != null) {
+            update.set("country", country);
+        }
+        if (city != null) {
+            update.set("city", city);
+        }
+        if (stars != 0) {
+            update.set("stars", stars);
+        }
+        if (room_type != null) {
+            update.set("room_type", room_type);
+        }
+        if (max_adults != 0) {
+            update.set("max_adults", max_adults);
+        }
+        if (max_children_to_3 != 0) {
+            update.set("max_children_to_3", max_children_to_3);
+        }
+        if (max_children_to_10 != 0) {
+            update.set("max_children_to_10", max_children_to_10);
+        }
+        if (max_children_to_18 != 0) {
+            update.set("max_children_to_18", max_children_to_18);
+        }
+        if (meals != null) {
+            update.set("meals", meals);
+        }
+        if (price != 0) {
+            update.set("price", price);
+        }
+        if (!available) {
+            update.set("available", false);
+        }
 
-                    offer.getStart_date().ifPresent(existingOffer::setStart_date);
-
-                    offer.getEnd_date().ifPresent(existingOffer::setEnd_date);
-
-                    offer.getPrice().ifPresent(existingOffer::setPrice);
-
-                    offer.getMax_adults().ifPresent(existingOffer::setMax_adults);
-
-                    offer.getMax_children_to_3().ifPresent(existingOffer::setMax_children_to_3);
-
-                    offer.getMax_children_to_10().ifPresent(existingOffer::setMax_children_to_10);
-
-                    offer.getMax_children_to_18().ifPresent(existingOffer::setMax_children_to_18);
-
-                    offer.getMeals().ifPresent(existingOffer::setMeals);
-
-                    offer.getImage().ifPresent(existingOffer::setImage);
-
-                    offer.getAvailable().ifPresent(existingOffer::setAvailable);
-
-                    return offerRepository.save(existingOffer);
-                });
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
+        return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class);
     }
-
 
 }

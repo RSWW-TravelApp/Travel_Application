@@ -3,7 +3,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/flights
+      uri: mongodb://localhost:27021/flights
   cloud:
     stream:
       function:
