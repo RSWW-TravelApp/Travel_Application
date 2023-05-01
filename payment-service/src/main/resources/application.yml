@@ -1,23 +1,19 @@
-#server:
-#  port: 8081
-#spring:
+server:
+  port: 0
+spring:
 #  data:
 #    mongodb:
 #      uri: mongodb://localhost:27017/hotels
-#  cloud:
-#    stream:
-#      function:
-#        definition: createOfferHandle;deleteOfferHandle;updateOfferHandle
-#      bindings:
-#        createFlightHandle-in-0:
-#          destination: cqrs_offers_create
-#        deleteFlightHandle-in-0:
-#          destination: cqrs_offers_delete
-#        updateFlightHandle-in-0:
-#          destination: cqrs_offers_update
-#
-#  rabbitmq:
-#    username: guest
-#    password: guest
-#    host: 127.0.0.1
-#    port: 5672
+  cloud:
+    stream:
+      function:
+        definition: processPayment
+      bindings:
+        processPayment-in-0:
+          destination: saga_require_payment
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 127.0.0.1
+    port: 5672

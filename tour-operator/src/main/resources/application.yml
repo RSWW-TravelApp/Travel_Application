@@ -1,0 +1,20 @@
+#server:
+#  port: 0
+#spring:
+#  data:
+#    mongodb:
+#      uri: mongodb://localhost:27017/hotels
+#  cloud:
+#    stream:
+#      function:
+#        definition: makeReservation
+#      bindings:
+#        makeReservation-out-0:
+#          destination: sage_make_reservation
+#
+#
+#  rabbitmq:
+#    username: guest
+#    password: guest
+#    host: 127.0.0.1
+#    port: 5672

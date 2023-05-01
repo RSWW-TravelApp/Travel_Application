@@ -1,6 +1,8 @@
 package events.Saga;
 
-public class MakeReservationEvent extends SagaEvent {
+import java.io.Serializable;
+
+public class MakeReservationEvent extends SagaEvent implements Serializable {
     private final String room_type;
     private final Integer adult;
     private final Integer children_to_3;
@@ -10,10 +12,10 @@ public class MakeReservationEvent extends SagaEvent {
     private final Integer number_of_days;
     private final String start_date;
     private final String end_date;
-    private final Boolean discount;
-    private final boolean is_paid;
+    private final String discount;
+    private final String is_paid;
 
-    public MakeReservationEvent(Double price, String offerId, String flightId, Integer seatsNeeded, String room_type, Integer adult, Integer children_to_3, Integer children_to_10, Integer getChildren_to_18, String meals, Integer number_of_days, String start_date, String end_date, Boolean discount, boolean is_paid) {
+    public MakeReservationEvent(Double price, String offerId, String flightId, Integer seatsNeeded, String room_type, Integer adult, Integer children_to_3, Integer children_to_10, Integer getChildren_to_18, String meals, Integer number_of_days, String start_date, String end_date, String discount, String is_paid) {
         super(price, offerId, flightId, seatsNeeded);
         this.room_type = room_type;
         this.adult = adult;
@@ -64,11 +66,11 @@ public class MakeReservationEvent extends SagaEvent {
         return end_date;
     }
 
-    public Boolean getDiscount() {
+    public String getDiscount() {
         return discount;
     }
 
-    public boolean isIs_paid() {
+    public String isIs_paid() {
         return is_paid;
     }
 }

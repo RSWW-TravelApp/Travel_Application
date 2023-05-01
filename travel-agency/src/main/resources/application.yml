@@ -1,5 +1,5 @@
 server:
-  port: 333
+  port: 0
 spring:
 #  data:
 #    mongodb:
@@ -7,10 +7,12 @@ spring:
   cloud:
     stream:
       function:
-        definition: makeReservation
+        definition: receiveReservation
       bindings:
-        makeReservation-out-0:
+        receiveReservation-in-0:
           destination: sage_make_reservation
+        receiveReservation-out-0:
+          destination: saga_require_payment
 
 
   rabbitmq:
