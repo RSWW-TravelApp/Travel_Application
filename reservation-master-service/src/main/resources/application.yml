@@ -1,23 +1,22 @@
-#server:
-#  port: 8081
-#spring:
-#  data:
-#    mongodb:
-#      uri: mongodb://localhost:27017/hotels
-#  cloud:
-#    stream:
-#      function:
-#        definition: createOfferHandle;deleteOfferHandle;updateOfferHandle
-#      bindings:
-#        createFlightHandle-in-0:
-#          destination: cqrs_offers_create
-#        deleteFlightHandle-in-0:
-#          destination: cqrs_offers_delete
-#        updateFlightHandle-in-0:
-#          destination: cqrs_offers_update
-#
-#  rabbitmq:
-#    username: guest
-#    password: guest
-#    host: 127.0.0.1
-#    port: 5672
+server:
+  port: 333
+spring:
+  #  data:
+  #    mongodb:
+  #      uri: mongodb://localhost:27017/hotels
+  cloud:
+    stream:
+      function:
+        definition: makeReservation; removeReservation
+      bindings:
+        makeReservation-out-0:
+          destination: sage_make_reservation
+        removeReservation-in-0:
+          destination: saga_remove_reservation
+
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 127.0.0.1
+    port: 5672
