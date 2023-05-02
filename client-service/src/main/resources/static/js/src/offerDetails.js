@@ -1,3 +1,31 @@
+function createReservationListener() {
+    const currentUser = sessionStorage.getItem("user");
+    if (!currentUser) {
+        createUserInfoBox();
+        return;
+    }
+    eventSource = new EventSource("http://localhost:8080/notifications/" + currentUser);
+    console.log("Connection opened");
+    createUserInfoBox(function() {}, function() {eventSource.close(); console.log("Connection closed")});
+    eventSource.onmessage = (event) => {
+    const result = document.getElementById('actionResult');
+    if (event.data == "Reservation success") {
+        result.textContent = event.data;
+    } else if (event.data == "Reservation failed") {
+        result.textContent = event.data;
+    }
+    else if (event.data == "Purchase success") {
+        result.textContent = event.data;
+    }
+    else if (event.data == "Purchase failed") {
+        result.textContent = event.data;
+    }
+    };
+    eventSource.onerror = (error) => {
+      console.log(error);
+    };
+}
+
 function buildOfferInfo(offerItem) {
     const offerDetailsContainer = document.getElementById('offerDetails');
     appendChildren(offerDetailsContainer, [
