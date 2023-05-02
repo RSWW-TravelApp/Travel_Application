@@ -1,6 +1,8 @@
 server:
-  port: 8082
+  port: 0
 spring:
+  application:
+    name: flight-service
   data:
     mongodb:
       uri: mongodb://localhost:27017/flights
@@ -21,3 +23,12 @@ spring:
     password: guest
     host: 127.0.0.1
     port: 5672
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: flight-service
+    instance-id: ${spring.application.name}:${server.port}:${random.value}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
