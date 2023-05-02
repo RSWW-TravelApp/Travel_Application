@@ -7,7 +7,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: blockResources; unblockResources
+        definition: blockResources; unblockResources; createFlightCQRSHandle; createOfferCQRSHandle; deleteFlightCQRSHandle; deleteOfferCQRSHandle; updateFlightCQRSHandle; updateOfferCQRSHandle
       bindings:
         blockResources-in-0:
           destination: sage_make_reservation
@@ -21,6 +21,19 @@ spring:
           destination: saga_unblock_resources
         unblockResources-out-0:
           destination: saga_remove_reservation
+        createFlightCQRSHandle-out-0:
+          destination: cqrs_flights_create
+        createOfferCQRSHandle-out-0:
+          destination: cqrs_offers_create
+        deleteFlightCQRSHandle-out-0:
+          destination: cqrs_flights_delete
+        deleteOfferCQRSHandle-out-0:
+          destination: cqrs_offers_delete
+        updateFlightCQRSHandle-out-0:
+          destination: cqrs_flights_update
+        updateOfferCQRSHandle-out-0:
+          destination: cqrs_offers_update
+
   rabbitmq:
     username: guest
     password: guest

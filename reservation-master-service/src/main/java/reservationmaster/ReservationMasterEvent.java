@@ -1,7 +1,9 @@
 package reservationmaster;
 
 import events.Saga.MakeReservationEvent;
+import events.Saga.PayReservationEvent;
 import events.Saga.RemoveReservationEvent;
+import events.Saga.TONotificationEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +36,13 @@ public class ReservationMasterEvent {
                 .doOnNext(event -> System.out.println("removing reservation:" + event.getOfferId()))
                 .then();
     }
+    @Bean
+    public Function<Flux<PayReservationEvent>, Flux<TONotificationEvent>> finaliseReservation() {
+        return flux -> flux
+                .doOnNext(event -> System.out.println("marking reservation as paid for:" + event.getOfferId()))
+                .map(event -> new TONotificationEvent(event.getPrice(),event.getOfferId(),event.getFlightId(),event.getSeatsNeeded()));
+    }
+
     @Bean
     public Supplier<Flux<MakeReservationEvent>> makeReservation() {
         return sink::asFlux;

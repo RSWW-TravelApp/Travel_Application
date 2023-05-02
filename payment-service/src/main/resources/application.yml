@@ -17,7 +17,7 @@ spring:
               deadLetterExchangeType: topic
 
       function:
-        definition: processPayment; validatePayment; failTransaction
+        definition: processPayment; validatePayment; failTransaction; succeedTransaction
       bindings:
         processPayment-in-0:
           destination: saga_require_payment
@@ -30,6 +30,8 @@ spring:
           group: test
         failTransaction-out-0:
           destination: saga_unblock_resources
+        succeedTransaction-out-0:
+          destination: saga_finalise_reservation
 
   rabbitmq:
     username: guest

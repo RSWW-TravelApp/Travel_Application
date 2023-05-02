@@ -7,12 +7,22 @@ spring:
   cloud:
     stream:
       function:
-        definition: makeReservation; removeReservation
+        definition: makeReservation; removeReservation; createReservationCQRSHandle; deleteReservationCQRSHandle; updateReservationCQRSHandle; finaliseReservation
       bindings:
         makeReservation-out-0:
           destination: sage_make_reservation
         removeReservation-in-0:
           destination: saga_remove_reservation
+        createReservationCQRSHandle-out-0:
+          destination: cqrs_reservations_create
+        deleteReservationCQRSHandle-out-0:
+          destination: cqrs_reservations_delete
+        updateReservationCQRSHandle-out-0:
+          destination: cqrs_reservations_update
+        finaliseReservation-in-0:
+          destination: saga_finalise_reservation
+        finaliseReservation-out-0:
+          destination: to_notif_purchases
 
 
   rabbitmq:
