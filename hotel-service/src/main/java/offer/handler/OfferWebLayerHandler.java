@@ -1,21 +1,16 @@
 package offer.handler;
 
-import offer.data.OfferService;
 import offer.data.Offer;
-
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
+import offer.data.OfferService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Component
 public class OfferWebLayerHandler {
@@ -115,7 +110,6 @@ public class OfferWebLayerHandler {
 
         offers.doOnNext(element -> System.out.println("Element: " + element))
                 .subscribe();
-
 
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(offers, Offer.class);
     }

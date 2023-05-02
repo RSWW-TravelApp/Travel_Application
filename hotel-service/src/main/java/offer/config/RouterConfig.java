@@ -1,11 +1,8 @@
 package offer.config;
 
-import offer.data.Offer;
 import offer.handler.OfferWebLayerHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
-import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -16,7 +13,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class RouterConfig {
 
     @Bean
-    RouterFunction<ServerResponse> offerRoutes(OfferWebLayerHandler handler) {
+    RouterFunction<ServerResponse> getOffers(OfferWebLayerHandler handler) {
         return route(GET("/offers"), handler::getOffers);
     }
 

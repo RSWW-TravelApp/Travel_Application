@@ -30,8 +30,7 @@ public class FlightEvent {
                     event.getArrival_country(),
                     event.getArrival_city(),
                     event.getAvailable_seats(),
-                    LocalDate.parse(event.getDate()),
-                    event.getPrice())
+                    LocalDate.parse(event.getDate()))
                 )
         )
         .then();
@@ -56,8 +55,7 @@ public class FlightEvent {
                     event.getArrival_country().orElse(null),
                     event.getArrival_city().orElse(null),
                     event.getAvailable_seats().orElse(0),
-                    event.getDate().map(LocalDate::parse).orElse(null),
-                    event.getPrice().orElse(0.0)
+                    event.getDate().map(LocalDate::parse).orElse(null)
                 )
         )
         .then();

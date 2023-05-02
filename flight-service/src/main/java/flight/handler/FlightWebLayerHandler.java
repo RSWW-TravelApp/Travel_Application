@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
@@ -41,43 +40,26 @@ public class FlightWebLayerHandler {
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
-//    public Mono<ServerResponse> getFlightsByParams(ServerRequest request) {
-//        String departureCountry = request.queryParam("departure_country").orElse(null);
-//        String departureCity = request.queryParam("departure_city").orElse(null);
-//        String arrivalCountry = request.queryParam("arrival_country").orElse(null);
-//        String arrivalCity = request.queryParam("arrival_city").orElse(null);
-//        int available_seats = request.queryParam("available_seats").map(Integer::parseInt).orElse(0);
-//        LocalDate date = request.queryParam("date").map(LocalDate::parse).orElse(null);
-//
-//        Flux<Flight> flights = flightService.fetchFlights(departureCountry, departureCity, arrivalCountry,
-//                arrivalCity, available_seats, date);
-//
-//        return ServerResponse.ok()
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(flights, Flight.class);
-//    }
+    public Mono<ServerResponse> getFlights(ServerRequest request) {
+        System.out.println("WEB LAYER AA");
 
-    public Mono<ServerResponse> getFlightsByParams(ServerRequest request) {
-        MultiValueMap<String, String> queryParams = request.queryParams();
-        String departureCountry = queryParams.getFirst("departure_country");
-        String departureCity = queryParams.getFirst("departure_city");
-        String arrivalCountry = queryParams.getFirst("arrival_country");
-        String arrivalCity = queryParams.getFirst("arrival_city");
-//        String totalPeople = queryParams.getFirst("total_people");
-//        String dateString = queryParams.getFirst("date");
+        String departure_country = request.queryParam("departure_country").orElse(null);
+        String departure_city = request.queryParam("departure_city").orElse(null);
+        String arrival_country = request.queryParam("arrival_country").orElse(null);
+        String arrival_city = request.queryParam("arrival_city").orElse(null);
+        int available_seats = Integer.parseInt(request.queryParam("available_seats").orElse("0"));
+        LocalDate date = LocalDate.parse(request.queryParam("date").orElse("2020-01-01"));
 
-        Flux<Flight> flights = flightService.fetchFlights(departureCountry, departureCity, arrivalCountry, arrivalCity
-               );
+        Flux<Flight> flights = flightService.fetchFlights(departure_country, departure_city, arrival_country,
+                arrival_city, available_seats, date);
 
+        flights.doOnNext(element -> System.out.println("Element: " + element))
+                .subscribe();
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(flights, Flight.class);
     }
-
-
-
-
 
     public Mono<ServerResponse> createFlight(ServerRequest request) {
         Mono<Flight> flight = request.bodyToMono(Flight.class);
@@ -102,13 +84,12 @@ public class FlightWebLayerHandler {
                     String arrival_city = flight.getArrival_city().orElse(null);
                     Integer available_seats = flight.getAvailable_seats().orElse(0);
                     LocalDate date = flight.getDate().orElse(null);
-                    Double price = flight.getPrice().orElse(0.0);
 
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)
                             .body(
                                     flightService.updateFlight(id, departure_country, departure_city, arrival_country,
-                                            arrival_city, available_seats, date, price),
+                                            arrival_city, available_seats, date),
                                     Flight.class
                             );
                 })

@@ -11,6 +11,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 
 @Service
@@ -81,11 +83,13 @@ public class OfferService {
         }
         if(start_date != null){
             System.out.println("Adding start_date criteria");
-            query.addCriteria(Criteria.where("start_date").gte(start_date));
+            LocalDateTime startOfDay = start_date.atStartOfDay();
+            query.addCriteria(Criteria.where("start_date").gte(startOfDay));
         }
         if(end_date != null){
             System.out.println("Adding end_date criteria");
-            query.addCriteria(Criteria.where("end_date").lte(end_date));
+            LocalDateTime endOfDay = end_date.atTime(LocalTime.MAX);
+            query.addCriteria(Criteria.where("end_date").lte(endOfDay));
         }
         if(room_type != null){
             System.out.println("Adding room_type criteria");

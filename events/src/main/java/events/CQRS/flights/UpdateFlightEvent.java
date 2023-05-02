@@ -10,9 +10,9 @@ public class UpdateFlightEvent{
     private final String arrival_country;
     private final String arrival_city;
     private final Integer available_seats;
-    private final Double price;
 
-    public UpdateFlightEvent(String id, String departure_country, String departure_city, String date, String arrival_country, String arrival_city, Integer available_seats, Double price) {
+    public UpdateFlightEvent(String id, String departure_country, String departure_city, String date,
+                             String arrival_country, String arrival_city, Integer available_seats) {
         this.id = id;
         this.departure_country = departure_country;
         this.departure_city = departure_city;
@@ -20,7 +20,6 @@ public class UpdateFlightEvent{
         this.arrival_country = arrival_country;
         this.arrival_city = arrival_city;
         this.available_seats = available_seats;
-        this.price = price;
     }
 
     public String getId() {
@@ -51,8 +50,5 @@ public class UpdateFlightEvent{
         return Optional.ofNullable(available_seats);
     }
 
-    public Optional<Double> getPrice() {
-        return Optional.ofNullable(price);
-    }
 
 }

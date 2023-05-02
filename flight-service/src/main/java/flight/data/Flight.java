@@ -1,11 +1,12 @@
 package flight.data;
 
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDate;
 import java.util.Optional;
 
-@Document(collection = "flights")
+@Document(collection = "trips")
 public class Flight {
     @Id
     private String flightId;
@@ -19,13 +20,11 @@ public class Flight {
 
     private LocalDate date;
 
-    private Double price;
-
     public Flight() {
     }
 
     public Flight(String flightId, String departure_country, String departure_city, String arrival_country,
-                  String arrival_city, Integer available_seats, LocalDate date, Double price) {
+                  String arrival_city, Integer available_seats, LocalDate date) {
         this.flightId = flightId;
         this.departure_country = departure_country;
         this.departure_city = departure_city;
@@ -33,7 +32,6 @@ public class Flight {
         this.arrival_city = arrival_city;
         this.available_seats = available_seats;
         this.date = date;
-        this.price = price;
     }
 
     @Override
@@ -46,7 +44,6 @@ public class Flight {
                 ", arrival_city=" + arrival_city +
                 ", available_seats=" + available_seats +
                 ", date=" + date +
-                ", price=" + price +
                 '}';
     }
 
@@ -71,10 +68,6 @@ public class Flight {
     public Optional<LocalDate> getDate() {
         return Optional.ofNullable(date);
     }
-    public Optional<Double> getPrice() {
-        return Optional.ofNullable(price);
-    }
-
 
     public void setFlightId(String flightId) { this.flightId = flightId; }
     public void setDeparture_country(String departure_country) {
@@ -94,8 +87,5 @@ public class Flight {
     }
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-    public void setPrice(Double price) {
-        this.price = price;
     }
 }
