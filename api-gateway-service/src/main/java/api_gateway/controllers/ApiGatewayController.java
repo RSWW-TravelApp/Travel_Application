@@ -72,11 +72,13 @@ public class ApiGatewayController {
         return Mono.just("Successful reservation. You have 1min to purchase offer, otherwise reservation will be dropped");
     }
 
-    @PostMapping(value = "/purchase/{offerId}/{flightId}")
+    @PostMapping(value = "/purchase/{offerId}/{flightId}/{status}")
     public Mono<String> purchaseOffer(@PathVariable String offerId,
-                                      @PathVariable String flightId) {
+                                      @PathVariable String flightId,
+                                      @PathVariable String status) {
         System.out.println(offerId);
         System.out.println(flightId);
+        System.out.println(status);
         return Mono.just("Successful purchase");
     }
 }

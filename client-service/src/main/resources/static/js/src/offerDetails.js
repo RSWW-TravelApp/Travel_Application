@@ -80,12 +80,20 @@ async function fetchFlightDetails() {
 }
 
 async function reserveOffer() {
+    const result = document.getElementById('actionResult');
+    result.textContent = "";
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
-    if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId)) {
-            alert("Specified offer or flight does not exist");
-            return;
+    const userId = sessionStorage.getItem("user");
+    if (!userId) {
+        alert("Please log in to reserve")
+        return;
     }
+    if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId)) {
+        alert("Specified offer or flight does not exist");
+        return;
+    }
+    result.textContent = "Do not leave this page";
     await fetch('http://localhost:8080/reserve' + `/${offerId}/${flightId}`, {method: "POST"})
     .then(response => response.text())
     .then(response => {
@@ -93,14 +101,22 @@ async function reserveOffer() {
     });
 }
 
-async function purchaseOffer() {
+async function purchaseOffer(status) {
+    const result = document.getElementById('actionResult');
+    result.textContent = "";
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
+    const userId = sessionStorage.getItem("user");
+    if (!userId) {
+        alert("Please log in to purchase");
+        return;
+    }
     if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId)) {
         alert("Specified offer or flight does not exist");
         return;
     }
-    await fetch('http://localhost:8080/purchase' + `/${offerId}/${flightId}`, {method: "POST"})
+    result.textContent = "Do not leave this page";
+    await fetch('http://localhost:8080/purchase' + `/${offerId}/${flightId}/${status}`, {method: "POST"})
     .then(response => response.text())
     .then(response => {
         alert(response);
