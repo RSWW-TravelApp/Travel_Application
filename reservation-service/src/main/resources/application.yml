@@ -1,9 +1,9 @@
-#server:
-#  port: 8081
-#spring:
-#  data:
-#    mongodb:
-#      uri: mongodb://localhost:27017/hotels
+server:
+  port: 8083
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/reservations
 #  cloud:
 #    stream:
 #      function:

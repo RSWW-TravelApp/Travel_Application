@@ -21,6 +21,7 @@
         <module>client-service</module>
         <module>api-gateway-service</module>
         <module>events</module>
+        <module>discovery-server-service</module>
         <module>reservation-service</module>
         <module>reservation-master-service</module>
         <module>payment-service</module>

@@ -52,6 +52,7 @@ public class OfferWebLayerHandler {
     public Mono<ServerResponse> updateOfferById(ServerRequest request) {
         String id = request.pathVariable("offerId");
         Mono<Offer> updatedOffer = request.bodyToMono(Offer.class);
+
         return updatedOffer
                 .flatMap(offer -> {
                     String hotel_name = offer.getHotel_name().orElse(null);
@@ -83,9 +84,11 @@ public class OfferWebLayerHandler {
     }
 
     public Mono<ServerResponse> deleteOfferById(ServerRequest request){
-        return offerService.deleteByOfferId(request.pathVariable("offerId"))
-                .flatMap(offer -> ServerResponse.ok().body(offer, Offer.class))
-                .switchIfEmpty(ServerResponse.notFound().build());
+        return Mono.from(offerService.deleteByOfferId(request.pathVariable("offerId")))
+                .flatMap(offer -> ServerResponse
+                        .ok()
+                        .bodyValue(offer)
+                .switchIfEmpty(ServerResponse.notFound().build()));
     }
 
     public Mono<ServerResponse> getOffers(ServerRequest request) {
@@ -108,8 +111,9 @@ public class OfferWebLayerHandler {
         Flux<Offer> offers = offerService.fetchOffers(hotel_name, image, country, city, stars, start_date, end_date,
                 room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals);
 
-        offers.doOnNext(element -> System.out.println("Element: " + element))
-                .subscribe();
+        // For testing purpose
+        // offers.doOnNext(element -> System.out.println("Element: " + element))
+        //        .subscribe();
 
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(offers, Offer.class);
     }

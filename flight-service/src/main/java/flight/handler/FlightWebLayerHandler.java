@@ -21,7 +21,6 @@ public class FlightWebLayerHandler {
         this.flightService = flightService;
     }
 
-    @NotNull
     public Mono<ServerResponse> getAllFlights(ServerRequest request) {
         return ServerResponse
                 .ok()
@@ -41,8 +40,6 @@ public class FlightWebLayerHandler {
     }
 
     public Mono<ServerResponse> getFlights(ServerRequest request) {
-        System.out.println("WEB LAYER AA");
-
         String departure_country = request.queryParam("departure_country").orElse(null);
         String departure_city = request.queryParam("departure_city").orElse(null);
         String arrival_country = request.queryParam("arrival_country").orElse(null);
@@ -53,8 +50,9 @@ public class FlightWebLayerHandler {
         Flux<Flight> flights = flightService.fetchFlights(departure_country, departure_city, arrival_country,
                 arrival_city, available_seats, date);
 
-        flights.doOnNext(element -> System.out.println("Element: " + element))
-                .subscribe();
+        // For testing purposes
+        // flights.doOnNext(element -> System.out.println("Element: " + element))
+        //        .subscribe();
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -97,8 +95,10 @@ public class FlightWebLayerHandler {
     }
 
     public Mono<ServerResponse> deleteFlightById(ServerRequest request){
-        return flightService.deleteByFlightId(request.pathVariable("flightId"))
-                .flatMap(flight -> ServerResponse.ok().body(flight, Flight.class))
-                .switchIfEmpty(ServerResponse.notFound().build());
+        return Mono.from(flightService.deleteByFlightId(request.pathVariable("flightId")))
+                .flatMap(flight -> ServerResponse
+                        .ok()
+                        .bodyValue(flight)
+                        .switchIfEmpty(ServerResponse.notFound().build()));
     }
 }
