@@ -1,31 +1,31 @@
 async function fetchDestinations(el) {
   await fetch('http://localhost:8080/flights' + window.location.search, {method: "GET"})
-  .then(response => response.json())
+  .then(response => checkResponse(response))
   .then(data => {
     const listOfFlights = createElement('div');
     data.forEach(item => {
-                const flightItem = createElement('div', {'id': item.id})
+                const flightItem = createElement('div', {'id': item.flightId})
                 const form = createElement('form', {'action': '/offers'});
                 const button = createElement('button', {
                     'name': 'flightId',
-                    'value': item.id,
+                    'value': item.flightId,
                     'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
                 });
-                const dstCountryInput = createElement('input', {
+                const arrivalCountryInput = createElement('input', {
                     'type': 'hidden',
-                    'id': 'dstCountry',
-                    'name': 'dstCountry',
-                    'value': item.dstCountry
+                    'id': 'arrival_country',
+                    'name': 'arrival_country',
+                    'value': item.arrival_country
                 });
-                const srcCountryInput = createElement('input', {
+                const departureCountryInput = createElement('input', {
                     'type': 'hidden',
-                    'id': 'startDate',
-                    'name': 'startDate',
-                    'value': item.startDate
+                    'id': 'date',
+                    'name': 'date',
+                    'value': item.date
                 });
-                const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`From: ${item.srcCountry}, ${item.srcCity}\nTo: ${item.dstCountry}, ${item.dstCity}\nPrice: ${item.price}`, {'class': 'svg-button'});
+                const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`From: ${item.departure_country}, ${item.departure_city}\nTo: ${item.arrival_country}, ${item.arrival_city}\nAvailable seats: ${item.available_seats}`, {'class': 'svg-button'});
                 appendChildren(button, [postCard]);
-                appendChildren(form, [button, dstCountryInput, srcCountryInput]);
+                appendChildren(form, [button, arrivalCountryInput, departureCountryInput]);
                 appendChildren(flightItem, [form]);
                 appendChildren(listOfFlights, [flightItem]);
               });
@@ -33,5 +33,9 @@ async function fetchDestinations(el) {
     flightsCounter.textContent = `${data.length} flights found`;
     const container = document.getElementById('container');
     appendChildren(container, [listOfFlights]);
+  })
+  .catch(error => {
+        const flightsCounter = document.getElementById('flightsCounter');
+        flightsCounter.textContent = "0 flights found";
   });
 }

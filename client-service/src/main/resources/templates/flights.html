@@ -6,6 +6,7 @@
   <h1>Travel Application Home Page</h1>
   <script type="text/javascript" th:src="@{/js/src/flights.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
+  <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
 <body onload="createUserInfoBox(); fetchDestinations(); setFilterStartingValues(); disableNullFields()">
 <main>
@@ -15,14 +16,14 @@
       <h3> Find a journey from your dreams!</h3>
       <div class="filter">
         <form id="form" class="skipEmptyFields" action="/flights">
-          <label for="srcCountry">From</label>
-          <input type="search" id="srcCountry" name="srcCountry" placeholder="Departure country"><br>
-          <label for="dstCountry">To</label>
-          <input type="search" id="dstCountry" name="dstCountry" placeholder="Destination country"><br>
-          <label for="tripDate">Put date of departure</label>
-          <input type="date" id="tripDate" name="tripDate" placeholder="Departure Date"><br>
-          <label for="numberOfPeople">Put the number of people</label>
-          <input type="number" id="numberOfPeople" name="numberOfPeople" min="1" max="99">
+          <label for="departure_country">From</label>
+          <input type="search" id="departure_country" name="departure_country" placeholder="Departure country"><br>
+          <label for="arrival_country">To</label>
+          <input type="search" id="arrival_country" name="arrival_country" placeholder="Destination country"><br>
+          <label for="date">Put date of departure</label>
+          <input type="date" id="date" name="date" placeholder="Departure Date"><br>
+          <label for="number_of_people">Put the number of people</label>
+          <input type="number" id="number_of_people" name="number_of_people" min="1" max="99">
           <button> Search </button>
         </form>
       </div>

@@ -30,7 +30,7 @@ public class FlightWebLayerHandler {
                 .flatMap(flight -> ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(flight, Flight.class)
+                        .body(Mono.just(flight), Flight.class)
                 )
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
