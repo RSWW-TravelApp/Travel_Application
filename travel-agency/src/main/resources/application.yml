@@ -7,14 +7,18 @@ spring:
   cloud:
     stream:
       function:
-        definition: receiveReservation
+        definition: receiveReservation; receiveReservation2; unblockResources
       bindings:
         receiveReservation-in-0:
           destination: sage_make_reservation
         receiveReservation-out-0:
+          destination: saga_require_payment2
+        receiveReservation2-in-0:
+          destination: saga_require_payment2
+        receiveReservation2-out-0:
           destination: saga_require_payment
-
-
+        unblockResources-in-0:
+          destination: poo
   rabbitmq:
     username: guest
     password: guest
