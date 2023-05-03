@@ -65,7 +65,7 @@ public class FlightService {
         if (arrival_city != null) {
             update.set("arrival_city", arrival_city);
         }
-        if (available_seats != 0) {
+        if (available_seats != null) {
             update.set("available_seats", available_seats);
         }
         if (date != null) {
@@ -77,17 +77,12 @@ public class FlightService {
     }
 
 
-
     // finding all flights that have specific parameters chosen in the Web filter
     public Flux<Flight> fetchFlights(String departure_country, String departure_city, String arrival_country,
-                                     String arrival_city, int available_seats, LocalDate date){
+                                     String arrival_city, Integer available_seats, LocalDate date){
         Query query = new Query();
 
         String date_temp = date.toString();
-
-        // available_seats has to be >= total number of people of the trip
-        // total_people are taken from the Web filter and by default are 0
-        query.addCriteria(Criteria.where("available_seats").gte(available_seats));
 
         if(departure_country != null){
             query.addCriteria(Criteria.where("departure_country").regex(departure_country));
@@ -101,15 +96,17 @@ public class FlightService {
         if(arrival_city != null){
             query.addCriteria(Criteria.where("arrival_city").regex(arrival_city));
         }
+        if(available_seats != null){
+            query.addCriteria(Criteria.where("available_seats").gte(available_seats));
+        }
         if(!date_temp.equals("2020-01-01")){
             LocalDateTime startOfDay = date.atStartOfDay();
             LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
-
             query.addCriteria(Criteria.where("date").gte(startOfDay).lt(endOfDay));
         }
         else{
-            LocalDate minDate = LocalDate.of(2020, 1, 1);
-            LocalDate maxDate = LocalDate.of(2025, 1, 1);
+            LocalDate minDate = LocalDate.of(2019, 1, 1);
+            LocalDate maxDate = LocalDate.of(2026, 1, 1);
             query.addCriteria(Criteria.where("date").gte(minDate).andOperator(Criteria.where("date").lte(maxDate)));
         }
 

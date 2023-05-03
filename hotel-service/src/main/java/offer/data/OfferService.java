@@ -53,70 +53,51 @@ public class OfferService {
     }
 
     // finding all offers that have specific parameters chosen in the Web filter
-    public Flux<Offer> fetchOffers(String hotel_name, String image, String country, String city, int stars,
-                                   LocalDate start_date, LocalDate end_date, String room_type, int max_adults,
-                                   int max_children_to_3, int max_children_to_10, int max_children_to_18, String meals){
+    public Flux<Offer> fetchOffers(String hotel_name, String image, String country, String city, Integer stars,
+                                   LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults,
+                                   Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals){
 
         Query query = new Query().with(Sort.by(Collections.singletonList(Sort.Order.asc("price"))));
 
-        System.out.println("hotel_name: " + hotel_name + ", image: " + image + ", country: " + country + ", city: "
-                + city + ", stars: " + stars + ", start_date: " + start_date + ", end_date: " + end_date +
-                ", room_type: "  + room_type + ", max_adults: " + max_adults + ", max_children_to_3: " +
-                max_children_to_3 + ", max_children_to_10: " + max_children_to_10 + ", max_children_to_18: " +
-                max_children_to_18 + ", meals: " + meals);
-
         if(hotel_name != null){
-            System.out.println("Adding hotel_name criteria");
             query.addCriteria(Criteria.where("hotel_name").regex(hotel_name));
         }
         if(image != null){
-            System.out.println("Adding image criteria");
             query.addCriteria(Criteria.where("image").regex(image));
         }
         if(country != null){
-            System.out.println("Adding country criteria");
             query.addCriteria(Criteria.where("country").regex(country));
         }
         if(city != null){
-            System.out.println("Adding city criteria");
             query.addCriteria(Criteria.where("city").regex(city));
         }
         if(start_date != null){
-            System.out.println("Adding start_date criteria");
             LocalDateTime startOfDay = start_date.atStartOfDay();
             query.addCriteria(Criteria.where("start_date").gte(startOfDay));
         }
         if(end_date != null){
-            System.out.println("Adding end_date criteria");
             LocalDateTime endOfDay = end_date.atTime(LocalTime.MAX);
             query.addCriteria(Criteria.where("end_date").lte(endOfDay));
         }
         if(room_type != null){
-            System.out.println("Adding room_type criteria");
             query.addCriteria(Criteria.where("room_type").regex(room_type));
         }
-        if(stars != 0){
-            System.out.println("Adding stars criteria");
+        if(stars != null){
             query.addCriteria(Criteria.where("stars").gte(stars));
         }
-        if(max_adults != 0){
-            System.out.println("Adding max_adults criteria");
+        if(max_adults != null){
             query.addCriteria(Criteria.where("max_adults").gte(max_adults));
         }
-        if(max_children_to_3 != 0){
-            System.out.println("Adding max_children_to_3 criteria");
+        if(max_children_to_3 != null){
             query.addCriteria(Criteria.where("max_children_to_3").gte(max_children_to_3));
         }
-        if(max_children_to_10 != 0){
-            System.out.println("Adding max_children_to_10 criteria");
+        if(max_children_to_10 != null){
             query.addCriteria(Criteria.where("max_children_to_10").gte(max_children_to_10));
         }
-        if(max_children_to_18 != 0){
-            System.out.println("Adding max_children_to_18 criteria");
+        if(max_children_to_18 != null){
             query.addCriteria(Criteria.where("max_children_to_18").gte(max_children_to_18));
         }
         if(meals != null) {
-            System.out.println("Adding meals criteria");
             query.addCriteria(Criteria.where("meals").regex(meals));
         }
 
@@ -126,9 +107,10 @@ public class OfferService {
 
     // updating the specific offer with the given parameters (null parameters - don't update the field)
     public Mono<Offer> updateOffer(String offerId, String hotel_name, String image, String country, String city,
-                                   int stars, LocalDate start_date, LocalDate end_date, String room_type, int max_adults, int max_children_to_3,
-                                   int max_children_to_10, int max_children_to_18, String meals,
-                                   double price, boolean available) {
+                                   Integer stars, LocalDate start_date, LocalDate end_date, String room_type,
+                                   Integer max_adults, Integer max_children_to_3,
+                                   Integer max_children_to_10, Integer max_children_to_18, String meals,
+                                   Double price, boolean available) {
         Query query = new Query();
         query.addCriteria(Criteria.where("offerId").is(offerId));
 
@@ -145,7 +127,7 @@ public class OfferService {
         if(city != null) {
             update.set("city", city);
         }
-        if(stars != 0) {
+        if(stars != null) {
             update.set("stars", stars);
         }
         if(start_date != null) {
@@ -157,22 +139,22 @@ public class OfferService {
         if(room_type != null) {
             update.set("room_type", room_type);
         }
-        if(max_adults != 0) {
+        if(max_adults != null) {
             update.set("max_adults", max_adults);
         }
-        if(max_children_to_3 != 0) {
+        if(max_children_to_3 != null) {
             update.set("max_children_to_3", max_children_to_3);
         }
-        if(max_children_to_10 != 0) {
+        if(max_children_to_10 != null) {
             update.set("max_children_to_10", max_children_to_10);
         }
-        if(max_children_to_18 != 0) {
+        if(max_children_to_18 != null) {
             update.set("max_children_to_18", max_children_to_18);
         }
         if(meals != null) {
             update.set("meals", meals);
         }
-        if(price != 0) {
+        if(price != null) {
             update.set("price", price);
         }
         if(!available) {

@@ -59,16 +59,16 @@ public class OfferWebLayerHandler {
                     String image = offer.getImage().orElse(null);
                     String country = offer.getCountry().orElse(null);
                     String city = offer.getCity().orElse(null);
-                    int stars = offer.getStars().orElse(0);
+                    Integer stars = offer.getStars().orElse(null);
                     LocalDate start_date = offer.getStart_date().orElse(null);
                     LocalDate end_date = offer.getEnd_date().orElse(null);
                     String room_type = offer.getRoom_type().orElse(null);
-                    int max_adults = offer.getMax_adults().orElse(0);
-                    int max_children_to_3 = offer.getMax_children_to_3().orElse(0);
-                    int max_children_to_10 = offer.getMax_children_to_10().orElse(0);
-                    int max_children_to_18 = offer.getMax_children_to_18().orElse(0);
+                    Integer max_adults = offer.getMax_adults().orElse(null);
+                    Integer max_children_to_3 = offer.getMax_children_to_3().orElse(null);
+                    Integer max_children_to_10 = offer.getMax_children_to_10().orElse(null);
+                    Integer max_children_to_18 = offer.getMax_children_to_18().orElse(null);
                     String meals = offer.getMeals().orElse(null);
-                    double price = offer.getPrice().orElse(0.0);
+                    Double price = offer.getPrice().orElse(null);
                     boolean available = offer.getAvailable().orElse(true);
 
                     return ServerResponse.ok()
@@ -99,14 +99,14 @@ public class OfferWebLayerHandler {
         String room_type = request.queryParam("room_type").orElse(null);
         String meals = request.queryParam("meals").orElse(null);
 
-        LocalDate start_date = LocalDate.parse(request.queryParam("start_date").orElse("2020-01-01"));
-        LocalDate end_date = LocalDate.parse(request.queryParam("end_date").orElse("2025-01-01"));
+        LocalDate start_date = LocalDate.parse(request.queryParam("start_date").orElse("2019-01-01"));
+        LocalDate end_date = LocalDate.parse(request.queryParam("end_date").orElse("2026-01-01"));
 
-        int stars = Integer.parseInt(request.queryParam("stars").orElse("0"));
-        int max_adults = Integer.parseInt(request.queryParam("max_adults").orElse("0"));
-        int max_children_to_3 = Integer.parseInt(request.queryParam("max_children_to_3").orElse("0"));
-        int max_children_to_10 = Integer.parseInt(request.queryParam("max_children_to_10").orElse("0"));
-        int max_children_to_18 = Integer.parseInt(request.queryParam("max_children_to_18").orElse("0"));
+        Integer stars = Integer.getInteger(request.queryParam("stars").orElse(null));
+        Integer max_adults = Integer.getInteger(request.queryParam("max_adults").orElse(null));
+        Integer max_children_to_3 = Integer.getInteger(request.queryParam("max_children_to_3").orElse(null));
+        Integer max_children_to_10 = Integer.getInteger(request.queryParam("max_children_to_10").orElse(null));
+        Integer max_children_to_18 = Integer.getInteger(request.queryParam("max_children_to_18").orElse(null));
 
         Flux<Offer> offers = offerService.fetchOffers(hotel_name, image, country, city, stars, start_date, end_date,
                 room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals);
