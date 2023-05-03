@@ -54,7 +54,7 @@ public class FlightEvent {
                     event.getDeparture_city().orElse(null),
                     event.getArrival_country().orElse(null),
                     event.getArrival_city().orElse(null),
-                    event.getAvailable_seats().orElse(0),
+                    event.getAvailable_seats().orElse(null),
                     event.getDate().map(LocalDate::parse).orElse(null)
                 )
         )

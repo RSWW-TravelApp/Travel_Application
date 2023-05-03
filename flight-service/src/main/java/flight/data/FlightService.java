@@ -82,8 +82,6 @@ public class FlightService {
                                      String arrival_city, Integer available_seats, LocalDate date){
         Query query = new Query();
 
-        String date_temp = date.toString();
-
         if(departure_country != null){
             query.addCriteria(Criteria.where("departure_country").regex(departure_country));
         }
@@ -99,15 +97,10 @@ public class FlightService {
         if(available_seats != null){
             query.addCriteria(Criteria.where("available_seats").gte(available_seats));
         }
-        if(!date_temp.equals("2020-01-01")){
+        if(date != null){
             LocalDateTime startOfDay = date.atStartOfDay();
             LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
             query.addCriteria(Criteria.where("date").gte(startOfDay).lt(endOfDay));
-        }
-        else{
-            LocalDate minDate = LocalDate.of(2019, 1, 1);
-            LocalDate maxDate = LocalDate.of(2026, 1, 1);
-            query.addCriteria(Criteria.where("date").gte(minDate).andOperator(Criteria.where("date").lte(maxDate)));
         }
 
         return reactiveMongoTemplate

@@ -55,7 +55,8 @@ public class OfferService {
     // finding all offers that have specific parameters chosen in the Web filter
     public Flux<Offer> fetchOffers(String hotel_name, String image, String country, String city, Integer stars,
                                    LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults,
-                                   Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals){
+                                   Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18,
+                                   String meals){
 
         Query query = new Query().with(Sort.by(Collections.singletonList(Sort.Order.asc("price"))));
 
@@ -110,7 +111,7 @@ public class OfferService {
                                    Integer stars, LocalDate start_date, LocalDate end_date, String room_type,
                                    Integer max_adults, Integer max_children_to_3,
                                    Integer max_children_to_10, Integer max_children_to_18, String meals,
-                                   Double price, boolean available) {
+                                   Double price, Boolean available) {
         Query query = new Query();
         query.addCriteria(Criteria.where("offerId").is(offerId));
 
@@ -157,7 +158,7 @@ public class OfferService {
         if(price != null) {
             update.set("price", price);
         }
-        if(!available) {
+        if(available != null) {
             update.set("available", false);
         }
 
