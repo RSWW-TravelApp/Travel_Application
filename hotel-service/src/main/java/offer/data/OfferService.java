@@ -37,54 +37,11 @@ public class OfferService {
                             .switchIfEmpty(Mono.empty());
     }
 
-    public Flux<Offer> findByCountry(String country){
-        return offerRepository.findByCountry(country)
-                .switchIfEmpty(Flux.empty());
-    }
-
     public Mono<Offer> deleteByOfferId(String offerId) {
         return offerRepository.findByOfferId(offerId)
                 .flatMap(existingOffer -> offerRepository.delete(existingOffer)
                         .then(Mono.just(existingOffer)));
 
-    }
-
-    // finding all offers that have specific parameters chosen in the Web filter
-    public Flux<Offer> findByParameters(int stars, int adults, int children_to_3, int children_to_10,
-                                        int children_to_18, String meals, String room_type, double price,
-                                        String country, LocalDate start_date, LocalDate end_date, String available){
-        Query query = new Query()
-                .with(Sort
-                        .by(Collections.singletonList(Sort.Order.asc("price")))
-                );
-        query.addCriteria(
-                Criteria.where("stars").gte(stars)
-                        .and("max_adults").gte(adults)
-                        .and("max_children_to_3").gte(children_to_3)
-                        .and("max_children_to_10").gte(children_to_10)
-                        .and("max_children_to_18").gte(children_to_18)
-                        .and("price").lte(price)
-                        .and("available").regex(String.valueOf(available))
-        );
-
-        if(meals != null) {
-            query.addCriteria(Criteria.where("meals").regex(meals));
-        }
-        if(room_type != null) {
-            query.addCriteria(Criteria.where("room_type").regex(room_type));
-        }
-        if(country != null) {
-            query.addCriteria(Criteria.where("country").regex(country));
-        }
-        if(start_date != null){
-            query.addCriteria(Criteria.where("start_date").gte(start_date));
-        }
-        if(end_date != null){
-            query.addCriteria(Criteria.where("end_date").lte(end_date));
-        }
-
-        return reactiveMongoTemplate
-                .find(query, Offer.class);
     }
 
     // TODO fix the update functions

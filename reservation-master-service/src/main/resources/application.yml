@@ -1,9 +1,12 @@
-#server:
-#  port: 8081
-#spring:
-#  data:
-#    mongodb:
-#      uri: mongodb://localhost:27017/hotels
+server:
+  port: 8090
+spring:
+  application:
+    name: reservation-master-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/reservations_master
+
 #  cloud:
 #    stream:
 #      function:
@@ -15,9 +18,18 @@
 #          destination: cqrs_offers_delete
 #        updateFlightHandle-in-0:
 #          destination: cqrs_offers_update
-#
+
 #  rabbitmq:
 #    username: guest
 #    password: guest
 #    host: 127.0.0.1
 #    port: 5672
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: ${spring.application.name}
+    instance-id: ${spring.application.name}:${server.port}:${random.value}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
