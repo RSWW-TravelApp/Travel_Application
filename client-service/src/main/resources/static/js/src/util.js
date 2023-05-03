@@ -210,7 +210,7 @@ function createNotLoggedUserInfoBox(logOutCallback) {
     appendChildren(userInfoDiv, [button]);
     appendChildren(parentDiv, [userInfoDiv]);
     if (logOutCallback) {
-            logOutCallback();
+        logOutCallback();
     }
 }
 

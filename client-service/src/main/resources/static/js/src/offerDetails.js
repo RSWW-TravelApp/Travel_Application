@@ -1,3 +1,4 @@
+
 function createReservationListener() {
     const currentUser = sessionStorage.getItem("user");
     if (!currentUser) {
@@ -34,9 +35,12 @@ function buildOfferInfo(offerItem) {
         labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.hotel_name}`, {'class': 'svg-button', 'id': 'hotelNameInfo'}, "Hotel name"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.start_date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Starting date"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_adults}`, {'class': 'svg-button', 'id': 'adultsInfo'}, "Adults"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_3}`, {'class': 'svg-button', 'id': 'ppl3plusInfo'}, "Max people 3+"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_10}`, {'class': 'svg-button', 'id': 'ppl10plusInfo'}, "Max people 10+"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_18}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "Max people 18+")
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_3}`, {'class': 'svg-button', 'id': 'ppl3plusInfo'}, "People up to 3"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_10}`, {'class': 'svg-button', 'id': 'ppl10plusInfo'}, "People up to 10"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_18}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "People up to 18"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.room_type}`, {'class': 'svg-button', 'id': 'room_type'}, "Room type"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.meals}`, {'class': 'svg-button', 'id': 'meals'}, "Meals"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.price}`, {'class': 'svg-button', 'id': 'price'}, "Price")
     ])
 }
 
@@ -55,7 +59,8 @@ function buildFlightInfo(flightItem) {
     ]);
     const flightDataDateContainer = document.getElementById('flightDataDate');
     appendChildren(flightDataDateContainer, [
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${flightItem.date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Flight date")
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${flightItem.date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Flight date"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${flightItem.available_seats}`, {'class': 'svg-button', 'id': 'availableSeats'}, "Available seats")
     ]);
 
     setAttributes(document.getElementById("flightId"), {'value': flightItem.flightId});
@@ -85,6 +90,14 @@ async function reserveOffer() {
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
     const userId = sessionStorage.getItem("user");
+    if (Number(document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent) +
+        Number(document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent) +
+        Number(document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent) +
+        Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent) >
+        Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)) {
+        alert("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
+        return;
+    }
     if (!userId) {
         alert("Please log in to reserve")
         return;
@@ -107,6 +120,14 @@ async function purchaseOffer(status) {
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
     const userId = sessionStorage.getItem("user");
+    if (Number(document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent) +
+        Number(document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent) +
+        Number(document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent) +
+        Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent) >
+        Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)) {
+        alert("Specified offer configuration cannot be purchased cause there is lack of available seats in a plane");
+        return;
+    }
     if (!userId) {
         alert("Please log in to purchase");
         return;

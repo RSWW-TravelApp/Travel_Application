@@ -50,8 +50,7 @@ public class ApiGatewayController {
     }
 
     @GetMapping(value = "/login/{login}/{password}")
-    public Mono<String> login(ServerHttpResponse response,
-                              @PathVariable String login,
+    public Mono<String> login(@PathVariable String login,
                               @PathVariable String password) {
 
         String correctPassword = users.get(login);

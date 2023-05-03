@@ -1,5 +1,10 @@
 async function fetchDestinations(el) {
-  await fetch('http://localhost:8080/flights' + window.location.search, {method: "GET"})
+  var queryParams = window.location.search;
+  const numberOfPeople = getSearchRequestParams(['number_of_people'])['number_of_people'];
+  if (!numberOfPeople) {
+    queryParams += (queryParams == "" ? "?" : "&") + `number_of_people=${document.getElementById('number_of_people').value}`
+  }
+  await fetch('http://localhost:8080/flights' + queryParams, {method: "GET"})
   .then(response => checkResponse(response))
   .then(data => {
     const listOfFlights = createElement('div');
@@ -23,9 +28,15 @@ async function fetchDestinations(el) {
                     'name': 'date',
                     'value': item.date
                 });
+                const numberOfPeopleInput = createElement('input', {
+                    'type': 'hidden',
+                    'id': 'max_adults',
+                    'name': 'max_adults',
+                    'value': document.getElementById('number_of_people').value
+                });
                 const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`From: ${item.departure_country}, ${item.departure_city}\nTo: ${item.arrival_country}, ${item.arrival_city}\nAvailable seats: ${item.available_seats}`, {'class': 'svg-button'});
                 appendChildren(button, [postCard]);
-                appendChildren(form, [button, arrivalCountryInput, departureCountryInput]);
+                appendChildren(form, [button, arrivalCountryInput, departureCountryInput, numberOfPeopleInput]);
                 appendChildren(flightItem, [form]);
                 appendChildren(listOfFlights, [flightItem]);
               });
