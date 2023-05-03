@@ -86,8 +86,6 @@ public class ReservationMasterWebLayerHandler {
                     Boolean isPaid = reservationNested.getIsPaid().orElse(null);
                     String eventType = reservationNested.getEventType().orElse(null);
 
-                    System.out.println(eventType + "AAA");
-
                     ReservationNested reservation1 = new ReservationNested(id, userId, flightId, offerId, isPaid,
                             eventType);
 
