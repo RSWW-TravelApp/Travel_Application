@@ -40,11 +40,6 @@ public class OfferService {
                             .switchIfEmpty(Mono.empty());
     }
 
-    public Flux<Offer> findByCountry(String country){
-        return offerRepository.findByCountry(country)
-                .switchIfEmpty(Flux.empty());
-    }
-
     public Mono<Offer> deleteByOfferId(String offerId) {
         return offerRepository.findByOfferId(offerId)
                 .flatMap(existingOffer -> offerRepository.delete(existingOffer)
