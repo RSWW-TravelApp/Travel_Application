@@ -2,33 +2,30 @@ package reservationmaster.data;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.util.List;
 import java.util.Optional;
 
 @Document(collection = "bookings")
-public class Reservation{
+public class ReservationNested{
 
     @Id
     private String reservationId;
-
+    private String eventType;
     private String userId;
     private String offerId;
     private String flightId;
-
     private Boolean isPaid;
-    private List<ReservationNested> events;
 
-    public Reservation() {
+    public ReservationNested() {
     }
 
-    public Reservation(String reservationId, String userId, String offerId, String flightId, Boolean isPaid,
-                       List<ReservationNested> events) {
+    public ReservationNested(String reservationId, String userId, String offerId, String flightId, Boolean isPaid,
+                       String eventType) {
         this.reservationId = reservationId;
         this.userId = userId;
         this.offerId = offerId;
         this.flightId = flightId;
         this.isPaid = isPaid;
-        this.events = events;
+        this.eventType = eventType;
     }
 
     @Override
@@ -39,7 +36,7 @@ public class Reservation{
                 ", offerId='" + offerId +
                 ", flightId='" + flightId +
                 ", isPaid='" + isPaid + '\'' +
-                ", events='" + events + '\'' +
+                ", eventType='" + eventType + '\'' +
                 '}';
     }
 
@@ -58,7 +55,7 @@ public class Reservation{
     public Optional<Boolean> getIsPaid() {
         return Optional.ofNullable(isPaid);
     }
-    public List<ReservationNested> getEvents() {return  events;}
+    public Optional<String> getEventType() {return  Optional.ofNullable(eventType);}
 
     public void setReservationId(String reservationId) {
         this.reservationId = reservationId;
@@ -75,5 +72,6 @@ public class Reservation{
     public void setIsPaid(Boolean isPaid) {
         this.isPaid = isPaid;
     }
-    public void setEvents(List<ReservationNested> events){this.events = events;}
+    public void setEventType(String eventType){this.eventType = eventType;}
 }
+

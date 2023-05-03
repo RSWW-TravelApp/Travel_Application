@@ -1,55 +1,84 @@
 package reservationmaster.data;
 
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 
 @Service
 public class ReservationMasterService {
 
     private ReactiveMongoTemplate reactiveMongoTemplate;
-    private ReservationRepository reservationRepository;
+    private ReservationMasterRepository reservationMasterRepository;
 
-    public ReservationMasterService(ReactiveMongoTemplate reactiveMongoTemplate, ReservationRepository reservationRepository) {
+    public ReservationMasterService(ReactiveMongoTemplate reactiveMongoTemplate, ReservationMasterRepository reservationMasterRepository) {
         this.reactiveMongoTemplate = reactiveMongoTemplate;
-        this.reservationRepository = reservationRepository;
+        this.reservationMasterRepository = reservationMasterRepository;
     }
 
     public Mono<Reservation> createReservation(Reservation reservation){
-        return reservationRepository.save(reservation);
+        return reservationMasterRepository.save(reservation);
+    }
+
+    public Mono<Reservation> deleteReservationById(String reservationId){
+        return reservationMasterRepository.findByReservationId(reservationId)
+                .flatMap(existingReservation -> reservationMasterRepository.delete(existingReservation)
+                        .then(Mono.just(existingReservation)));
+    }
+
+    public Mono<ReservationNested> addEvent(ReservationNested reservationNested){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reservationId").is(reservationNested.getReservationId()));
+
+        Update update = new Update()
+                .push("events", reservationNested);
+
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
+        return reactiveMongoTemplate.findAndModify(query, update, options, ReservationNested.class);
     }
 
     public Flux<Reservation> getAllReservations(){
-        return reservationRepository.findAll().switchIfEmpty(Flux.empty());
+        return reservationMasterRepository.findAll().switchIfEmpty(Flux.empty());
     }
 
-    public Mono<Reservation> findByReservationId(String reservationID){
-        return reservationRepository.findByReservationId(reservationID).switchIfEmpty(Mono.empty());
+    public Mono<Reservation> findByReservationId(String reservationId){
+        return reservationMasterRepository.findByReservationId(reservationId).switchIfEmpty(Mono.empty());
     }
 
-    public Mono<Reservation> deleteByReservationId(String reservationID){
-        return reservationRepository.findByReservationId(reservationID)
-                .flatMap(existingReservation -> reservationRepository.delete(existingReservation)
-                        .then(Mono.just(existingReservation)));
-    }
-    /*
     // updating the specific offer with the given parameters (null parameters - don't update the field)
-    public Mono<Reservation> updateReservation(Reservation reservation){
-        return reservationRepository.findById(reservation.getReservationID())
-                .flatMap(dbReservations -> {
-                    reservation.getUserID().ifPresent(dbReservations::setUserID);
+    public Mono<Reservation> updateReservation(String reservationId, String userId, String flightId, String offerId,
+                                               Boolean isPaid, List<ReservationNested> events){
 
-                    reservation.getHotelID().ifPresent(dbReservations::setHotelID);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reservationId").is(reservationId));
 
-                    reservation.getFlightID().ifPresent(dbReservations::setFlightID);
+        Update update = new Update();
+        if(userId != null) {
+            update.set("userId", userId);
+        }
+        if(flightId != null) {
+            update.set("flightId", flightId);
+        }
+        if(offerId != null) {
+            update.set("offerId", offerId);
+        }
+        if(isPaid != null) {
+            update.set("isPaid", isPaid);
+        }
+        if(events != null){
+            update.set("events", events);
+        }
 
-                    reservation.getIsPaid().ifPresent(dbReservations::setIsPaid);
-
-                    return reservationRepository.save(dbReservations);
-                });
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
+        return reactiveMongoTemplate.findAndModify(query, update, options, Reservation.class);
     }
 
-*/
+
 }
+

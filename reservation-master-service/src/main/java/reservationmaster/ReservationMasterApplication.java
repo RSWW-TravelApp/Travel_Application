@@ -23,6 +23,6 @@ public class ReservationMasterApplication extends AbstractReactiveMongoConfigura
 
     @Override
     protected String getDatabaseName() {
-        return "reservations";
+        return "reservations_master";
     }
 }

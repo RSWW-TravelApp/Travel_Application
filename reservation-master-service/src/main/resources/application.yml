@@ -1,9 +1,9 @@
 server:
   port: 333
 spring:
-  #  data:
-  #    mongodb:
-  #      uri: mongodb://localhost:27017/hotels
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/reservations_master
   cloud:
     stream:
       function:
