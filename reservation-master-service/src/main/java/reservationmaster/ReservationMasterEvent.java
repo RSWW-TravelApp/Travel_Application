@@ -40,7 +40,7 @@ public class ReservationMasterEvent {
     public Function<Flux<PayReservationEvent>, Flux<TONotificationEvent>> finaliseReservation() {
         return flux -> flux
                 .doOnNext(event -> System.out.println("marking reservation as paid for:" + event.getOfferId()))
-                .map(event -> new TONotificationEvent(event.getPrice(),event.getOfferId(),event.getFlightId(),event.getSeatsNeeded()));
+                .map(event -> new TONotificationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlightId(),event.getSeatsNeeded()));
     }
 
     @Bean

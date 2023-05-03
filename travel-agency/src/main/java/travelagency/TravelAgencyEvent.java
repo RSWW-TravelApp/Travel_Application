@@ -12,7 +12,7 @@ public class TravelAgencyEvent {
     public Function<Flux<MakeReservationEvent>, Flux<SagaEvent>> blockResources() {
         return flux -> flux
                 .doOnNext(event -> System.out.println("blocking offer:" + event.getOfferId()))
-                .map(event -> new RequirePaymentEvent(20.0,event.getOfferId(),event.getFlightId(),1337));
+                .map(event -> new RequirePaymentEvent(20.0,event.getUser_id(), event.getOfferId(),event.getFlightId(),1337));
     }
 
 //    @Bean
@@ -37,7 +37,7 @@ public class TravelAgencyEvent {
 //        )))).then();
         return flux -> flux
                 .doOnNext(event -> System.out.println("unblocking resources:" + event.getOfferId()))
-                .map(event -> new RemoveReservationEvent(event.getPrice(),event.getOfferId(),event.getFlightId(),1337));
+                .map(event -> new RemoveReservationEvent(event.getPrice(), event.getUser_id(), event.getOfferId(),event.getFlightId(),1337));
     }
 
 
