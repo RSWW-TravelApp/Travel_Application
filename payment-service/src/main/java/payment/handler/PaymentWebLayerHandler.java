@@ -56,32 +56,44 @@ public class PaymentWebLayerHandler {
 
 
         switch (status) {
-            case "fail":
+            case "fail" -> {
                 // 100% for fail
                 return ServerResponse
                         .status(HttpStatus.PAYMENT_REQUIRED)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.TEXT_PLAIN)
                         .body(Mono.just("Payment cannot be processed"), String.class);
-            case "success":
+            }
+            case "success" -> {
                 // ~0% for fail BUT SAGA can fail, so it is not exactly 0%
-                break;
-            case "random":
+
+                return ServerResponse
+                        .status(HttpStatus.OK)
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .body(Mono.just("Payment is processed"), String.class);
+            }
+            case "random" -> {
                 // 15% for fail
                 Random rand = new Random();
                 if (rand.nextInt(0, 100) < 15) {
                     return ServerResponse
                             .status(HttpStatus.PAYMENT_REQUIRED)
-                            .contentType(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.TEXT_PLAIN)
                             .body(Mono.just("Payment cannot be processed"), String.class);
-                };
+                }
+                ;
 
                 // SAGA
-                break;
+
+                return ServerResponse
+                        .status(HttpStatus.OK)
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .body(Mono.just("Payment is processed"), String.class);
+            }
         }
 
         return ServerResponse
                 .status(HttpStatus.BAD_REQUEST)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.TEXT_PLAIN)
                 .body(Mono.just("Status must be one of the following ['fail', 'success', 'random']"), String.class);
     }
 
