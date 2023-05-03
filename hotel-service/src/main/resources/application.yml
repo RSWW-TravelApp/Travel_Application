@@ -27,7 +27,7 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-    hostname: offer-service
+    hostname: ${spring.application.name}
     instance-id: ${spring.application.name}:${server.port}:${random.value}
   client:
     serviceUrl:

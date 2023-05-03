@@ -1,11 +1,12 @@
 server:
-  port: 8092
+  port: 8091
 spring:
   application:
-    name: payment-service
+    name: travel-agency-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/payments
+      uri: mongodb://localhost:27017/travel_agency
+
 #  cloud:
 #    stream:
 #      function:
@@ -17,7 +18,7 @@ spring:
 #          destination: cqrs_offers_delete
 #        updateFlightHandle-in-0:
 #          destination: cqrs_offers_update
-#
+
 #  rabbitmq:
 #    username: guest
 #    password: guest
