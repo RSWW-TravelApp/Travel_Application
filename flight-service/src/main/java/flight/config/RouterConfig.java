@@ -11,9 +11,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class RouterConfig {
+
     @Bean
     RouterFunction<ServerResponse> getFlights(FlightWebLayerHandler handler) {
-        return route(GET("/flights"), handler::getAllFlights);
+        return route(GET("/flights"), handler::getFlights);
     }
 
     @Bean

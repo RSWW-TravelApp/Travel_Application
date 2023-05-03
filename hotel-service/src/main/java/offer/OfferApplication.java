@@ -28,4 +28,6 @@ public class OfferApplication extends AbstractReactiveMongoConfiguration {
         return "hotels";
     }
 
+
+
 }

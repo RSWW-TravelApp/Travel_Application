@@ -11,9 +11,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class RouterConfig {
+
     @Bean
     RouterFunction<ServerResponse> getOffers(OfferWebLayerHandler handler) {
-        return route(GET("/offers"), handler::getAllOffers);
+        return route(GET("/offers"), handler::getOffers);
     }
 
     @Bean
@@ -35,4 +36,9 @@ public class RouterConfig {
     RouterFunction<ServerResponse> deleteOfferById(OfferWebLayerHandler handler) {
         return route(DELETE("/offers/{offerId}"), handler::deleteOfferById);
     }
+
+
+
+
+
 }

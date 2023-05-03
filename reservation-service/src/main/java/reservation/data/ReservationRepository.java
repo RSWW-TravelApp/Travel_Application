@@ -1,4 +1,4 @@
-package flight.data;
+package reservation.data;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 @Repository
 @EnableReactiveMongoRepositories
-public interface FlightRepository extends ReactiveMongoRepository<Flight, String> {
+public interface ReservationRepository extends ReactiveMongoRepository<Reservation, String> {
 
-    Mono<Flight> findByFlightId(String flightId);
+    Mono<Reservation> findByReservationId(String reservationId);
 }
