@@ -1,8 +1,8 @@
 async function fetchDestinations(el) {
   var queryParams = window.location.search;
-  const numberOfPeople = getSearchRequestParams(['number_of_people'])['number_of_people'];
+  const numberOfPeople = getSearchRequestParams(['available_seats'])['available_seats'];
   if (!numberOfPeople) {
-    queryParams += (queryParams == "" ? "?" : "&") + `number_of_people=${document.getElementById('number_of_people').value}`
+    queryParams += (queryParams == "" ? "?" : "&") + `available_seats=${document.getElementById('available_seats').value}`
   }
   await fetch('http://localhost:8080/flights' + queryParams, {method: "GET"})
   .then(response => checkResponse(response))
@@ -32,7 +32,7 @@ async function fetchDestinations(el) {
                     'type': 'hidden',
                     'id': 'max_adults',
                     'name': 'max_adults',
-                    'value': document.getElementById('number_of_people').value
+                    'value': document.getElementById('available_seats').value
                 });
                 const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`From: ${item.departure_country}, ${item.departure_city}\nTo: ${item.arrival_country}, ${item.arrival_city}\nAvailable seats: ${item.available_seats}`, {'class': 'svg-button'});
                 appendChildren(button, [postCard]);

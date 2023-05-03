@@ -11,6 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Component
 public class OfferWebLayerHandler {
@@ -102,14 +103,18 @@ public class OfferWebLayerHandler {
         LocalDate start_date = LocalDate.parse(request.queryParam("start_date").orElse("2019-01-01"));
         LocalDate end_date = LocalDate.parse(request.queryParam("end_date").orElse("2026-01-01"));
 
-        Integer stars = Integer.getInteger(request.queryParam("stars").orElse(null));
-        Integer max_adults = Integer.getInteger(request.queryParam("max_adults").orElse(null));
-        Integer max_children_to_3 = Integer.getInteger(request.queryParam("max_children_to_3").orElse(null));
-        Integer max_children_to_10 = Integer.getInteger(request.queryParam("max_children_to_10").orElse(null));
-        Integer max_children_to_18 = Integer.getInteger(request.queryParam("max_children_to_18").orElse(null));
+        Integer stars, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, min_price, max_price;
+        stars = max_adults = max_children_to_3 = max_children_to_10 = max_children_to_18 = min_price = max_price = null;
+        try { stars = Integer.valueOf(Objects.requireNonNull(request.queryParam("stars").orElse(null))); } catch (Exception ignored) {}
+        try { max_adults = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_adults").orElse(null))); } catch (Exception ignored) {}
+        try { max_children_to_3 = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_children_to_3").orElse(null))); } catch (Exception ignored) {}
+        try { max_children_to_10 = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_children_to_10").orElse(null))); } catch (Exception ignored) {}
+        try { max_children_to_18 = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_children_to_18").orElse(null))); } catch (Exception ignored) {}
+        try { min_price = Integer.valueOf(Objects.requireNonNull(request.queryParam("min_price").orElse(null))); } catch (Exception ignored) {}
+        try { max_price = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_price").orElse(null))); } catch (Exception ignored) {}
 
         Flux<Offer> offers = offerService.fetchOffers(hotel_name, image, country, city, stars, start_date, end_date,
-                room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals);
+                room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals, min_price, max_price);
 
         // For testing purpose
         // offers.doOnNext(element -> System.out.println("Element: " + element))
