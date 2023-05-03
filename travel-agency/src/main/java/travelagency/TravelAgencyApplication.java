@@ -23,7 +23,7 @@ public class TravelAgencyApplication extends AbstractReactiveMongoConfiguration 
 
     @Override
     protected String getDatabaseName() {
-        return "travelagency";
+        return "travel_agency";
     }
 
 }

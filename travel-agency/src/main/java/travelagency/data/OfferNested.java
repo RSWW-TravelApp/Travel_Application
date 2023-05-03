@@ -3,25 +3,24 @@ package travelagency.data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @Document(collection = "offers")
-public class Offer {
+public class OfferNested {
     private String offerId;
-
     private String hotel_name;
     private String image;
     private String country;
     private String city;
     private String meals;
+    private String eventType;
+
+    private Integer stars;
 
     private LocalDate start_date;
     private LocalDate end_date;
     private String room_type;
 
-    private Integer stars;
     private Integer max_adults;
     private Integer max_children_to_3;
     private Integer max_children_to_10;
@@ -29,16 +28,14 @@ public class Offer {
 
     private Double price;
     private Boolean available;
-    private List<OfferNested> events;
 
-
-    public Offer() {
+    public OfferNested() {
     }
 
-    public Offer(String offerId, String hotel_name, String image, String country, String city, Integer stars,
+    public OfferNested(String offerId, String hotel_name, String image, String country, String city, Integer stars,
                  LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults,
                  Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18,
-                 String meals, Double price, Boolean available, List<OfferNested> events) {
+                 String meals, Double price, Boolean available, String eventType) {
         this.offerId = offerId;
         this.hotel_name = hotel_name;
         this.image = image;
@@ -55,7 +52,7 @@ public class Offer {
         this.meals = meals;
         this.price = price;
         this.available = available;
-        this.events = events;
+        this.eventType = eventType;
     }
 
     @Override
@@ -124,7 +121,7 @@ public class Offer {
         return Optional.ofNullable(price);
     }
     public Optional<Boolean> getAvailable() { return Optional.ofNullable(available);}
-    public Optional<List<OfferNested>> getEvents() {return Optional.ofNullable(events);}
+    public Optional<String> getEventType() {return Optional.ofNullable(eventType);}
 
     public void setOfferId(String offerId) {
         this.offerId = offerId;
@@ -170,7 +167,7 @@ public class Offer {
         this.price = price;
     }
     public void setAvailable(Boolean available) { this.available = available; }
-    public void setEvents(List<OfferNested> events){this.events = events;}
+    public void setEventType(String eventType) {this.eventType = eventType;}
 
 
 }
