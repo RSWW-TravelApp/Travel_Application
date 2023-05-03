@@ -41,7 +41,7 @@ public class ReservationService {
 
     // updating the specific offer with the given parameters (null parameters - don't update the field)
     public Mono<Reservation> updateReservation(String reservationId, String userId, String flightId, String offerId,
-                                               boolean isPaid){
+                                               Boolean isPaid){
 
         Query query = new Query();
         query.addCriteria(Criteria.where("reservationId").is(reservationId));
@@ -56,8 +56,8 @@ public class ReservationService {
         if(offerId != null) {
             update.set("offerId", offerId);
         }
-        if(!isPaid) {
-            update.set("isPaid", false);
+        if(isPaid != null) {
+            update.set("isPaid", isPaid);
         }
 
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
