@@ -2,7 +2,6 @@ package events.CQRS.flights;
 
 public class CreateFlightEvent {
     private final String id;
-    private final String airline_name;
     private final String departure_country;
     private final String departure_city;
     private final String date;
@@ -10,9 +9,10 @@ public class CreateFlightEvent {
     private final String arrival_city;
     private final Integer available_seats;
 
-    public CreateFlightEvent(String id, String airline_name, String departure_country, String departure_city, String date, String arrival_country, String arrival_city, Integer available_seats) {
+
+    public CreateFlightEvent(String id, String departure_country, String departure_city, String date,
+                             String arrival_country, String arrival_city, Integer available_seats) {
         this.id = id;
-        this.airline_name = airline_name;
         this.departure_country = departure_country;
         this.departure_city = departure_city;
         this.date = date;
@@ -23,10 +23,6 @@ public class CreateFlightEvent {
 
     public String getId() {
         return id;
-    }
-
-    public String getAirline_name() {
-        return airline_name;
     }
 
     public String getDeparture_country() {
@@ -52,4 +48,5 @@ public class CreateFlightEvent {
     public Integer getAvailable_seats() {
         return available_seats;
     }
+
 }
