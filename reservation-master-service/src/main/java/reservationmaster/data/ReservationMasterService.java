@@ -28,12 +28,12 @@ public class ReservationMasterService {
         return reservationMasterRepository.findAll().switchIfEmpty(Flux.empty());
     }
 
-    public Mono<Reservation> findByReservationId(String reservationID){
-        return reservationMasterRepository.findByReservationId(reservationID).switchIfEmpty(Mono.empty());
+    public Mono<Reservation> findByReservationId(String reservationId){
+        return reservationMasterRepository.findByReservationId(reservationId).switchIfEmpty(Mono.empty());
     }
 
-    public Mono<Reservation> deleteByReservationId(String reservationID){
-        return reservationMasterRepository.findByReservationId(reservationID)
+    public Mono<Reservation> deleteByReservationId(String reservationId){
+        return reservationMasterRepository.findByReservationId(reservationId)
                 .flatMap(existingReservation -> reservationMasterRepository.delete(existingReservation)
                         .then(Mono.just(existingReservation)));
     }

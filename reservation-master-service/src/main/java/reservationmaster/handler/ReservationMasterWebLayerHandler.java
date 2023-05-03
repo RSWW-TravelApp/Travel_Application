@@ -2,12 +2,14 @@ package reservationmaster.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import reservationmaster.data.Reservation;
 import reservationmaster.data.ReservationMasterService;
 
+@Component
 public class ReservationMasterWebLayerHandler {
     private final ReservationMasterService reservationMasterService;
 
@@ -31,9 +33,9 @@ public class ReservationMasterWebLayerHandler {
         Mono<Reservation> updatedReservation = request.bodyToMono(Reservation.class);
         return updatedReservation
                 .flatMap(reservation -> {
-                    String hotelId = reservation.getHotelID().orElse(null);
-                    String flightId = reservation.getFlightID().orElse(null);
-                    String userId = reservation.getUserID().orElse(null);
+                    String hotelId = reservation.getHotelId().orElse(null);
+                    String flightId = reservation.getFlightId().orElse(null);
+                    String userId = reservation.getUserId().orElse(null);
                     Boolean isPaid = reservation.getIsPaid().orElse(null);
 
                     return ServerResponse

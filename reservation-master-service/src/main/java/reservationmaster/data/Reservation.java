@@ -8,11 +8,11 @@ import java.util.Optional;
 @Document(collection = "reservations")
 public class Reservation {
     @Id
-    private String reservationID;
+    private String reservationId;
 
-    private String userID;
-    private String hotelID;
-    private String flightID;
+    private String userId;
+    private String hotelId;
+    private String flightId;
 
     private Boolean isPaid;
 
@@ -20,51 +20,51 @@ public class Reservation {
     }
 
     public Reservation(String reservationID, String userID, String hotelID, String flightID, Boolean isPaid) {
-        this.reservationID = reservationID;
-        this.userID = userID;
-        this.hotelID = hotelID;
-        this.flightID = flightID;
+        this.reservationId = reservationID;
+        this.userId = userID;
+        this.hotelId = hotelID;
+        this.flightId = flightID;
         this.isPaid = isPaid;
     }
 
     @Override
     public String toString() {
         return "Reservation{" +
-                "reservationID='" + reservationID + '\'' +
-                ", userID='" + userID + '\'' +
-                ", hotelID=" + hotelID +
-                ", flightID=" + flightID +
+                "reservationID='" + reservationId + '\'' +
+                ", userID='" + userId + '\'' +
+                ", hotelID=" + hotelId +
+                ", flightID=" + flightId +
                 ", isPaid='" + isPaid + '\'' +
                 '}';
     }
 
-    public String getReservationID() {
-        return reservationID;
+    public String getReservationId() {
+        return reservationId;
     }
-    public Optional<String> getUserID() {
-        return Optional.ofNullable(userID);
+    public Optional<String> getUserId() {
+        return Optional.ofNullable(userId);
     }
-    public Optional<String> getHotelID() {
-        return Optional.ofNullable(hotelID);
+    public Optional<String> getHotelId() {
+        return Optional.ofNullable(hotelId);
     }
-    public Optional<String> getFlightID() {
-        return Optional.ofNullable(flightID);
+    public Optional<String> getFlightId() {
+        return Optional.ofNullable(flightId);
     }
     public Optional<Boolean> getIsPaid() {
         return Optional.ofNullable(isPaid);
     }
 
-    public void setReservationID(String reservationID) {
-        this.reservationID = reservationID;
+    public void setReservationId(String reservationID) {
+        this.reservationId = reservationID;
     }
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserId(String userID) {
+        this.userId = userID;
     }
-    public void setHotelID(String hotelID) {
-        this.hotelID = hotelID;
+    public void setHotelId(String hotelID) {
+        this.hotelId = hotelID;
     }
-    public void setFlightID(String flightID) {
-        this.flightID = flightID;
+    public void setFlightId(String flightID) {
+        this.flightId = flightID;
     }
     public void setIsPaid(Boolean isPaid) {
         this.isPaid = isPaid;
