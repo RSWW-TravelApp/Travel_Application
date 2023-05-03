@@ -57,22 +57,22 @@ public class OfferEvent {
     public Function<Flux<UpdateOfferEvent>, Mono<Void>> updateOfferHandle() {
         return flux -> flux.doOnNext(
                         event ->
-                                offerService.update(new Offer(event.getId(),
+                                offerService.updateOffer(event.getId(),
                                         event.getHotel_name().orElse(null),
                                         event.getImage().orElse(null),
                                         event.getCountry().orElse(null),
                                         event.getCity().orElse(null),
-                                        event.getStars().orElse(null),
+                                        event.getStars().orElse(0),
                                         event.getStart_date().map(LocalDate::parse).orElse(null),
                                         event.getEnd_date().map(LocalDate::parse).orElse(null),
                                         event.getRoom_type().orElse(null),
-                                        event.getMax_adults().orElse(null),
-                                        event.getMax_children_to_3().orElse(null),
-                                        event.getMax_children_to_10().orElse(null),
-                                        event.getMax_children_to_18().orElse(null),
+                                        event.getMax_adults().orElse(0),
+                                        event.getMax_children_to_3().orElse(0),
+                                        event.getMax_children_to_10().orElse(0),
+                                        event.getMax_children_to_18().orElse(0),
                                         event.getMeals().orElse(null),
-                                        event.getPrice().orElse(null),
-                                        Boolean.parseBoolean(event.getAvailable().orElse(null))
+                                        event.getPrice().orElse(0.0),
+                                        Boolean.parseBoolean(event.getAvailable().orElse(null)
                                 ))
                 )
                 .then();

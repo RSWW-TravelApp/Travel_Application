@@ -9,5 +9,5 @@ import reactor.core.publisher.Mono;
 @EnableReactiveMongoRepositories
 public interface ReservationRepository extends ReactiveMongoRepository<Reservation, String> {
 
-    Mono<Reservation> findByReservationId(String reservationID);
+    Mono<Reservation> findByReservationId(String reservationId);
 }

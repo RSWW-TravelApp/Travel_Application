@@ -8,11 +8,11 @@ spring:
     gateway:
       routes:
         - id: offer-service
-          uri: http://localhost:8081
+          uri: lb://offer-service
           predicates:
             - Path=/offers,/offers/{offerId}
         - id: flight-service
-          uri: http://localhost:8082
+          uri: lb://flight-service
           predicates:
             - Path=/flights,/flights/{flightId}
 
@@ -29,3 +29,14 @@ logging:
     root: INFO
     org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
     org.springframework.cloud.gateway: TRACE
+
+eureka:
+  instance:
+    hostname: api_gateway
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+#offer-service:
+ # ribbon:
+  #  listOfServers: http://offer-service

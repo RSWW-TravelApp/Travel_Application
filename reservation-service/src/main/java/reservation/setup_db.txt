@@ -1,0 +1,10 @@
+Database: reservations
+Collection: bookings
+
+db.bookings.insertOne({
+        reservationId: "0",
+        userId: "0",
+        offerId: "644fc233d7b67a24cd4adfdc",
+        flightId: "645128080a076a5dc7dfbbb2",
+        isPaid: true
+    })
