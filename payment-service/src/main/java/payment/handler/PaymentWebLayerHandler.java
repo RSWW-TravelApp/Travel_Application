@@ -19,37 +19,40 @@ public class PaymentWebLayerHandler {
     }
 
     public Mono<ServerResponse> createPayment(ServerRequest request) {
-        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
-
-        return paymentMono
-                .flatMap(paymentObject -> ServerResponse
-                        .status(HttpStatus.CREATED)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(paymentService.createPayment(paymentObject), Payment.class)
-                );
+//        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
+//
+//        return paymentMono
+//                .flatMap(paymentObject -> ServerResponse
+//                        .status(HttpStatus.CREATED)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(paymentService.createPayment(paymentObject), Payment.class)
+//                );
+        return null;
     }
 
     public Mono<ServerResponse> updatePayment(ServerRequest request) {
-        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
-        String id = request.pathVariable("paymentId");
-
-        return paymentMono
-                .flatMap(paymentObject -> ServerResponse
-                        .status(HttpStatus.CREATED)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(paymentService.updatePayment(paymentObject, id), Payment.class)
-                );
+//        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
+//        String id = request.pathVariable("paymentId");
+//
+//        return paymentMono
+//                .flatMap(paymentObject -> ServerResponse
+//                        .status(HttpStatus.CREATED)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(paymentService.updatePayment(paymentObject, id), Payment.class)
+//                );
+        return null;
     }
 
     public Mono<ServerResponse> createReservation(ServerRequest request) {
-        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
-
-        return paymentMono
-                .flatMap(paymentObject -> ServerResponse
-                        .status(HttpStatus.CREATED)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(paymentService.createReservation(paymentObject), Payment.class)
-                );
+//        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
+//
+//        return paymentMono
+//                .flatMap(paymentObject -> ServerResponse
+//                        .status(HttpStatus.CREATED)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(paymentService.createReservation(paymentObject), Payment.class)
+//                );
+        return null;
     }
 
 

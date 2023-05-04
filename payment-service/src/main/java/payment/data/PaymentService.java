@@ -22,52 +22,55 @@ public class PaymentService {
     }
 
     public Mono<Payment> createPayment(Payment payment){
-        paymentRepository.save(payment);
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("paymentId").is(payment.getPaymentId()));
-
-        Update update = new Update();
-
-        if(payment.getIsPaid().isPresent()){
-            System.out.println("Updating isPaid");
-            update.set("isPaid", true);
-        }
-
-        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
-        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
+//        paymentRepository.save(payment);
+//
+//        Query query = new Query();
+//        query.addCriteria(Criteria.where("paymentId").is(payment.getPaymentId()));
+//
+//        Update update = new Update();
+//
+//        if(payment.getIsPaid().isPresent()){
+//            System.out.println("Updating isPaid");
+//            update.set("isPaid", true);
+//        }
+//
+//        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
+//        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
+        return null;
     }
 
     public Mono<Payment> createReservation(Payment payment){
-        paymentRepository.save(payment);
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("paymentId").is(payment.getPaymentId()));
-
-        Update update = new Update();
-
-        if(payment.getIsPaid().isPresent()){
-            System.out.println("Updating isPaid");
-            update.set("isPaid", false);
-        }
-
-        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
-        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
+//        paymentRepository.save(payment);
+//
+//        Query query = new Query();
+//        query.addCriteria(Criteria.where("paymentId").is(payment.getPaymentId()));
+//
+//        Update update = new Update();
+//
+//        if(payment.getIsPaid().isPresent()){
+//            System.out.println("Updating isPaid");
+//            update.set("isPaid", false);
+//        }
+//
+//        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
+//        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
+        return null;
     }
 
     public Mono<Payment> updatePayment(Payment payment, String paymentId){
-        Query query = new Query();
-        query.addCriteria(Criteria.where("paymentId").is(paymentId));
-
-        Update update = new Update();
-
-        if(payment.getIsPaid().isPresent()){
-            System.out.println("Updating isPaid");
-            update.set("isPaid", true);
-        }
-
-        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
-        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
+//        Query query = new Query();
+//        query.addCriteria(Criteria.where("paymentId").is(paymentId));
+//
+//        Update update = new Update();
+//
+//        if(payment.getIsPaid().isPresent()){
+//            System.out.println("Updating isPaid");
+//            update.set("isPaid", true);
+//        }
+//
+//        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
+//        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
+        return null;
     }
 
 
