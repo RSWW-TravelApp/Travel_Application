@@ -1,4 +1,4 @@
-package offer.data;
+package travelagency.data;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 @EnableReactiveMongoRepositories
 public interface OfferRepository extends ReactiveMongoRepository<Offer, String> {
 
-    Flux<Offer>findByCountry(String country);
     Mono<Offer>findByOfferId(String offerId);
 
 }
