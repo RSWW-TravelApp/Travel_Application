@@ -46,7 +46,8 @@ public class OfferWebLayerHandler {
                         .status(HttpStatus.CREATED)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(offerService.createOffer(offerObject), Offer.class)
-                );
+                )
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     public Mono<ServerResponse> updateOfferById(ServerRequest request) {
