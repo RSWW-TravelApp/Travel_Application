@@ -1,5 +1,6 @@
 package travelagency.data;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.util.OptionalInt;
 
 @Document(collection = "offers")
 public class Offer {
+    @Id
     private String offerId;
 
     private String hotel_name;
