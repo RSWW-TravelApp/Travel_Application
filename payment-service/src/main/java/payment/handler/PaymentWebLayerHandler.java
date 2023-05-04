@@ -18,7 +18,7 @@ public class PaymentWebLayerHandler {
         this.paymentService = paymentService;
     }
 
-    public Mono<ServerResponse> createPayment(ServerRequest request) {
+    public Mono<ServerResponse> createPaidPayment(ServerRequest request) {
 //        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
 //
 //        return paymentMono
@@ -30,7 +30,7 @@ public class PaymentWebLayerHandler {
         return Mono.empty();
     }
 
-    public Mono<ServerResponse> updatePayment(ServerRequest request) {
+    public Mono<ServerResponse> updatePaymentToPaid(ServerRequest request) {
 //        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
 //        String id = request.pathVariable("paymentId");
 //
@@ -43,14 +43,14 @@ public class PaymentWebLayerHandler {
         return Mono.empty();
     }
 
-    public Mono<ServerResponse> createReservation(ServerRequest request) {
+    public Mono<ServerResponse> createUnpaidPayment(ServerRequest request) {
 //        Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
 //
 //        return paymentMono
 //                .flatMap(paymentObject -> ServerResponse
 //                        .status(HttpStatus.CREATED)
 //                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(paymentService.createReservation(paymentObject), Payment.class)
+//                        .body(paymentService.createUnpaidPayment(paymentObject), Payment.class)
 //                );
         return Mono.empty();
     }

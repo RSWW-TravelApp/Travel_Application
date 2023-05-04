@@ -21,7 +21,7 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    public Mono<Payment> createPayment(Payment payment){
+    public Mono<Payment> createPaidPayment(Payment payment){
 //        paymentRepository.save(payment);
 //
 //        Query query = new Query();
@@ -39,7 +39,7 @@ public class PaymentService {
         return Mono.empty();
     }
 
-    public Mono<Payment> createReservation(Payment payment){
+    public Mono<Payment> createUnpaidPayment(Payment payment){
 //        paymentRepository.save(payment);
 //
 //        Query query = new Query();
@@ -57,7 +57,7 @@ public class PaymentService {
         return Mono.empty();
     }
 
-    public Mono<Payment> updatePayment(Payment payment, String paymentId){
+    public Mono<Payment> updatePaymentToPaid(Payment payment, String paymentId){
 //        Query query = new Query();
 //        query.addCriteria(Criteria.where("paymentId").is(paymentId));
 //

@@ -14,17 +14,17 @@ public class RouterConfig {
 
     @Bean
     RouterFunction<ServerResponse> createPayment(PaymentWebLayerHandler handler) {
-        return route(POST("/pay"), handler::createPayment);
+        return route(POST("/pay"), handler::createPaidPayment);
     }
 
     @Bean
     RouterFunction<ServerResponse> updatePayment(PaymentWebLayerHandler handler) {
-        return route(PUT("/pay/{paymentId}"), handler::updatePayment);
+        return route(PUT("/pay/{paymentId}"), handler::updatePaymentToPaid);
     }
 
     @Bean
     RouterFunction<ServerResponse> createReservation(PaymentWebLayerHandler handler) {
-        return route(POST("/makereservation"), handler::createReservation);
+        return route(POST("/makereservation"), handler::createUnpaidPayment);
     }
 
 }
