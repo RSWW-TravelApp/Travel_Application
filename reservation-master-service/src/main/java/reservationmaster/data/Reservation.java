@@ -58,6 +58,7 @@ public class Reservation{
     public Optional<Boolean> getIsPaid() {
         return Optional.ofNullable(isPaid);
     }
+
     public Optional<List<ReservationNested>> getEvents() {return Optional.ofNullable(events);}
 
     public void setReservationId(String reservationId) {

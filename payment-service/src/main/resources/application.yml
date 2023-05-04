@@ -5,25 +5,41 @@ spring:
     name: payment-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/bills
-#  cloud:
-#    stream:
-#      function:
-#        definition: createOfferHandle;deleteOfferHandle;updateOfferHandle
-#      bindings:
-#        createFlightHandle-in-0:
-#          destination: cqrs_offers_create
-#        deleteFlightHandle-in-0:
-#          destination: cqrs_offers_delete
-#        updateFlightHandle-in-0:
-#          destination: cqrs_offers_update
-#
-#  rabbitmq:
-#    username: guest
-#    password: guest
-#    host: 127.0.0.1
-#    port: 5672
+      uri: mongodb://localhost:27017/travel_agency
+  cloud:
+    stream:
+      rabbit:
+        bindings:
+          processPayment-out-0:
+            producer:
+              autoBindDlq: true
+              ttl: 5000
+              deadLetterExchange: delay-topic
+              deadLetterQueueName: delay-topic.test
+              deadLetterExchangeType: topic
 
+      function:
+        definition: processPayment; validatePayment; failTransaction; succeedTransaction
+      bindings:
+        processPayment-in-0:
+          destination: saga_require_payment
+        processPayment-out-0:
+          destination: temp
+          producer:
+            requiredGroups: test
+        validatePayment-in-0:
+          destination: delay-topic
+          group: test
+        failTransaction-out-0:
+          destination: saga_unblock_resources
+        succeedTransaction-out-0:
+          destination: saga_finalise_reservation
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 127.0.0.1
+    port: 5672
 eureka:
   instance:
     prefer-ip-address: true

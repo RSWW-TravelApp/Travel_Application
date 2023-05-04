@@ -1,29 +1,40 @@
 server:
   port: 8086
 spring:
-  application:
-    name: travel-agency-service
   data:
     mongodb:
       uri: mongodb://localhost:27017/travel_agency
+  cloud:
+    stream:
+      function:
+        definition: blockResources; unblockResources; createFlightCQRSHandle; createOfferCQRSHandle; deleteFlightCQRSHandle; deleteOfferCQRSHandle; updateFlightCQRSHandle; updateOfferCQRSHandle
+      bindings:
+        blockResources-in-0:
+          destination: sage_make_reservation
+        blockResources-out-0:
+          destination: saga_require_payment
+        unblockResources-in-0:
+          destination: saga_unblock_resources
+        unblockResources-out-0:
+          destination: saga_remove_reservation
+        createFlightCQRSHandle-out-0:
+          destination: cqrs_flights_create
+        createOfferCQRSHandle-out-0:
+          destination: cqrs_offers_create
+        deleteFlightCQRSHandle-out-0:
+          destination: cqrs_flights_delete
+        deleteOfferCQRSHandle-out-0:
+          destination: cqrs_offers_delete
+        updateFlightCQRSHandle-out-0:
+          destination: cqrs_flights_update
+        updateOfferCQRSHandle-out-0:
+          destination: cqrs_offers_update
 
-#  cloud:
-#    stream:
-#      function:
-#        definition: createOfferHandle;deleteOfferHandle;updateOfferHandle
-#      bindings:
-#        createFlightHandle-in-0:
-#          destination: cqrs_offers_create
-#        deleteFlightHandle-in-0:
-#          destination: cqrs_offers_delete
-#        updateFlightHandle-in-0:
-#          destination: cqrs_offers_update
-
-#  rabbitmq:
-#    username: guest
-#    password: guest
-#    host: 127.0.0.1
-#    port: 5672
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 127.0.0.1
+    port: 5672
 
 eureka:
   instance:
