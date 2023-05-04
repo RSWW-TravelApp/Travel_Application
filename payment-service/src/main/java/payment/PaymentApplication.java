@@ -23,6 +23,6 @@ public class PaymentApplication extends AbstractReactiveMongoConfiguration {
 
     @Override
     protected String getDatabaseName() {
-        return "payments";
+        return "bills";
     }
 }

@@ -49,30 +49,30 @@ public class Payment {
     public String getPaymentId() {
         return paymentId;
     }
-    public Optional<String> getUserId() {
-        return Optional.ofNullable(userId);
+    public String getUserId() {
+        return userId;
     }
-    public Optional<String> getReservationId() {
-        return Optional.ofNullable(reservationId);
+    public String getReservationId() {
+        return reservationId;
     }
-    public Optional<String> getOfferId() {
-        return Optional.ofNullable(offerId);
+    public String getOfferId() {
+        return offerId;
     }
-    public Optional<String> getFlightId() {
-        return Optional.ofNullable(flightId);
+    public String getFlightId() {
+        return flightId;
     }
 
-    public Optional<Boolean> getIsReserved() {
-        return Optional.ofNullable(isReserved);
+    public Boolean getIsReserved() {
+        return isReserved;
     }
-    public Optional<Boolean> getIsPaid() {
-        return Optional.ofNullable(isPaid);
+    public Boolean getIsPaid() {
+        return isPaid;
     }
-    public Optional<Boolean> getIsExpired() {
-        return Optional.ofNullable(isExpired);
+    public Boolean getIsExpired() {
+        return isExpired;
     }
-    public Optional<Double> getPrice() {
-        return Optional.ofNullable(price);
+    public Double getPrice() {
+        return price;
     }
 
     public void setPaymentId(String paymentId) {
