@@ -42,60 +42,44 @@ public class PaymentWebLayerHandler {
         String paymentId = request.pathVariable("paymentId");
         String status = request.pathVariable("status");
 
-        /*Mono<ServerResponse> response = paymentService.findByPaymentId(request.pathVariable("paymentId"))
+        return paymentService.findByPaymentId(paymentId)
                 .hasElement()
                 .flatMap(exist -> {
                     if (!exist) {
                         return ServerResponse
                                 .status(HttpStatus.NOT_FOUND)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .body("Not found", String.class);
+                                .body(Mono.just("404,Not found"), String.class);
                     }
-                    return null;
-                });    HOW THE FUCK TO CHECK IF ELEMENT EXISTS IN DATABASE AAAAAAA */
-
-
-        switch (status) {
-            case "fail" -> {
-                // 100% for fail
-                return ServerResponse
-                        .status(HttpStatus.PAYMENT_REQUIRED)
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .body(Mono.just("Payment cannot be processed"), String.class);
-            }
-            case "success" -> {
-                // ~0% for fail BUT SAGA can fail, so it is not exactly 0%
-
-                return ServerResponse
-                        .status(HttpStatus.OK)
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .body(Mono.just("Payment is processed"), String.class);
-            }
-            case "random" -> {
-                // 15% for fail
-                Random rand = new Random();
-                if (rand.nextInt(0, 100) < 15) {
+                    switch (status) {
+                        case "fail" -> {
+                            // 100% for fail
+                            return ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
+                                    .body(Mono.just("402,Payment cannot be processed"), String.class);
+                        }
+                        case "success" -> {
+                            // ~0% for fail BUT SAGA can fail, so it is not exactly 0%
+                            return ServerResponse
+                                    .status(HttpStatus.OK)
+                                    .body(Mono.just("200,Payment is processed"), String.class);
+                        }
+                        case "random" -> {
+                            // 15% for fail
+                            Random rand = new Random();
+                            if (rand.nextInt(0, 100) < 15) {
+                                return ServerResponse
+                                        .status(HttpStatus.PAYMENT_REQUIRED)
+                                        .body(Mono.just("402,Payment cannot be processed"), String.class);
+                            }
+                            // SAGA
+                            return ServerResponse
+                                    .status(HttpStatus.OK)
+                                    .body(Mono.just("200,Payment is processed"), String.class);
+                        }
+                    }
                     return ServerResponse
-                            .status(HttpStatus.PAYMENT_REQUIRED)
-                            .contentType(MediaType.TEXT_PLAIN)
-                            .body(Mono.just("Payment cannot be processed"), String.class);
-                }
-                ;
-
-                // SAGA
-
-                return ServerResponse
-                        .status(HttpStatus.OK)
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .body(Mono.just("Payment is processed"), String.class);
-            }
-        }
-
-        return ServerResponse
-                .status(HttpStatus.BAD_REQUEST)
-                .contentType(MediaType.TEXT_PLAIN)
-                .body(Mono.just("Status must be one of the following ['fail', 'success', 'random']"), String.class);
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(Mono.just("400,Status must be one of the following ['fail', 'success', 'random']"), String.class);
+                });
     }
-
 }
 

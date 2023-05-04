@@ -22,11 +22,6 @@ spring:
           predicates:
             - Path=/payments/{paymentId}/{status}
             - Method=POST
-#        - id: reservation-master-service
-#          uri: lb://reservation-master-service
-#          predicates:
-#            - Path=/reservations
-#            - Method=POST
 
       globalcors:
         cors-configurations:
