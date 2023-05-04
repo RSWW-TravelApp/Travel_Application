@@ -11,6 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Component
 public class OfferWebLayerHandler {
@@ -18,6 +19,13 @@ public class OfferWebLayerHandler {
 
     public OfferWebLayerHandler(OfferService offerService) {
         this.offerService = offerService;
+    }
+
+    private Integer getIntegerParam(String nameOfParam, ServerRequest request) {
+        try {
+            return Integer.valueOf(Objects.requireNonNull(request.queryParam(nameOfParam).orElse(null)));
+        } catch (Exception ignored) {}
+        return null;
     }
 
     public Mono<ServerResponse> getAllOffers(ServerRequest request) {
@@ -103,14 +111,16 @@ public class OfferWebLayerHandler {
         LocalDate start_date = request.queryParam("start_date").map(LocalDate::parse).orElse(null);
         LocalDate end_date = request.queryParam("end_date").map(LocalDate::parse).orElse(null);
 
-        Integer stars = request.queryParam("stars").map(Integer::parseInt).orElse(null);
-        Integer max_adults = request.queryParam("max_adults").map(Integer::parseInt).orElse(null);
-        Integer max_children_to_3 = request.queryParam("max_children_to_3").map(Integer::parseInt).orElse(null);
-        Integer max_children_to_10 = request.queryParam("max_children_to_10").map(Integer::parseInt).orElse(null);
-        Integer max_children_to_18 = request.queryParam("max_children_to_18").map(Integer::parseInt).orElse(null);
+        Integer stars = getIntegerParam("stars", request);
+        Integer max_adults = getIntegerParam("max_adults", request);
+        Integer max_children_to_3 = getIntegerParam("max_children_to_3", request);
+        Integer max_children_to_10 = getIntegerParam("max_children_to_10", request);
+        Integer max_children_to_18 = getIntegerParam("max_children_to_18", request);
+        Integer min_price = getIntegerParam("min_price", request);
+        Integer max_price = getIntegerParam("max_price", request);
 
         Flux<Offer> offers = offerService.fetchOffers(hotel_name, image, country, city, stars, start_date, end_date,
-                room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals);
+                room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals, min_price, max_price);
 
         // For testing purpose
         // offers.doOnNext(element -> System.out.println("Element: " + element))

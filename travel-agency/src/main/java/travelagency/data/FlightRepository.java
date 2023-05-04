@@ -10,5 +10,4 @@ import reactor.core.publisher.Mono;
 public interface FlightRepository extends ReactiveMongoRepository<Flight, String> {
 
     Mono<Flight> findByFlightId(String flightId);
-
 }

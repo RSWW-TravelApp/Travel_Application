@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Component
 public class FlightWebLayerHandler {
@@ -17,6 +18,13 @@ public class FlightWebLayerHandler {
 
     public FlightWebLayerHandler(FlightService flightService) {
         this.flightService = flightService;
+    }
+
+    private Integer getIntegerParam(String nameOfParam, ServerRequest request) {
+        try {
+            return Integer.valueOf(Objects.requireNonNull(request.queryParam(nameOfParam).orElse(null)));
+        } catch (Exception ignored) {}
+        return null;
     }
 
     public Mono<ServerResponse> getAllFlights(ServerRequest request) {
@@ -43,7 +51,7 @@ public class FlightWebLayerHandler {
         String arrival_country = request.queryParam("arrival_country").orElse(null);
         String arrival_city = request.queryParam("arrival_city").orElse(null);
 
-        Integer available_seats = request.queryParam("available_seats").map(Integer::parseInt).orElse(null);
+        Integer available_seats = getIntegerParam("available_seats", request);
 
         LocalDate date = request.queryParam("date").map(LocalDate::parse).orElse(null);
 

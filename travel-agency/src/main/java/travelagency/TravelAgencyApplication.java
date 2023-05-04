@@ -27,5 +27,4 @@ public class TravelAgencyApplication extends AbstractReactiveMongoConfiguration 
     protected String getDatabaseName() {
         return "travel_agency";
     }
-
 }

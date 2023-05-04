@@ -11,10 +11,17 @@ spring:
           uri: lb://offer-service
           predicates:
             - Path=/offers,/offers/{offerId}
+            - Method=GET
         - id: flight-service
           uri: lb://flight-service
           predicates:
             - Path=/flights,/flights/{flightId}
+            - Method=GET
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payments/{paymentId}/{status}
+            - Method=POST
 
       globalcors:
         cors-configurations:
@@ -23,6 +30,7 @@ spring:
             allowedHeaders: "*"
             allowedMethods:
               - GET
+              - POST
 
 logging:
   level:
@@ -36,7 +44,3 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-
-#offer-service:
- # ribbon:
-  #  listOfServers: http://offer-service

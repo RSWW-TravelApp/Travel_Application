@@ -148,16 +148,25 @@ function labeledSquareProperty(x, y, w, h, thickness = 2, padding = 2, txt = und
     return container;
 }
 
-function createUserInfoBox() {
+function createUserInfoBox(loginCallback, logOutCallback) {
     const currentUser = sessionStorage.getItem("user");
-    if (currentUser) {
-        createLoggedUserInfoBox(currentUser);
+    if (!currentUser) {
+        createNotLoggedUserInfoBox(logOutCallback);
         return;
     }
-    createNotLoggedUserInfoBox();
+    fetch("http://localhost:8080/login/" + `${currentUser}/password`, {method: "GET"})
+    .then(response => response.text())
+              .then(response => {
+                  const [status, body] = response.split(",");
+                  if (status == "404") {
+                      createNotLoggedUserInfoBox(logOutCallback);
+                      return;
+                  }
+                  createLoggedUserInfoBox(currentUser, loginCallback, logOutCallback);
+              });
 }
 
-function createLoggedUserInfoBox(currentUser) {
+function createLoggedUserInfoBox(currentUser, loginCallback, logOutCallback) {
     const parentDiv = document.getElementById('userInfo');
     const userInfoDiv = createElement('div', {'id': 'loginInfo'});
     const button = createElement('button', {
@@ -165,16 +174,19 @@ function createLoggedUserInfoBox(currentUser) {
                                 'id': 'loginButton',
                                 'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
                                 });
-    button.onclick = function() { createNotLoggedUserInfoBox(); };
+    button.onclick = function() { createNotLoggedUserInfoBox(logOutCallback); };
     const postCard = squareFrame(0, 0, 100, 50, 2, 2, "Log out", {'class': 'svg-button', 'id': 'loginButtonSVG'});
     const label = createLabel(`Current user: ${currentUser}`, {'for': 'loginInfo', 'style': 'font-size:1.3em;'}, 2);
 
     appendChildren(button, [postCard]);
     appendChildren(userInfoDiv, [label, button]);
     appendChildren(parentDiv, [userInfoDiv]);
+    if (loginCallback) {
+        loginCallback();
+    }
 }
 
-function createNotLoggedUserInfoBox() {
+function createNotLoggedUserInfoBox(logOutCallback) {
     sessionStorage.removeItem('user');
     const loggedUserInfoDiv = document.getElementById('loginInfo');
     if (loggedUserInfoDiv != null) {
@@ -197,5 +209,8 @@ function createNotLoggedUserInfoBox() {
     appendChildren(button, [postCard]);
     appendChildren(userInfoDiv, [button]);
     appendChildren(parentDiv, [userInfoDiv]);
+    if (logOutCallback) {
+        logOutCallback();
+    }
 }
 

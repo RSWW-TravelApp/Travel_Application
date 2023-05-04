@@ -26,23 +26,4 @@ public class RouterConfig {
     RouterFunction<ServerResponse> deleteReservationById(ReservationMasterWebLayerHandler handler) {
         return route(DELETE("/reservations/{reservationId}"), handler::deleteReservationById);
     }
-
-    /*
-    @Bean
-    RouterFunction<ServerResponse> getReservations(ReservationMasterWebLayerHandler handler) {
-        return route(GET("/reservations"), handler::getReservations);
-    }
-
-    @Bean
-    RouterFunction<ServerResponse> getReservationById(ReservationMasterWebLayerHandler handler) {
-        return route(GET("/reservations/{reservationId}"), handler::getReservationById);
-    }
-
-    @Bean
-    RouterFunction<ServerResponse> updateReservationById(ReservationMasterWebLayerHandler handler) {
-        return route(PUT("/reservations/{reservationId}"), handler::updateReservationById);
-    }
-     */
-
-
 }

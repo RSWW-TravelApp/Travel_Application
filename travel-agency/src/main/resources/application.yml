@@ -1,9 +1,12 @@
 server:
   port: 8086
 spring:
+  application:
+    name: travel-agency-service
   data:
     mongodb:
       uri: mongodb://localhost:27017/travel_agency
+
 #  cloud:
 #    stream:
 #      function:
@@ -15,9 +18,18 @@ spring:
 #          destination: cqrs_offers_delete
 #        updateFlightHandle-in-0:
 #          destination: cqrs_offers_update
-#
+
 #  rabbitmq:
 #    username: guest
 #    password: guest
 #    host: 127.0.0.1
 #    port: 5672
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: ${spring.application.name}
+    instance-id: ${spring.application.name}:${server.port}:${random.value}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

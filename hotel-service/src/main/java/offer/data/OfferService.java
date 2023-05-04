@@ -40,11 +40,6 @@ public class OfferService {
                             .switchIfEmpty(Mono.empty());
     }
 
-    public Flux<Offer> findByCountry(String country){
-        return offerRepository.findByCountry(country)
-                .switchIfEmpty(Flux.empty());
-    }
-
     public Mono<Offer> deleteByOfferId(String offerId) {
         return offerRepository.findByOfferId(offerId)
                 .flatMap(existingOffer -> offerRepository.delete(existingOffer)
@@ -55,8 +50,8 @@ public class OfferService {
     // finding all offers that have specific parameters chosen in the Web filter
     public Flux<Offer> fetchOffers(String hotel_name, String image, String country, String city, Integer stars,
                                    LocalDate start_date, LocalDate end_date, String room_type, Integer max_adults,
-                                   Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18,
-                                   String meals){
+                                   Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals,
+                                   Integer min_price, Integer max_price){
 
         Query query = new Query().with(Sort.by(Collections.singletonList(Sort.Order.asc("price"))));
 
@@ -101,7 +96,15 @@ public class OfferService {
         if(meals != null) {
             query.addCriteria(Criteria.where("meals").regex(meals));
         }
-
+        if(min_price != null && max_price != null) {
+            query.addCriteria(Criteria.where("price").gte(min_price).lt(max_price));
+        }
+        else if (min_price == null && max_price != null) {
+            query.addCriteria(Criteria.where("price").lt(max_price));
+        }
+        else if (min_price != null && max_price == null) {
+            query.addCriteria(Criteria.where("price").gte(min_price));
+        }
         return reactiveMongoTemplate.find(query, Offer.class);
     }
 

@@ -7,7 +7,7 @@
   <script type="text/javascript" th:src="@{/js/src/offerDetails.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
-<body onload="createUserInfoBox(); fetchOfferDetails(); fetchFlightDetails()">
+<body onload="createReservationListener(); fetchOfferDetails(); fetchFlightDetails()">
   <div>
     <form action="/offers">
       <input type="hidden" id="flightId" name="flightId" value="">
@@ -29,8 +29,11 @@
     <div id="actionButtons">
       <br>
       <button onclick="reserveOffer()">Reserve offer</button><br>
-      <button onclick="purchaseOffer()">Purchase offer</button>
+      <button onclick="purchaseOffer('random')">Purchase offer</button><br><br>
+      <button onclick="purchaseOffer('success')">Purchase offer success</button>
+      <button onclick="purchaseOffer('fail')">Purchase offer failure</button>
     </div>
+    <h2 id="actionResult"></h2>
   </div>
   <style>
       .svg-button:hover path{

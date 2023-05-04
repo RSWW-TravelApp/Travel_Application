@@ -11,7 +11,6 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class RouterConfig {
-
     /*
     @Bean
     RouterFunction<ServerResponse> getPayments(PaymentWebLayerHandler handler) {
