@@ -21,7 +21,6 @@ public class RouterConfig {
     RouterFunction<ServerResponse> getFlights(TravelAgencyWebLayerHandler handler) {
         return route(GET("/flights"), handler::getFlights);
     }
-     */
 
     @Bean
     RouterFunction<ServerResponse> createOffer(TravelAgencyWebLayerHandler handler) {
@@ -52,4 +51,5 @@ public class RouterConfig {
     RouterFunction<ServerResponse> deleteFlightById(TravelAgencyWebLayerHandler handler) {
         return route(DELETE("/flights/{flightId}"), handler::deleteFlightById);
     }
+     */
 }
