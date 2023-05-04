@@ -17,6 +17,9 @@ public class Reservation {
 
     private Boolean isPaid;
 
+    public Reservation() {
+    }
+
     public Reservation(String reservationId, String userId, String offerId, String flightId, Boolean isPaid) {
         this.reservationId = reservationId;
         this.userId = userId;

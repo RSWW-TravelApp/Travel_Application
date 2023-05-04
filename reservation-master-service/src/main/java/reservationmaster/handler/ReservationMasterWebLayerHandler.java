@@ -60,7 +60,7 @@ public class ReservationMasterWebLayerHandler {
                     String flightId = reservation.getFlightId().orElse(null);
                     String offerId = reservation.getOfferId().orElse(null);
                     Boolean isPaid = reservation.getIsPaid().orElse(null);
-                    List<ReservationNested> events = reservation.getEvents();
+                    List<ReservationNested> events = reservation.getEvents().orElse(null);
 
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +75,6 @@ public class ReservationMasterWebLayerHandler {
 
     public Mono<ServerResponse> addEvent(ServerRequest request) {
         String id = request.pathVariable("reservationId");
-
         Mono<ReservationNested> updatedReservation = request.bodyToMono(ReservationNested.class);
 
         return updatedReservation

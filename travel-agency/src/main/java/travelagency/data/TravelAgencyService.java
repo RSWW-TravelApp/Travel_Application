@@ -1,16 +1,13 @@
 package travelagency.data;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.LocalDate;
-import java.util.Collections;
-
 
 @Service
 public class TravelAgencyService {
@@ -25,171 +22,90 @@ public class TravelAgencyService {
         this.reactiveMongoTemplate = reactiveMongoTemplate;
     }
 
-    public Mono<Offer> createOffer(Offer offer) {
-        return offerRepository.save(offer);
-    }
-
-    public Flux<Offer> getAllOffers(){
+    public Flux<Offer> getOffers(){
         return offerRepository.findAll()
                 .switchIfEmpty(Flux.empty());
     }
 
-    public Mono<Offer> findByOfferId(String offerId){
-        return offerRepository.findByOfferId(offerId)
-                            .switchIfEmpty(Mono.empty());
+    public Flux<Flight> getFlights(){
+        return flightRepository.findAll()
+                .switchIfEmpty(Flux.empty());
     }
 
-    public Flux<Offer> findByCountry(String country){
-        return offerRepository.findByCountry(country)
-                .switchIfEmpty(Flux.empty());
+    public Mono<Offer> createOffer(Offer offer) {
+        return offerRepository.save(offer);
+    }
+
+    public Mono<Flight> createFlight(Flight flight){
+        return flightRepository.save(flight);
     }
 
     public Mono<Offer> deleteByOfferId(String offerId) {
         return offerRepository.findByOfferId(offerId)
                 .flatMap(existingOffer -> offerRepository.delete(existingOffer)
                         .then(Mono.just(existingOffer)));
-
     }
 
-    // finding all offers that have specific parameters chosen in the Web filter
-    public Flux<Offer> findByParameters(int stars, int adults, int children_to_3, int children_to_10,
-                                        int children_to_18, String meals, String room_type, double price,
-                                        String country, LocalDate start_date, LocalDate end_date, String available){
-        Query query = new Query()
-                .with(Sort
-                        .by(Collections.singletonList(Sort.Order.asc("price")))
-                );
-        query.addCriteria(
-                Criteria.where("stars").gte(stars)
-                        .and("max_adults").gte(adults)
-                        .and("max_children_to_3").gte(children_to_3)
-                        .and("max_children_to_10").gte(children_to_10)
-                        .and("max_children_to_18").gte(children_to_18)
-                        .and("price").lte(price)
-                        .and("available").regex(String.valueOf(available))
-        );
-
-        if(meals != null) {
-            query.addCriteria(Criteria.where("meals").regex(meals));
-        }
-        if(room_type != null) {
-            query.addCriteria(Criteria.where("room_type").regex(room_type));
-        }
-        if(country != null) {
-            query.addCriteria(Criteria.where("country").regex(country));
-        }
-        if(start_date != null){
-            query.addCriteria(Criteria.where("start_date").gte(start_date));
-        }
-        if(end_date != null){
-            query.addCriteria(Criteria.where("end_date").lte(end_date));
-        }
-
-        return reactiveMongoTemplate
-                .find(query, Offer.class);
-    }
-
-    // TODO fix the update functions
-    public Mono<Offer> update(Offer offer){
-        return offerRepository.findByOfferId(offer.getOfferId())
-                .flatMap(existingOffer -> {
-                    offer.getHotel_name().ifPresent(existingOffer::setHotel_name);
-                    offer.getCountry().ifPresent(existingOffer::setCountry);
-                    return offerRepository.save(existingOffer);});}
-
-    // updating the specific offer with the given parameters (null parameters - don't update the field)
-
-    public Mono<Offer> updateOffer(Offer offer){
-        return offerRepository.findByOfferId(offer.getOfferId())
-                .flatMap(existingOffer -> {
-                    offer.getRoom_type().ifPresent(existingOffer::setRoom_type);   //room_type -> { dbOffers.setRoom_type(room_type);  });
-
-                    offer.getStart_date().ifPresent(existingOffer::setStart_date);
-
-                    offer.getEnd_date().ifPresent(existingOffer::setEnd_date);
-
-                    offer.getPrice().ifPresent(existingOffer::setPrice);
-
-                    offer.getMax_adults().ifPresent(existingOffer::setMax_adults);
-
-                    offer.getMax_children_to_3().ifPresent(existingOffer::setMax_children_to_3);
-
-                    offer.getMax_children_to_10().ifPresent(existingOffer::setMax_children_to_10);
-
-                    offer.getMax_children_to_18().ifPresent(existingOffer::setMax_children_to_18);
-
-                    offer.getMeals().ifPresent(existingOffer::setMeals);
-
-                    offer.getImage().ifPresent(existingOffer::setImage);
-
-                    offer.getAvailable().ifPresent(existingOffer::setAvailable);
-
-                    return offerRepository.save(existingOffer);
-                });
-    }
-    public Mono<Flight> createFlight(Flight flight){
-        return flightRepository.save(flight);
-    }
-
-    public Flux<Flight> getAllFlights(){
-        return flightRepository.findAll();
-    }
-
-    public Mono<Flight> findFlightById(String flightId){
-        return flightRepository.findById(flightId);
-    }
-
-    public Mono<Flight> deleteFlightById(String flightId){
-        return flightRepository.findById(flightId)
+    public Mono<Flight> deleteByFlightId(String flightId){
+        return flightRepository.findByFlightId(flightId)
                 .flatMap(existingFlight -> flightRepository.delete(existingFlight)
                         .then(Mono.just(existingFlight)));
     }
 
-    // updating the specific flight with the given parameters (null parameters - don't update the field)
-    public Mono<Flight> updateFlight(Flight flight){
-        return flightRepository.findById(flight.getFlightId())
-                .flatMap(dbFlights -> {
-                    flight.getAirline_name().ifPresent(dbFlights::setAirline_name);
+    public Mono<Offer> updateOffer(String offerId, Boolean available){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("offerId").is(offerId));
 
-                    flight.getArrival_country().ifPresent(dbFlights::setArrival_country);
+        Update update = new Update();
+        if(available != null) {
+            update.set("available", available);
+        }
 
-                    flight.getArrival_city().ifPresent(dbFlights::setArrival_city);
-
-                    flight.getDeparture_country().ifPresent(dbFlights::setDeparture_country);
-
-                    flight.getDeparture_city().ifPresent(dbFlights::setDeparture_city);
-
-                    flight.getAvailable_seats().ifPresent(dbFlights::setAvailable_seats);
-
-                    flight.getDate().ifPresent(dbFlights::setDate);
-
-                    return flightRepository.save(dbFlights);
-                });
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
+        return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class);
     }
 
-    // finding all flights that have specific parameters chosen in the Web filter
-    public Flux<Flight> fetchFlights(String airline_name, String departure_country, String departure_city,
-                                     String arrival_country, String arrival_city, int total_people, LocalDate date){
-
+    public Mono<OfferNested> addEventOffer(OfferNested offerNested){
         Query query = new Query();
+        query.addCriteria(Criteria.where("offerId").is(offerNested.getOfferId()));
 
-        // available_seats has to be >= total number of people of the trip
-        // total_people are taken from the Web filter and by default are 0
-        query.addCriteria(Criteria.where("available_seats").gte(total_people));
+        Update update = new Update();
 
+        offerNested.getAvailable().ifPresent(available -> update.set("available", available));
 
-        if(departure_country != null){
-            query.addCriteria(Criteria.where("departure_country").regex(departure_country));
+        update.push("events", offerNested);
+
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
+        return reactiveMongoTemplate.findAndModify(query, update, options, OfferNested.class);
+    }
+
+    public Mono<FlightNested> addEventFlight(FlightNested flightNested){
+        Query query = new Query();
+        Update update = new Update();
+
+        Integer seats = flightNested.getAvailable_seats().orElse(null);
+        String event_type = flightNested.getEventType().orElse(null);
+
+        query.addCriteria(Criteria
+                .where("flightId").is(flightNested.getFlightId()));
+
+        if(seats != null && event_type != null){
+            query.addCriteria(Criteria
+                    .where("available_seats").gte(seats));
+
+            if(event_type.equals("BlockResourcesEvent")){
+                update.inc("available_seats",-seats);
+            }
+            else if(event_type.equals("UnblockResourcesEvent")){
+                update.inc("available_seats",seats);
+            }
         }
-        if(arrival_country != null){
-            query.addCriteria(Criteria.where("arrival_country").regex(arrival_country));
-        }
-        if(date != null){
-            query.addCriteria(Criteria.where("date").is(date)); // TODO check if "is()" works with the LocalDate type
-        }
 
-        return reactiveMongoTemplate
-                .find(query, Flight.class);
+
+        update.push("events", flightNested);
+
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
+        return reactiveMongoTemplate.findAndModify(query, update, options, FlightNested.class);
     }
 
 }
