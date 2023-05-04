@@ -52,12 +52,28 @@ public class TravelAgencyService {
                         .then(Mono.just(existingFlight)));
     }
 
+    public Mono<Offer> updateOffer(String offerId, Boolean available){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("offerId").is(offerId));
+
+        Update update = new Update();
+        if(available != null) {
+            update.set("available", available);
+        }
+
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
+        return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class);
+    }
+
     public Mono<OfferNested> addEventOffer(OfferNested offerNested){
         Query query = new Query();
         query.addCriteria(Criteria.where("offerId").is(offerNested.getOfferId()));
 
-        Update update = new Update()
-                .push("events", offerNested);
+        Update update = new Update();
+
+        offerNested.getAvailable().ifPresent(available -> update.set("available", available));
+
+        update.push("events", offerNested);
 
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
         return reactiveMongoTemplate.findAndModify(query, update, options, OfferNested.class);
@@ -65,10 +81,28 @@ public class TravelAgencyService {
 
     public Mono<FlightNested> addEventFlight(FlightNested flightNested){
         Query query = new Query();
-        query.addCriteria(Criteria.where("flightId").is(flightNested.getFlightId()));
+        Update update = new Update();
 
-        Update update = new Update()
-                .push("events", flightNested);
+        Integer seats = flightNested.getAvailable_seats().orElse(null);
+        String event_type = flightNested.getEventType().orElse(null);
+
+        query.addCriteria(Criteria
+                .where("flightId").is(flightNested.getFlightId()));
+
+        if(seats != null && event_type != null){
+            query.addCriteria(Criteria
+                    .where("available_seats").gte(seats));
+
+            if(event_type.equals("BlockResourcesEvent")){
+                update.inc("available_seats",-seats);
+            }
+            else if(event_type.equals("UnblockResourcesEvent")){
+                update.inc("available_seats",seats);
+            }
+        }
+
+
+        update.push("events", flightNested);
 
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
         return reactiveMongoTemplate.findAndModify(query, update, options, FlightNested.class);
