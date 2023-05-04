@@ -1,6 +1,8 @@
 server:
-  port: 0
+  port: 8085
 spring:
+  application:
+    name: tour-operator
   cloud:
     stream:
       function:
@@ -15,3 +17,12 @@ spring:
     password: guest
     host: 127.0.0.1
     port: 5672
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: ${spring.application.name}
+    instance-id: ${spring.application.name}:${server.port}:${random.value}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
