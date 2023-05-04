@@ -72,12 +72,6 @@ public class TravelAgencyService {
         Update update = new Update();
 
         offerNested.getAvailable().ifPresent(available -> update.set("available", available));
-        /*
-        Boolean available = offerNested.getAvailable().orElse(null);
-        if(available != null){
-            update.set("available", available);
-        }
-         */
 
         update.push("events", offerNested);
 
