@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 import java.util.Optional;
 
-//@Document(collection = "flights")
+@Document(collection = "flights")
 public class FlightNested {
 
     @Id

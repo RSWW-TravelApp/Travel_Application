@@ -75,7 +75,6 @@ public class ReservationMasterWebLayerHandler {
 
     public Mono<ServerResponse> addEvent(ServerRequest request) {
         String id = request.pathVariable("reservationId");
-
         Mono<ReservationNested> updatedReservation = request.bodyToMono(ReservationNested.class);
 
         return updatedReservation

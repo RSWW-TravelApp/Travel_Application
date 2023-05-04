@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @Document(collection = "offers")
 public class Offer {

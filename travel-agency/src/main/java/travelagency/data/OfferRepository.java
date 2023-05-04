@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 @EnableReactiveMongoRepositories
 public interface OfferRepository extends ReactiveMongoRepository<Offer, String> {
 
-    Flux<Offer>findByCountry(String country);
     Mono<Offer>findByOfferId(String offerId);
 
 }
