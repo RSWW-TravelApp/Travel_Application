@@ -25,7 +25,7 @@ public class PaymentWebLayerHandler {
 //                .flatMap(paymentObject -> ServerResponse
 //                        .status(HttpStatus.CREATED)
 //                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(paymentService.createPayment(paymentObject), Payment.class)
+//                        .body(paymentService.createPaidPayment(paymentObject), Payment.class)
 //                );
         return Mono.empty();
     }
@@ -38,7 +38,7 @@ public class PaymentWebLayerHandler {
 //                .flatMap(paymentObject -> ServerResponse
 //                        .status(HttpStatus.CREATED)
 //                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(paymentService.updatePayment(paymentObject, id), Payment.class)
+//                        .body(paymentService.updatePaymentToPaid(paymentObject, id), Payment.class)
 //                );
         return Mono.empty();
     }

@@ -13,17 +13,17 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class RouterConfig {
 
     @Bean
-    RouterFunction<ServerResponse> createPayment(PaymentWebLayerHandler handler) {
+    RouterFunction<ServerResponse> createPaidPayment(PaymentWebLayerHandler handler) {
         return route(POST("/pay"), handler::createPaidPayment);
     }
 
     @Bean
-    RouterFunction<ServerResponse> updatePayment(PaymentWebLayerHandler handler) {
+    RouterFunction<ServerResponse> updatePaymentToPaid(PaymentWebLayerHandler handler) {
         return route(PUT("/pay/{paymentId}"), handler::updatePaymentToPaid);
     }
 
     @Bean
-    RouterFunction<ServerResponse> createReservation(PaymentWebLayerHandler handler) {
+    RouterFunction<ServerResponse> createUnpaidPayment(PaymentWebLayerHandler handler) {
         return route(POST("/makereservation"), handler::createUnpaidPayment);
     }
 
