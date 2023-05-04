@@ -6,25 +6,36 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import payment.handler.PaymentWebLayerHandler;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
 public class RouterConfig {
-
+    /*
     @Bean
     RouterFunction<ServerResponse> getPayments(PaymentWebLayerHandler handler) {
-        return route(GET("/payments"), handler::getPayments);
+        return route(GET("/pay"), handler::getPayments);
     }
+    */
 
     @Bean
     RouterFunction<ServerResponse> getPaymentById(PaymentWebLayerHandler handler) {
-        return route(GET("/payments/{paymentId}"), handler::getPaymentById);
+        return route(GET("/pay/{paymentId}"), handler::getPaymentById);
     }
 
     @Bean
-    RouterFunction<ServerResponse> payForReservation(PaymentWebLayerHandler handler) {
-        return route(POST("/payments/{paymentId}/{status}"), handler::payForReservation);
+    RouterFunction<ServerResponse> createPaidPayment(PaymentWebLayerHandler handler) {
+        return route(POST("/pay/{status}"), handler::createPaidPayment);
     }
+
+    @Bean
+    RouterFunction<ServerResponse> updatePayment(PaymentWebLayerHandler handler) {
+        return route(PUT("/pay/{paymentId}/{status}"), handler::updatePayment);
+    }
+
+    @Bean
+    RouterFunction<ServerResponse> createUnpaidPayment(PaymentWebLayerHandler handler) {
+        return route(POST("/makereservation"), handler::createUnpaidPayment);
+    }
+
 }
