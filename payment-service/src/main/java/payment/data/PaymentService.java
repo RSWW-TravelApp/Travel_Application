@@ -36,7 +36,7 @@ public class PaymentService {
 //
 //        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
 //        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
-        return null;
+        return Mono.empty();
     }
 
     public Mono<Payment> createReservation(Payment payment){
@@ -54,7 +54,7 @@ public class PaymentService {
 //
 //        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
 //        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
-        return null;
+        return Mono.empty();
     }
 
     public Mono<Payment> updatePayment(Payment payment, String paymentId){
@@ -70,7 +70,7 @@ public class PaymentService {
 //
 //        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
 //        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
-        return null;
+        return Mono.empty();
     }
 
 

@@ -27,7 +27,7 @@ public class PaymentWebLayerHandler {
 //                        .contentType(MediaType.APPLICATION_JSON)
 //                        .body(paymentService.createPayment(paymentObject), Payment.class)
 //                );
-        return null;
+        return Mono.empty();
     }
 
     public Mono<ServerResponse> updatePayment(ServerRequest request) {
@@ -40,7 +40,7 @@ public class PaymentWebLayerHandler {
 //                        .contentType(MediaType.APPLICATION_JSON)
 //                        .body(paymentService.updatePayment(paymentObject, id), Payment.class)
 //                );
-        return null;
+        return Mono.empty();
     }
 
     public Mono<ServerResponse> createReservation(ServerRequest request) {
@@ -52,7 +52,7 @@ public class PaymentWebLayerHandler {
 //                        .contentType(MediaType.APPLICATION_JSON)
 //                        .body(paymentService.createReservation(paymentObject), Payment.class)
 //                );
-        return null;
+        return Mono.empty();
     }
 
 
