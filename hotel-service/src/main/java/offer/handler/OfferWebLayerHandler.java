@@ -11,7 +11,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Component
 public class OfferWebLayerHandler {
@@ -70,7 +69,7 @@ public class OfferWebLayerHandler {
                     Integer max_children_to_18 = offer.getMax_children_to_18().orElse(null);
                     String meals = offer.getMeals().orElse(null);
                     Double price = offer.getPrice().orElse(null);
-                    boolean available = offer.getAvailable().orElse(true);
+                    Boolean available = offer.getAvailable().orElse(null);
 
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)
@@ -100,18 +99,16 @@ public class OfferWebLayerHandler {
         String room_type = request.queryParam("room_type").orElse(null);
         String meals = request.queryParam("meals").orElse(null);
 
-        LocalDate start_date = LocalDate.parse(request.queryParam("start_date").orElse("2019-01-01"));
-        LocalDate end_date = LocalDate.parse(request.queryParam("end_date").orElse("2026-01-01"));
+        LocalDate start_date = request.queryParam("start_date").map(LocalDate::parse).orElse(null);
+        LocalDate end_date = request.queryParam("end_date").map(LocalDate::parse).orElse(null);
 
-        Integer stars, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, min_price, max_price;
-        stars = max_adults = max_children_to_3 = max_children_to_10 = max_children_to_18 = min_price = max_price = null;
-        try { stars = Integer.valueOf(Objects.requireNonNull(request.queryParam("stars").orElse(null))); } catch (Exception ignored) {}
-        try { max_adults = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_adults").orElse(null))); } catch (Exception ignored) {}
-        try { max_children_to_3 = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_children_to_3").orElse(null))); } catch (Exception ignored) {}
-        try { max_children_to_10 = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_children_to_10").orElse(null))); } catch (Exception ignored) {}
-        try { max_children_to_18 = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_children_to_18").orElse(null))); } catch (Exception ignored) {}
-        try { min_price = Integer.valueOf(Objects.requireNonNull(request.queryParam("min_price").orElse(null))); } catch (Exception ignored) {}
-        try { max_price = Integer.valueOf(Objects.requireNonNull(request.queryParam("max_price").orElse(null))); } catch (Exception ignored) {}
+        Integer stars = request.queryParam("stars").map(Integer::parseInt).orElse(null);
+        Integer max_adults = request.queryParam("max_adults").map(Integer::parseInt).orElse(null);
+        Integer max_children_to_3 = request.queryParam("max_children_to_3").map(Integer::parseInt).orElse(null);
+        Integer max_children_to_10 = request.queryParam("max_children_to_10").map(Integer::parseInt).orElse(null);
+        Integer max_children_to_18 = request.queryParam("max_children_to_18").map(Integer::parseInt).orElse(null);
+        Integer min_price = request.queryParam("min_price").map(Integer::parseInt).orElse(null);
+        Integer max_price = request.queryParam("max_price").map(Integer::parseInt).orElse(null);
 
         Flux<Offer> offers = offerService.fetchOffers(hotel_name, image, country, city, stars, start_date, end_date,
                 room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals, min_price, max_price);

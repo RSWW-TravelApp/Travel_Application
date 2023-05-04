@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 public class ReservationMasterApplication extends AbstractReactiveMongoConfiguration {
 
     public static void main(String[] args) {
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         SpringApplication.run(ReservationMasterApplication.class, args);
     }
 

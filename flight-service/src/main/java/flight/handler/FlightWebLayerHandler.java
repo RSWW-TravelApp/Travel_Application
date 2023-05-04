@@ -10,7 +10,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Component
 public class FlightWebLayerHandler {
@@ -43,11 +42,10 @@ public class FlightWebLayerHandler {
         String departure_city = request.queryParam("departure_city").orElse(null);
         String arrival_country = request.queryParam("arrival_country").orElse(null);
         String arrival_city = request.queryParam("arrival_city").orElse(null);
-        Integer available_seats = null;
-        try {
-            available_seats = Integer.valueOf(Objects.requireNonNull(request.queryParam("available_seats").orElse(null)));
-        } catch (Exception ignored) {}
-        LocalDate date = LocalDate.parse(request.queryParam("date").orElse("2020-01-01"));
+
+        Integer available_seats = request.queryParam("available_seats").map(Integer::parseInt).orElse(null);
+
+        LocalDate date = request.queryParam("date").map(LocalDate::parse).orElse(null);
 
         Flux<Flight> flights = flightService.fetchFlights(departure_country, departure_city, arrival_country,
                 arrival_city, available_seats, date);

@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 8084
 spring:
   application:
     name: reservation-master-service
@@ -18,7 +18,7 @@ spring:
 #          destination: cqrs_offers_delete
 #        updateFlightHandle-in-0:
 #          destination: cqrs_offers_update
-
+#
 #  rabbitmq:
 #    username: guest
 #    password: guest

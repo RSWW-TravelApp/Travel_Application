@@ -8,45 +8,45 @@ import java.util.Optional;
 @Document(collection = "payments")
 public class Payment {
     @Id
-    private String paymentId;
+    private String paymentID;
 
-    private String reservationId;
+    private String reservationID;
 
     private Boolean isPaid;
 
     public Payment() {
     }
 
-    public Payment(String paymentId, String reservationId, Boolean isPaid) {
-        this.paymentId = paymentId;
-        this.reservationId = reservationId;
+    public Payment(String paymentID, String reservationID, Boolean isPaid) {
+        this.paymentID = paymentID;
+        this.reservationID = reservationID;
         this.isPaid = isPaid;
     }
 
     @Override
     public String toString() {
         return "Payment{" +
-                "paymentId='" + paymentId + '\'' +
-                ", reservationId='" + reservationId + '\'' +
+                "paymentID='" + paymentID + '\'' +
+                ", reservationID='" + reservationID + '\'' +
                 ", isPaid='" + isPaid + '\'' +
                 '}';
     }
 
-    public String getPaymentId() {
-        return paymentId;
+    public String getPaymentID() {
+        return paymentID;
     }
-    public Optional<String> getReservationId() {
-        return Optional.ofNullable(reservationId);
+    public Optional<String> getReservationID() {
+        return Optional.ofNullable(reservationID);
     }
     public Optional<Boolean> getIsPaid() {
         return Optional.ofNullable(isPaid);
     }
 
-    public void setReservationId(String reservationId) {
-        this.reservationId = reservationId;
+    public void setReservationID(String reservationID) {
+        this.reservationID = reservationID;
     }
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
+    public void setPaymentID(String paymentID) {
+        this.paymentID = paymentID;
     }
     public void setIsPaid(Boolean isPaid) {
         this.isPaid = isPaid;

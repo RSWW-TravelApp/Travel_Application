@@ -2,31 +2,27 @@ package travelagency.data;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Document(collection = "flights")
-public class Flight {
+public class FlightNested {
+
     @Id
     private String flightId;
-
     private String departure_country;
     private String departure_city;
     private String arrival_country;
     private String arrival_city;
-
     private Integer available_seats;
-
     private LocalDate date;
-    private List<FlightNested> events;
+    private String eventType;
 
-    public Flight() {
+    public FlightNested() {
     }
 
-    public Flight(String flightId, String departure_country, String departure_city, String arrival_country,
-                  String arrival_city, Integer available_seats, LocalDate date, List<FlightNested> events) {
+    public FlightNested(String flightId, String departure_country, String departure_city, String arrival_country,
+                        String arrival_city, Integer available_seats, LocalDate date, String eventType) {
         this.flightId = flightId;
         this.departure_country = departure_country;
         this.departure_city = departure_city;
@@ -34,7 +30,7 @@ public class Flight {
         this.arrival_city = arrival_city;
         this.available_seats = available_seats;
         this.date = date;
-        this.events = events;
+        this.eventType = eventType;
     }
 
     @Override
@@ -71,8 +67,7 @@ public class Flight {
     public Optional<LocalDate> getDate() {
         return Optional.ofNullable(date);
     }
-    public Optional<List<FlightNested>> getEvents() {return Optional.ofNullable(events);}
-
+    public Optional<String> getEventType() {return Optional.ofNullable(eventType);}
 
     public void setFlightId(String flightId) { this.flightId = flightId; }
     public void setDeparture_country(String departure_country) {
@@ -93,6 +88,6 @@ public class Flight {
     public void setDate(LocalDate date) {
         this.date = date;
     }
-    public void setEvents(List<FlightNested> events){this.events = events;}
+    public void setEventType(String eventType) {this.eventType = eventType;}
 
 }
