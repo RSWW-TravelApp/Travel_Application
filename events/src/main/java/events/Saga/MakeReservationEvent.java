@@ -18,20 +18,10 @@ public class MakeReservationEvent extends SagaEvent {
     private final String is_paid;
 
 
-    public MakeReservationEvent(Double price, String offerId, String flightId, Integer seatsNeeded, String user_id, String offer_id, String flight_id, String room_type, Integer adult, Integer children_to_3, Integer children_to_10, Integer getChildren_to_18, String meals, Integer number_of_days, String start_date, String end_date, String discount, String is_paid) {
+    public MakeReservationEvent(Double price, String offerId, String flightId, Integer seatsNeeded, String user_id, String offer_id, String flight_id, String is_paid) {
         super(price, user_id, offerId, flightId, seatsNeeded);
         this.offer_id = offer_id;
-        this.flight_id = flight_id;
-//        this.room_type = room_type;
-//        this.adult = adult;
-//        this.children_to_3 = children_to_3;
-//        this.children_to_10 = children_to_10;
-//        this.getChildren_to_18 = getChildren_to_18;
-//        this.meals = meals;
-//        this.number_of_days = number_of_days;
-//        this.start_date = start_date;
-//        this.end_date = end_date;
-//        this.discount = discount;
+        this.flight_id = flight_id;//
         this.is_paid = is_paid;
     }
 

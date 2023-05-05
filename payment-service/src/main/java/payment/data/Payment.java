@@ -1,6 +1,8 @@
 package payment.data;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Optional;
@@ -18,6 +20,24 @@ public class Payment {
     private Boolean isExpired;
     private Double price;
 
+    @Transient
+    private Integer seatsNeeded;
+
+    public Payment(String paymentId, String userId, String reservationId, String offerId,
+                   String flightId, Boolean isReserved, Boolean isPaid, Boolean isExpired, Double price, Integer seatsNeeded) {
+        this.paymentId = paymentId;
+        this.userId = userId;
+        this.reservationId = reservationId;
+        this.offerId = offerId;
+        this.flightId = flightId;
+        this.isReserved = isReserved;
+        this.isPaid = isPaid;
+        this.isExpired = isExpired;
+        this.price = price;
+        this.seatsNeeded = seatsNeeded;
+    }
+    public Payment(){}
+    @PersistenceConstructor
     public Payment(String paymentId, String userId, String reservationId, String offerId,
                    String flightId, Boolean isReserved, Boolean isPaid, Boolean isExpired, Double price) {
         this.paymentId = paymentId;
@@ -45,7 +65,9 @@ public class Payment {
                 "price='" + price + '\'' +
                 '}';
     }
-
+    public Integer getSeatsNeeded() {
+        return seatsNeeded;
+    }
     public String getPaymentId() {
         return paymentId;
     }

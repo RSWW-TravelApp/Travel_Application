@@ -26,7 +26,7 @@ public class ReservationMasterEvent {
     @GetMapping("/create/")
     public void makeReservationRe() {
         System.out.println("making reservation entry");
-        sink.tryEmitNext(new MakeReservationEvent(123.0,"123", "123456", 59, "user_id", "offer_id", "flight_id", "Big",3,0,0,0,"yes please", 5, "2020-04-04", "2020-04-09", "false", "false"));
+        //sink.tryEmitNext(new MakeReservationEvent(123.0,"123", "123456", 59, "user_id", "offer_id", "flight_id", "Big",3,0,0,0,"yes please", 5, "2020-04-04", "2020-04-09", "false", "false"));
 
     }
 

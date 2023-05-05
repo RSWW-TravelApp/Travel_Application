@@ -1,10 +1,13 @@
 package payment.handler;
 
+import events.Saga.MakeReservationEvent;
+import events.Saga.ValidatePaymentEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import payment.PaymentEvent;
 import payment.data.Payment;
 import payment.data.PaymentService;
 import reactor.core.publisher.Mono;
@@ -40,13 +43,63 @@ public class PaymentWebLayerHandler {
 
     public Mono<ServerResponse> createUnpaidPayment(ServerRequest request) {
         Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
-
+        //Mono<Payment> paymentMono = Mono.just(new Payment("a","b","c","d","e",false,false,false,342.3,35));
         return paymentMono
-                .flatMap(paymentObject -> ServerResponse
+                .doOnNext(payment ->
+                    {
+                        PaymentEvent.sink_new_reservation.tryEmitNext(
+                            new MakeReservationEvent(
+                                    payment.getPrice(),
+                                    payment.getOfferId(),
+                                    payment.getFlightId(),
+                                    payment.getSeatsNeeded(),
+                                    payment.getUserId(),
+                                    payment.getOfferId(),
+                                    payment.getFlightId(),
+                                    payment.getIsPaid().toString()));
+                        PaymentEvent.sink_validations.tryEmitNext(
+                            new ValidatePaymentEvent(
+                                    payment.getPrice(),
+                                    payment.getUserId(),
+                                    payment.getOfferId(),
+                                    payment.getFlightId(),
+                                    payment.getSeatsNeeded(),
+                                    payment.getPaymentId()
+                            )
+                        );
+                        System.out.println(payment.getSeatsNeeded());
+                    }).flatMap(paymentObject -> ServerResponse
                         .status(HttpStatus.CREATED)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(paymentService.createUnpaidPayment(paymentObject), Payment.class)
                 );
+//                //.subscribe();
+//        return paymentMono
+//                .doOnNext(payment ->
+//                    PaymentEvent.sink_new_reservation.tryEmitNext(
+//                            new MakeReservationEvent(
+//                                    payment.getPrice(),
+//                                    payment.getOfferId(),
+//                                    payment.getFlightId(),
+//                                    payment.getSeatsNeeded(),
+//                                    payment.getUserId(),
+//                                    payment.getOfferId(),
+//                                    payment.getFlightId(),
+//                                    payment.getIsPaid().toString())).orThrow()
+////                        PaymentEvent.sink_validations.tryEmitNext(
+////                            new ValidatePaymentEvent(
+////                                    payment.getPrice(),
+////                                    payment.getUserId(),
+////                                    payment.getOfferId(),
+////                                    payment.getFlightId(),
+////                                    payment.getSeatsNeeded(),
+////                                    payment.getPaymentId()
+////                            )
+////                        );
+//                )
+//        //.subscribe();
+
+
     }
 
     public Mono<ServerResponse> createPaidPayment(ServerRequest request) {
