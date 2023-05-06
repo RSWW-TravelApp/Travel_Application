@@ -3,3 +3,6 @@ server:
   error:
     whitelabel:
       enabled: false
+
+api-gateway:
+  uri: http://localhost:8080
