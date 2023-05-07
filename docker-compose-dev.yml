@@ -6,34 +6,20 @@ services:
       - "8761:8761"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://discovery-server:8761"]
 
   api-gateway:
     container_name: api-gateway
     build: ./api-gateway-service
     ports:
       - "8080:8080"
-    depends_on:
-      discovery-server:
-        condition: service_healthy
-      offer-service:
-        condition: service_healthy
-      flight-service:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://api-gateway:8080/offers"]
 
   client:
     container_name: client-service
     build: ./client-service
     ports:
       - "10000:10000"
-    depends_on:
-      api-gateway:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       API_GATEWAY_URI: http://localhost:8080
@@ -43,39 +29,26 @@ services:
     build: ./hotel-service
     ports:
       - "8081:8081"
-    depends_on:
-      discovery-server:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/hotels
       RABBITMQ_HOST_ADDRESS: localhost
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://offer-service:8081/offers"]
   
   flight-service:
     container_name: flight-service
     build: ./flight-service
     ports:
       - "8082:8082"
-    depends_on:
-      discovery-server:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/flights
       RABBITMQ_HOST_ADDRESS: localhost
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://flight-service:8082/flights"]
 
   payment-service:
     container_name: payment-service
     build: ./payment-service
     ports:
       - "8083:8083"
-    depends_on:
-      discovery-server:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/bills
@@ -86,9 +59,6 @@ services:
     build: ./reservation-master-service
     ports:
       - "8084:8084"
-    depends_on:
-      discovery-server:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/reservations_master
@@ -99,9 +69,6 @@ services:
     build: ./reservation-service
     ports:
       - "8085:8085"
-    depends_on:
-      discovery-server:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/reservations
@@ -121,9 +88,6 @@ services:
     build: ./travel-agency
     ports:
       - "8087:8087"
-    depends_on:
-      discovery-server:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/travel_agency
