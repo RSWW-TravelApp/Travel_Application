@@ -1,11 +1,11 @@
 server:
-  port: 8087
+  port: 8085
 spring:
   application:
-    name: payment-service
+    name: travel-agency-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/bills
+      uri: ${SPRING_DATA_MONGODB_URI}
 eureka:
   instance:
     prefer-ip-address: true
@@ -13,4 +13,4 @@ eureka:
     instance-id: ${spring.application.name}:${server.port}:${random.value}
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://discovery-server:8761/eureka/

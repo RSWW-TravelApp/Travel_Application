@@ -13,7 +13,7 @@ async function loginUser() {
         return;
     }
 
-    await fetch(getEffectiveGatewayURI() + '/login' + `/${login}/${password}`, {method: "GET"})
+    await fetch(getEffectiveGatewayUri() + '/login' + `/${login}/${password}`, {method: "GET"})
           .then(response => response.text())
           .then(response => {
               const [status, body] = response.split(",");
@@ -41,7 +41,7 @@ async function registerUser() {
         return;
     }
 
-    await fetch(getEffectiveGatewayURI() + '/register' + `/${login}/${password}`, {method: "POST"})
+    await fetch(getEffectiveGatewayUri() + '/register' + `/${login}/${password}`, {method: "POST"})
           .then(response => response.text())
           .then(response => {
               const [status, body] = response.split(",");

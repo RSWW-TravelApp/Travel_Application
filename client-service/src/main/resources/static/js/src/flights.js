@@ -4,7 +4,7 @@ async function fetchDestinations(el) {
   if (!numberOfPeople) {
     queryParams += (queryParams == "" ? "?" : "&") + `available_seats=${document.getElementById('available_seats').value}`
   }
-  await fetch(getEffectiveGatewayURI() + '/flights' + queryParams, {method: "GET"})
+  await fetch(getEffectiveGatewayUri() + '/flights' + queryParams, {method: "GET"})
   .then(response => checkResponse(response))
   .then(data => {
     const listOfFlights = createElement('div');

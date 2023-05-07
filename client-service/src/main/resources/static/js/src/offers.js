@@ -19,7 +19,7 @@ function buildFlightInfo(flightItem) {
 
 async function fetchOffers(el) {
   const flightId = getSearchRequestParams(['flightId'])['flightId'];
-  await fetch(getEffectiveGatewayURI() + '/offers' + window.location.search, {method: "GET"})
+  await fetch(getEffectiveGatewayUri() + '/offers' + window.location.search, {method: "GET"})
   .then(response => response.json())
   .then(data => {
     const listOfOffers = createElement('div');
@@ -47,7 +47,7 @@ async function fetchOffers(el) {
 
 async function fetchChosenFlight(el) {
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
-    await fetch(getEffectiveGatewayURI() + '/flights/' + flightId, {method: "GET"})
+    await fetch(getEffectiveGatewayUri() + '/flights/' + flightId, {method: "GET"})
         .then(response => checkResponse(response))
         .then(flightItem => buildFlightInfo(flightItem))
         .catch(error => buildFlightInfo(defaultFlightItem));

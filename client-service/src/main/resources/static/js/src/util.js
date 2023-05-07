@@ -1,4 +1,4 @@
-function getEffectiveGatewayURI() {
+function getEffectiveGatewayUri() {
     const uri = document.getElementById('gateway-config').textContent;
     if (uri === null) {
         return "http://localhost:8080";

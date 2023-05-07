@@ -5,7 +5,7 @@ function createReservationListener() {
         createUserInfoBox();
         return;
     }
-    eventSource = new EventSource(getEffectiveGatewayURI() + "/notifications/" + currentUser);
+    eventSource = new EventSource(getEffectiveGatewayUri() + "/notifications/" + currentUser);
     console.log("Connection opened");
     createUserInfoBox(function() {}, function() {eventSource.close(); console.log("Connection closed")});
     eventSource.onmessage = (event) => {
@@ -71,7 +71,7 @@ function buildFlightInfo(flightItem) {
 
 async function fetchOfferDetails() {
   const id = window.location.pathname.split("/").pop();
-  await fetch(getEffectiveGatewayURI() + '/offers/' + id, {method: "GET"})
+  await fetch(getEffectiveGatewayUri() + '/offers/' + id, {method: "GET"})
   .then(response => checkResponse(response))
   .then(offerItem => buildOfferInfo(offerItem))
   .catch(error => buildOfferInfo(defaultOfferItem));
@@ -79,7 +79,7 @@ async function fetchOfferDetails() {
 
 async function fetchFlightDetails() {
   const flightId = getSearchRequestParams(['flightId'])['flightId'];
-  await fetch(getEffectiveGatewayURI() + '/flights/' + flightId, {method: "GET"})
+  await fetch(getEffectiveGatewayUri() + '/flights/' + flightId, {method: "GET"})
   .then(response => checkResponse(response))
   .then(flightItem => buildFlightInfo(flightItem))
   .catch(error => buildFlightInfo(defaultFlightItem));
@@ -108,7 +108,7 @@ async function reserveOffer() {
         return;
     }
     result.textContent = "Do not leave this page";
-    await fetch(getEffectiveGatewayURI() + '/reserve' + `/${offerId}/${flightId}`, {method: "POST"})
+    await fetch(getEffectiveGatewayUri() + '/reserve' + `/${offerId}/${flightId}`, {method: "POST"})
     .then(response => response.text())
     .then(response => {
         alert(response);
@@ -138,7 +138,7 @@ async function purchaseOffer(status) {
         return;
     }
     result.textContent = "Do not leave this page";
-    await fetch(getEffectiveGatewayURI() + '/purchase' + `/${offerId}/${flightId}/${status}`, {method: "POST"})
+    await fetch(getEffectiveGatewayUri() + '/purchase' + `/${offerId}/${flightId}/${status}`, {method: "POST"})
     .then(response => response.text())
     .then(response => {
         alert(response);

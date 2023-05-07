@@ -1,0 +1,8 @@
+server:
+  port: 10000
+  error:
+    whitelabel:
+      enabled: false
+
+api-gateway:
+  uri: ${API_GATEWAY_URI}
