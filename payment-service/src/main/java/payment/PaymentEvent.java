@@ -3,29 +3,35 @@ package payment;
 import events.Saga.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import payment.data.Payment;
+import payment.data.PaymentService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuples;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Component
 public class PaymentEvent {
-    public static final Sinks.Many<MakeReservationEvent> sink_new_reservation = Sinks.many().multicast().onBackpressureBuffer();
-    public static final Sinks.Many<ValidatePaymentEvent> sink_validations = Sinks.many().multicast().onBackpressureBuffer();
-    static final Sinks.Many<PayReservationEvent> sink_succeeded = Sinks.many().multicast().onBackpressureBuffer();
+    private final PaymentService paymentService;
 
-    @Bean
-    public Function<Flux<RequirePaymentEvent>, Flux<ValidatePaymentEvent>> processPayment() {
-        return flux -> flux
-                .doOnNext(event -> System.out.println("paying for offer:" + event.getOfferId()))
-                .map(event -> new ValidatePaymentEvent(event.getPrice(),"", event.getOfferId(),event.getFlightId(),event.getSeatsNeeded(), "4"));
+    public PaymentEvent(PaymentService paymentService) {
+        this.paymentService = paymentService;
     }
+
+    public static final Sinks.Many<MakeReservationEvent> sink_new_reservation = Sinks.many().multicast().onBackpressureBuffer();
+
+    public static final Sinks.Many<PayReservationEvent> sink_succeeded = Sinks.many().multicast().onBackpressureBuffer();
+    public static final Sinks.Many<UnblockResourcesEvent> sink_failed = Sinks.many().multicast().onBackpressureBuffer();
+//    public static final Sinks.Many<RemoveReservationEvent> sink_failed_unreserved = Sinks.many().multicast().onBackpressureBuffer();
+
+//    @Bean
+//    public Function<Flux<RequirePaymentEvent>, Flux<ValidatePaymentEvent>> processPayment() {
+//        return flux -> flux
+//                .doOnNext(event -> System.out.println("paying for offer:" + event.getOfferId()))
+//                .map(event -> new ValidatePaymentEvent(event.getPrice(),"", event.getOfferId(),event.getFlightId(),event.getSeatsNeeded(), "4"));
+//    }
 
 //    @GetMapping("/pay/")
 //    public void payReservation() {
@@ -48,27 +54,73 @@ public class PaymentEvent {
 //                .map(event -> new MakeReservationEvent(123.0,"123", "123456", 59,"Big",3,0,0,0,"yes please", 5, "2020-04-04", "2020-04-09", "false", "false"));
 //    }
     @Bean
-    public Function<Flux<ValidatePaymentEvent>, Mono<Void>> validatePayment() {
+    public Function<Flux<ValidatePaymentEvent>, Mono<Void>> confirmReservationId() {
         return flux -> flux
-                .doOnNext(PaymentEvent::verifyIfPaid)
+                .doOnNext(event ->
+                {
+                    paymentService.findByPaymentId(event.getPayment_id())
+                            .flatMap(payment ->  paymentService.updatePayment(payment.getPaymentId(),"reservationId", event.getReservation_id()))
+                            .subscribe();
+                           //.subscribe();
+                })
                 .then();
     }
 
-    private static void verifyIfPaid(ValidatePaymentEvent event)
-    {
-        System.out.println("Checking Payment");
-        boolean success = false;
-        if(!success) {
-            System.out.println("Payment failed. Rollback. ");
-            //sink_failed.tryEmitNext(new UnblockResourcesEvent(event.getPrice(), "",event.getOfferId(), event.getFlightId(), event.getSeatsNeeded()));
-        }
+    @Bean
+    public Function<Flux<ValidatePaymentEvent>, Mono<Void>> validatePayment() {
+        return flux -> flux
+                .doOnNext(event ->
+                {
+                    paymentService.findByPaymentId(event.getPayment_id())
+                            .filter(a -> !a.getIsPaid())
+                            .flatMap(payment ->  paymentService.updatePayment(payment.getPaymentId(),"isExpired",true))
+                            .doOnNext(payment ->
+                            {
+                                System.out.println("Payment failed. Rollback. ");
+                                sink_failed.tryEmitNext(new UnblockResourcesEvent(
+                                        event.getPrice(),
+                                        event.getUser_id(),
+                                        event.getOfferId(),
+                                        event.getFlight_id(),
+                                        event.getPayment_id(),
+                                        event.getReservation_id(),
+                                        event.getSeatsNeeded()
+                                ));
+                            })
+                            .subscribe();
+                }).then();
     }
-//
-//    @Bean
-//    public Supplier<Flux<UnblockResourcesEvent>> failTransaction() {
-//        return sink_failed::asFlux;
+
+    @Bean
+    public Function<Flux<RefundPaymentEvent>, Mono<Void>> refundPayment() {
+        return flux -> flux
+                .flatMap(event ->
+                        paymentService.findByPaymentId(event.getPayment_id()))
+                        .filter(a -> !a.getIsExpired())
+                        .flatMap(payment ->  paymentService.updatePayment(payment.getPaymentId(),"isExpired",true))
+                .filter(Payment::getIsPaid)
+                .doOnNext(a -> System.out.println("Refunding Payment"+ a.getPaymentId()))
+                .then();
+    }
+
+//    private static void verifyIfPaid(ValidatePaymentEvent event)
+//    {
+//        System.out.println("Checking Payment");
+//        boolean success = false;
+//        if(!success) {
+//            System.out.println("Payment failed. Rollback. ");
+//            //sink_failed.tryEmitNext(new UnblockResourcesEvent(event.getPrice(), "",event.getOfferId(), event.getFlightId(), event.getSeatsNeeded()));
+//        }
 //    }
 
+    @Bean
+    public Supplier<Flux<UnblockResourcesEvent>> failTransaction() {
+        return sink_failed::asFlux;
+    }
+//    @Bean
+//    public Supplier<Flux<RemoveReservationEvent>> failUnreservedTransaction() {
+//        return sink_failed_unreserved::asFlux;
+//    }
     @Bean
     public Supplier<Flux<PayReservationEvent>> succeedTransaction() {
         return sink_succeeded::asFlux;
@@ -77,10 +129,7 @@ public class PaymentEvent {
     public Supplier<Flux<MakeReservationEvent>> makeReservation() {
         return sink_new_reservation::asFlux;
     }
-    @Bean
-    public Supplier<Flux<ValidatePaymentEvent>> requireValidation() {
-        return sink_validations::asFlux;
-    }
+
 
 
 }

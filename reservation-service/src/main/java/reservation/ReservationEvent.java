@@ -27,8 +27,13 @@ public class ReservationEvent {
                                         event.getUser_id(),
                                         event.getOffer_id(),
                                         event.getFlight_id(),
-                                        Boolean.parseBoolean(event.getIs_paid())))
-                ).then();
+                                        Boolean.parseBoolean(event.getIs_paid()),
+                                        Boolean.parseBoolean(event.getIsCancelled()),
+                                        event.getPrice(),
+                                        event.getTravellers(),
+                                        event.getPaymentId(),
+                                        Boolean.parseBoolean(event.getIsReserved()))
+                        )).then();
     }
 
     @Bean
@@ -45,10 +50,15 @@ public class ReservationEvent {
         return flux -> flux.doOnNext(
                         event ->
                                 reservationService.updateReservation(event.getId(),
-                                                event.getUser_id().orElse(null),
-                                                event.getOffer_id().orElse(null),
-                                                event.getFlight_id().orElse(null),
-                                                event.getIs_paid().map(Boolean::parseBoolean).orElse(null)
+                                    event.getUser_id().orElse(null),
+                                    event.getOffer_id().orElse(null),
+                                    event.getFlight_id().orElse(null),
+                                    event.getIs_paid().map(Boolean::parseBoolean).orElse(null),
+                                    event.getIsCancelled().map(Boolean::parseBoolean).orElse(null),
+                                    event.getPrice().orElse(null),
+                                    event.getTravellers().orElse(null),
+                                    event.getPaymentId().orElse(null),
+                                    event.getIsReserved().map(Boolean::parseBoolean).orElse(null)
 
                                 )
                 )
