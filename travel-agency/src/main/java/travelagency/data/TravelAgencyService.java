@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 @Service
 public class TravelAgencyService {
@@ -65,21 +66,22 @@ public class TravelAgencyService {
         return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class);
     }
 
-    public Mono<OfferNested> addEventOffer(OfferNested offerNested){
+    public Mono<Offer> addEventOffer(OfferNested offerNested){
         Query query = new Query();
         query.addCriteria(Criteria.where("offerId").is(offerNested.getOfferId()));
 
         Update update = new Update();
 
         offerNested.getAvailable().ifPresent(available -> update.set("available", available));
-
+        query.addCriteria(Criteria
+                .where("available").is(!offerNested.getAvailable().get()));
         update.push("events", offerNested);
 
-        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
-        return reactiveMongoTemplate.findAndModify(query, update, options, OfferNested.class);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+        return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class);
     }
 
-    public Mono<FlightNested> addEventFlight(FlightNested flightNested){
+    public Mono<Flight> addEventFlight(FlightNested flightNested){
         Query query = new Query();
         Update update = new Update();
 
@@ -90,10 +92,11 @@ public class TravelAgencyService {
                 .where("flightId").is(flightNested.getFlightId()));
 
         if(seats != null && event_type != null){
-            query.addCriteria(Criteria
-                    .where("available_seats").gte(seats));
+
 
             if(event_type.equals("BlockResourcesEvent")){
+                query.addCriteria(Criteria
+                        .where("available_seats").gte(seats));
                 update.inc("available_seats",-seats);
             }
             else if(event_type.equals("UnblockResourcesEvent")){
@@ -104,8 +107,74 @@ public class TravelAgencyService {
 
         update.push("events", flightNested);
 
-        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
-        return reactiveMongoTemplate.findAndModify(query, update, options, FlightNested.class);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+        return reactiveMongoTemplate.findAndModify(query, update, options, Flight.class);
     }
+
+//    public Mono<Void> ModifyResources(OfferNested offerNested, FlightNested flightNested)
+//    {
+//        Query query_offer = new Query();
+//        Query query_flight = new Query();
+//        Update update_offer = new Update();
+//        Update update_flight = new Update();
+//        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+//
+//        Integer seats = flightNested.getAvailable_seats().orElse(null);
+//        String event_type = flightNested.getEventType().orElse(null);
+//
+//        query_flight.addCriteria(Criteria
+//                .where("flightId").is(flightNested.getFlightId()));
+//        query_offer.addCriteria(Criteria
+//                .where("offerId").is(offerNested.getOfferId()));
+//        if(seats != null && event_type != null){
+//            query_flight.addCriteria(Criteria
+//                    .where("available_seats").gte(seats));
+//
+//            if(event_type.equals("BlockResourcesEvent")){
+//                update_flight.inc("available_seats",-seats);
+//            }
+//            else if(event_type.equals("UnblockResourcesEvent")){
+//                update_flight.inc("available_seats",seats);
+//            }
+//        }
+//
+//
+//
+//
+//        offerNested.getAvailable().ifPresent(available -> update_offer.set("available", available));
+//        query_offer.addCriteria(Criteria
+//                .where("available").is(true));
+//
+//        return Mono.zip(reactiveMongoTemplate.findAndModify(query_flight, update_flight, options, Flight.class),reactiveMongoTemplate.findAndModify(query_offer, update_offer, options, Offer.class))
+//                        .switchIfEmpty(
+//                                Mono.empty()
+//
+//                                //
+//                        )
+//                        .doOnNext(
+//                                event ->
+//                                {
+//                                    Query query_offer2 = new Query();
+//                                    Query query_flight2 = new Query();
+//                                    Update update_offer2 = new Update();
+//                                    Update update_flight2 = new Update();
+//                                    Flight flight = (Flight)event.get(0);
+//                                    Offer offer = (Offer)event.get(1);
+//                                    update_flight2.push("events", flight);
+//                                    update_offer2.push("events", offer);
+//                                    flight = (Flight)event.get(0);
+//                                    offer = (Offer)event.get(1);
+//                                    query_flight2.addCriteria(Criteria
+//                                            .where("flightId")
+//                                            .is(flight)
+//                                    );
+//                                    query_offer2.addCriteria(Criteria
+//                                            .where("offerId")
+//                                            .is(offer));
+//                                    reactiveMongoTemplate.findAndModify(query_flight2, update_flight2, options, Flight.class);
+//                                    reactiveMongoTemplate.findAndModify(query_offer2, update_offer2, options, Offer.class);
+//                                }
+//                ).then();
+//    }
 
 }

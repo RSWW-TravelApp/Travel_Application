@@ -29,6 +29,12 @@ public class ReservationService {
         return reservationRepository.findAll().switchIfEmpty(Flux.empty());
     }
 
+    public Flux<Reservation> getAllByUserId(String userId){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        return reactiveMongoTemplate.find(query, Reservation.class).switchIfEmpty(Mono.empty());
+    }
+
     public Mono<Reservation> findByReservationId(String reservationId){
         return reservationRepository.findByReservationId(reservationId).switchIfEmpty(Mono.empty());
     }
@@ -40,8 +46,8 @@ public class ReservationService {
     }
 
     // updating the specific offer with the given parameters (null parameters - don't update the field)
-    public Mono<Reservation> updateReservation(String reservationId, String userId, String flightId, String offerId,
-                                               Boolean isPaid){
+    public Mono<Reservation> updateReservation(String reservationId, String userId, String offerId, String flightId,
+                                               Boolean isPaid, Boolean isCancelled, Double price, Integer Travellers, String paymentId, Boolean isReserved){
 
         Query query = new Query();
         query.addCriteria(Criteria.where("reservationId").is(reservationId));
@@ -58,6 +64,21 @@ public class ReservationService {
         }
         if(isPaid != null) {
             update.set("isPaid", isPaid);
+        }
+        if(isPaid != null) {
+            update.set("isCancelled", isCancelled);
+        }
+        if(isPaid != null) {
+            update.set("price", price);
+        }
+        if(isPaid != null) {
+            update.set("Travellers", Travellers);
+        }
+        if(isPaid != null) {
+            update.set("paymentId", paymentId);
+        }
+        if(isPaid != null) {
+            update.set("isReserved", isReserved);
         }
 
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
