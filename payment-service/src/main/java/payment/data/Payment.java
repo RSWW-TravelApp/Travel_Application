@@ -12,10 +12,9 @@ public class Payment {
     @Id
     private String paymentId;
     private String userId;
-    private String reservationId;
     private String offerId;
     private String flightId;
-    private Boolean isReserved;
+    private String reservationId;
     private Boolean isPaid;
     private Boolean isExpired;
     private Double price;
@@ -23,43 +22,41 @@ public class Payment {
     @Transient
     private Integer seatsNeeded;
 
-    public Payment(String paymentId, String userId, String reservationId, String offerId,
-                   String flightId, Boolean isReserved, Boolean isPaid, Boolean isExpired, Double price, Integer seatsNeeded) {
+    public Payment(String paymentId, String userId, String offerId,
+                   String flightId, Boolean isPaid, Boolean isExpired, Double price, Integer seatsNeeded) {
         this.paymentId = paymentId;
         this.userId = userId;
-        this.reservationId = reservationId;
         this.offerId = offerId;
         this.flightId = flightId;
-        this.isReserved = isReserved;
+        this.reservationId = null;
         this.isPaid = isPaid;
         this.isExpired = isExpired;
         this.price = price;
         this.seatsNeeded = seatsNeeded;
     }
     public Payment(){}
-    @PersistenceConstructor
-    public Payment(String paymentId, String userId, String reservationId, String offerId,
-                   String flightId, Boolean isReserved, Boolean isPaid, Boolean isExpired, Double price) {
-        this.paymentId = paymentId;
-        this.userId = userId;
-        this.reservationId = reservationId;
-        this.offerId = offerId;
-        this.flightId = flightId;
-        this.isReserved = isReserved;
-        this.isPaid = isPaid;
-        this.isExpired = isExpired;
-        this.price = price;
-    }
+//    @PersistenceConstructor
+//    public Payment(String paymentId, String userId, String reservationId, String offerId,
+//                   String flightId, Boolean isReserved, Boolean isPaid, Boolean isExpired, Double price) {
+//        this.paymentId = paymentId;
+//        this.userId = userId;
+//        this.reservationId = reservationId;
+//        this.offerId = offerId;
+//        this.flightId = flightId;
+//        this.isReserved = isReserved;
+//        this.isPaid = isPaid;
+//        this.isExpired = isExpired;
+//        this.price = price;
+//    }
 
     @Override
     public String toString() {
         return "Payment{" +
                 "paymentId='" + paymentId + '\'' +
                 "userId='" + userId + '\'' +
-                "reservationId='" + reservationId + '\'' +
                 "offerId='" + offerId + '\'' +
                 "flightId='" + flightId + '\'' +
-                "isReserved='" + isReserved + '\'' +
+                "isReserved='" + reservationId + '\'' +
                 "isPaid='" + isPaid + '\'' +
                 "isExpired='" + isExpired + '\'' +
                 "price='" + price + '\'' +
@@ -74,9 +71,6 @@ public class Payment {
     public String getUserId() {
         return userId;
     }
-    public String getReservationId() {
-        return reservationId;
-    }
     public String getOfferId() {
         return offerId;
     }
@@ -84,8 +78,8 @@ public class Payment {
         return flightId;
     }
 
-    public Boolean getIsReserved() {
-        return isReserved;
+    public String getReservationId() {
+        return reservationId;
     }
     public Boolean getIsPaid() {
         return isPaid;
@@ -103,9 +97,6 @@ public class Payment {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    public void setReservationId(String reservationId) {
-        this.reservationId = reservationId;
-    }
     public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
@@ -116,8 +107,8 @@ public class Payment {
     public void setIsPaid(Boolean isPaid) {
         this.isPaid = isPaid;
     }
-    public void setIsReserved(Boolean reserved) {
-        isReserved = reserved;
+    public void setReservationId(String reservationId) {
+        reservationId = reservationId;
     }
     public void setIsExpired(Boolean expired) {
         isExpired = expired;

@@ -11,7 +11,6 @@ import java.util.Optional;
 public class Flight {
     @Id
     private String flightId;
-
     private String departure_country;
     private String departure_city;
     private String arrival_country;
@@ -21,6 +20,10 @@ public class Flight {
 
     private LocalDate date;
     private List<FlightNested> events;
+
+    public Flight() {
+
+    }
 
     public Flight(String flightId, String departure_country, String departure_city, String arrival_country,
                   String arrival_city, Integer available_seats, LocalDate date, List<FlightNested> events) {
