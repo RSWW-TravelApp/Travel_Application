@@ -24,6 +24,13 @@ public class ReservationWebLayerHandler {
                 .body(reservationService.getAllReservations(), Reservation.class);
     }
 
+    public Mono<ServerResponse> getReservationsByUserId(ServerRequest request) {
+        return ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(reservationService.getAllByUserId(request.pathVariable("userId")), Reservation.class);
+    }
+
     public Mono<ServerResponse> getReservationById(ServerRequest request) {
         return reservationService
                 .findByReservationId(request.pathVariable("reservationId"))

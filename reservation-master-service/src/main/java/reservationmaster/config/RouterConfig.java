@@ -12,18 +12,18 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class RouterConfig {
 
-    @Bean
-    RouterFunction<ServerResponse> createReservation(ReservationMasterWebLayerHandler handler) {
-        return route(POST("/reservations"), handler::createReservation);
-    }
-
-    @Bean
-    RouterFunction<ServerResponse> addEvent(ReservationMasterWebLayerHandler handler) {
-        return route(PUT("/reservations/{reservationId}"), handler::addEvent);
-    }
-
-    @Bean
-    RouterFunction<ServerResponse> deleteReservationById(ReservationMasterWebLayerHandler handler) {
-        return route(DELETE("/reservations/{reservationId}"), handler::deleteReservationById);
-    }
+//    @Bean
+//    RouterFunction<ServerResponse> createReservation(ReservationMasterWebLayerHandler handler) {
+//        return route(POST("/reservations"), handler::createReservation);
+//    }
+//
+//    @Bean
+//    RouterFunction<ServerResponse> addEvent(ReservationMasterWebLayerHandler handler) {
+//        return route(PUT("/reservations/{reservationId}"), handler::addEvent);
+//    }
+//
+//    @Bean
+//    RouterFunction<ServerResponse> deleteReservationById(ReservationMasterWebLayerHandler handler) {
+//        return route(DELETE("/reservations/{reservationId}"), handler::deleteReservationById);
+//    }
 }
