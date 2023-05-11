@@ -8,27 +8,26 @@ spring:
       uri: mongodb://localhost:27017/travel_agency
   cloud:
     stream:
-      rabbit:
-        bindings:
-          requireValidation-out-0:
-            producer:
-              autoBindDlq: true
-              ttl: 5000
-              deadLetterExchange: delay-topic
-              deadLetterQueueName: delay-topic.test
-              deadLetterExchangeType: topic
       function:
-        definition: makeReservation; requireValidation; validatePayment
+        definition: makeReservation; validatePayment; failTransaction; confirmReservationId; refundPayment; succeedTransaction
       bindings:
         makeReservation-out-0:
           destination: sage_make_reservation
-        requireValidation-out-0:
-          destination: temp
-          producer:
-            requiredGroups: test
         validatePayment-in-0:
           destination: delay-topic
           group: test
+        succeedTransaction-out-0:
+          destination: saga_paid_reservation
+        failTransaction-out-0:
+          destination: saga_unblock_resources
+        confirmReservationId-in-0:
+          destination: saga_reservationId_update
+        refundPayment-in-0:
+          destination: saga_refunds
+
+
+  #        failUnreservedTransaction-out-0:
+#          destination: saga_remove_reservation
 #      function:
 #        definition: processPayment; validatePayment; failTransaction; succeedTransaction
 #      bindings:

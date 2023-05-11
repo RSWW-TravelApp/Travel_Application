@@ -8,23 +8,46 @@ spring:
       uri: mongodb://localhost:27017/reservations_master
   cloud:
     stream:
+      rabbit:
+        bindings:
+          requireValidation-out-0:
+            producer:
+              autoBindDlq: true
+              ttl: 20000
+              deadLetterExchange: delay-topic
+              deadLetterQueueName: delay-topic.test
+              deadLetterExchangeType: topic
       function:
-        definition: makeReservation; removeReservation; createReservationCQRSHandle; deleteReservationCQRSHandle; updateReservationCQRSHandle; finaliseReservation
+        definition: removeReservation; createReservationCQRSHandle; deleteReservationCQRSHandle; updateReservationCQRSHandle; finaliseReservation; makeReservation; confirmReservation; requireValidation; confirmReservationId; requestRefund; receivePayment
       bindings:
-        makeReservation-out-0:
+        makeReservation-in-0:
           destination: sage_make_reservation
+        makeReservation-out-0:
+          destination: sage_block_resources
         removeReservation-in-0:
-          destination: saga_remove_reservation
+          destination: saga_cancel_reservation
         createReservationCQRSHandle-out-0:
           destination: cqrs_reservations_create
         deleteReservationCQRSHandle-out-0:
           destination: cqrs_reservations_delete
         updateReservationCQRSHandle-out-0:
           destination: cqrs_reservations_update
-        finaliseReservation-in-0:
-          destination: saga_finalise_reservation
+        requireValidation-out-0:
+          destination: temp
+          producer:
+            requiredGroups: test
+#        finaliseReservation-in-0:
+#          destination: saga_finalise_reservation
         finaliseReservation-out-0:
           destination: to_notif_purchases
+        confirmReservation-in-0:
+          destination: saga_reservation_succesful
+        confirmReservationId-out-0:
+          destination: saga_reservationId_update
+        requestRefund-out-0:
+          destination: saga_refunds
+        receivePayment-in-0:
+          destination: saga_paid_reservation
 
 
   rabbitmq:
