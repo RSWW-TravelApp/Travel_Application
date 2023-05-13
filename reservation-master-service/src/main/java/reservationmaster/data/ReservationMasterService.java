@@ -27,7 +27,20 @@ public class ReservationMasterService {
     }
 
     public Mono<Reservation> createReservation(Reservation reservation){
-        return reservationMasterRepository.save(reservation).flatMap(savedReservation -> addEvent(new ReservationNested(savedReservation.getReservationId(),savedReservation.getUserId(),savedReservation.getFlightId(),savedReservation.getOfferId(),savedReservation.getPaymentId(),savedReservation.getPrice(),savedReservation.getIsPaid(),savedReservation.getIsCancelled(),savedReservation.getTravellers(), savedReservation.getReserved(),"CreateReservation")));
+        return reservationMasterRepository.save(reservation).flatMap(savedReservation ->
+                addEvent(new ReservationNested(
+                        savedReservation.getReservationId(),
+                        savedReservation.getUserId(),
+                        savedReservation.getFlightId(),
+                        savedReservation.getOfferId(),
+                        savedReservation.getPaymentId(),
+                        savedReservation.getPrice(),
+                        savedReservation.getIsPaid(),
+                        savedReservation.getIsCancelled(),
+                        savedReservation.getTravellers(),
+                        savedReservation.getReserved(),
+                        "CreateReservation"))
+        );
 
     }
 
