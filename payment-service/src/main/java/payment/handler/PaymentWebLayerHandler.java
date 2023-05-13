@@ -60,52 +60,13 @@ public class PaymentWebLayerHandler {
                                     payment.getUserId(),
                                     payment.getPaymentId(),
                                     null,
-                                    payment.getIsPaid().toString()))
-                        ;
-//                        PaymentEvent.sink_validation.tryEmitNext(
-//                            new ValidatePaymentEvent(
-//                                    payment.getPrice(),
-//                                    payment.getUserId(),
-//                                    payment.getOfferId(),
-//                                    payment.getFlightId(),
-//                                    payment.getSeatsNeeded(),
-//                                    payment.getPaymentId()
-//                            )
-//                        );
+                                    payment.getIsPaid().toString()));
                     })
                 .flatMap(paymentObject -> ServerResponse
                         .status(HttpStatus.CREATED)
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(paymentObject)
-                        //.body(Mono.just(paymentObject), Payment.class)
                 );
-//                //.subscribe();
-//        return paymentMono
-//                .doOnNext(payment ->
-//                    PaymentEvent.sink_new_reservation.tryEmitNext(
-//                            new MakeReservationEvent(
-//                                    payment.getPrice(),
-//                                    payment.getOfferId(),
-//                                    payment.getFlightId(),
-//                                    payment.getSeatsNeeded(),
-//                                    payment.getUserId(),
-//                                    payment.getOfferId(),
-//                                    payment.getFlightId(),
-//                                    payment.getIsPaid().toString())).orThrow()
-////                        PaymentEvent.sink_validations.tryEmitNext(
-////                            new ValidatePaymentEvent(
-////                                    payment.getPrice(),
-////                                    payment.getUserId(),
-////                                    payment.getOfferId(),
-////                                    payment.getFlightId(),
-////                                    payment.getSeatsNeeded(),
-////                                    payment.getPaymentId()
-////                            )
-////                        );
-//                )
-//        //.subscribe();
-
-
     }
 
     public Mono<ServerResponse> createPaidPayment(ServerRequest request) {

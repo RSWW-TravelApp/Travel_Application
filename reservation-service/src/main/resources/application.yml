@@ -17,14 +17,11 @@ spring:
           destination: cqrs_reservations_delete
         updateReservationHandle-in-0:
           destination: cqrs_reservations_update
-
-
   rabbitmq:
     username: guest
     password: guest
     host: 127.0.0.1
     port: 5672
-
 eureka:
   instance:
     prefer-ip-address: true

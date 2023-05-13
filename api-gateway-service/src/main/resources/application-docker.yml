@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api_gateway
+  cloud:
+    gateway:
+      routes:
+        - id: offer-service
+          uri: lb://offer-service
+          predicates:
+            - Path=/offers,/offers/{offerId}
+            - Method=GET
+        - id: flight-service
+          uri: lb://flight-service
+          predicates:
+            - Path=/flights,/flights/{flightId}
+            - Method=GET
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payments/{paymentId}/{status}
+            - Method=POST
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
+    org.springframework.cloud.gateway: TRACE
+
+eureka:
+  instance:
+    hostname: api_gateway
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-server:8761/eureka/

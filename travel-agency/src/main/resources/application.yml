@@ -21,18 +21,18 @@ spring:
           destination: saga_cancel_reservation
         cancelReservation-out-0:
           destination: saga_cancel_reservation
-#        createFlightCQRSHandle-out-0:
-#          destination: cqrs_flights_create
-#        createOfferCQRSHandle-out-0:
-#          destination: cqrs_offers_create
-#        deleteFlightCQRSHandle-out-0:
-#          destination: cqrs_flights_delete
-#        deleteOfferCQRSHandle-out-0:
-#          destination: cqrs_offers_delete
-#        updateFlightCQRSHandle-out-0:
-#          destination: cqrs_flights_update
-#        updateOfferCQRSHandle-out-0:
-#          destination: cqrs_offers_update
+  #        createFlightCQRSHandle-out-0:
+  #          destination: cqrs_flights_create
+  #        createOfferCQRSHandle-out-0:
+  #          destination: cqrs_offers_create
+  #        deleteFlightCQRSHandle-out-0:
+  #          destination: cqrs_flights_delete
+  #        deleteOfferCQRSHandle-out-0:
+  #          destination: cqrs_offers_delete
+  #        updateFlightCQRSHandle-out-0:
+  #          destination: cqrs_flights_update
+  #        updateOfferCQRSHandle-out-0:
+  #          destination: cqrs_offers_update
 
   rabbitmq:
     username: guest

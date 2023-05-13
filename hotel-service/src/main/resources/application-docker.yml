@@ -1,27 +1,27 @@
 server:
-  port: 8082
+  port: 8081
 spring:
   application:
-    name: flight-service
+    name: offer-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/flights
+      uri: ${SPRING_DATA_MONGODB_URI}
   cloud:
     stream:
       function:
-        definition: createFlightHandle;deleteFlightHandle;updateFlightHandle
+        definition: createOfferHandle;deleteOfferHandle;updateOfferHandle
       bindings:
         createFlightHandle-in-0:
-          destination: cqrs_flights_create
+          destination: cqrs_offers_create
         deleteFlightHandle-in-0:
-          destination: cqrs_flights_delete
+          destination: cqrs_offers_delete
         updateFlightHandle-in-0:
-          destination: cqrs_flights_update
+          destination: cqrs_offers_update
 
   rabbitmq:
     username: guest
     password: guest
-    host: 127.0.0.1
+    host: ${RABBITMQ_HOST_ADDRESS}
     port: 5672
 
 eureka:
@@ -31,4 +31,4 @@ eureka:
     instance-id: ${spring.application.name}:${server.port}:${random.value}
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://discovery-server:8761/eureka/
