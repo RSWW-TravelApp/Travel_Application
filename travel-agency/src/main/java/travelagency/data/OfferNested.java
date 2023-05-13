@@ -123,7 +123,7 @@ public class OfferNested {
         return Optional.ofNullable(price);
     }
     public Optional<Boolean> getAvailable() { return Optional.ofNullable(available);}
-    public Optional<String> getEventType() {return Optional.ofNullable(eventType);}
+    public String getEventType() {return eventType;}
 
     public void setOfferId(String offerId) {
         this.offerId = offerId;

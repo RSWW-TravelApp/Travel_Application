@@ -4,6 +4,7 @@ import events.CQRS.reservations.CreateReservationEvent;
 import events.CQRS.reservations.DeleteReservationEvent;
 import events.CQRS.reservations.UpdateReservationEvent;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reservation.data.Reservation;
@@ -11,6 +12,7 @@ import reservation.data.ReservationService;
 
 import java.util.function.Function;
 
+@Component
 public class ReservationEvent {
     private final ReservationService reservationService;
 
@@ -20,25 +22,25 @@ public class ReservationEvent {
 
     @Bean
     public Function<Flux<CreateReservationEvent>, Mono<Void>> createReservationHandle() {
-        return flux -> flux.doOnNext(
-                        event ->
+        return flux -> flux.flatMap(
+                            event ->
                                 reservationService.createReservation(new Reservation(
-                                        event.getId(),
-                                        event.getUser_id(),
-                                        event.getOffer_id(),
-                                        event.getFlight_id(),
-                                        Boolean.parseBoolean(event.getIs_paid()),
-                                        Boolean.parseBoolean(event.getIsCancelled()),
-                                        event.getPrice(),
-                                        event.getTravellers(),
-                                        event.getPaymentId(),
-                                        Boolean.parseBoolean(event.getIsReserved()))
-                        )).then();
+                                    event.getId(),
+                                    event.getUser_id(),
+                                    event.getOffer_id(),
+                                    event.getFlight_id(),
+                                    Boolean.parseBoolean(event.getIs_paid()),
+                                    Boolean.parseBoolean(event.getIsCancelled()),
+                                    event.getPrice(),
+                                    event.getTravellers(),
+                                    event.getPaymentId(),
+                                    Boolean.parseBoolean(event.getIsReserved()))
+                                )).then();
     }
 
     @Bean
     public Function<Flux<DeleteReservationEvent>, Mono<Void>> deleteReservationHandle() {
-        return flux -> flux.doOnNext(
+        return flux -> flux.flatMap(
                         event ->
                                 reservationService.deleteReservationById(event.getId())
                 )
@@ -47,7 +49,7 @@ public class ReservationEvent {
 
     @Bean
     public Function<Flux<UpdateReservationEvent>, Mono<Void>> updateReservationHandle() {
-        return flux -> flux.doOnNext(
+        return flux -> flux.flatMap(
                         event ->
                                 reservationService.updateReservation(event.getId(),
                                     event.getUser_id().orElse(null),

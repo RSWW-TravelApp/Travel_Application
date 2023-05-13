@@ -6,12 +6,14 @@ import events.CQRS.offers.UpdateOfferEvent;
 import offer.data.Offer;
 import offer.data.OfferService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.function.Function;
 
+@Component
 public class OfferEvent {
     private final OfferService offerService;
 
@@ -21,7 +23,7 @@ public class OfferEvent {
 
     @Bean
     public Function<Flux<CreateOfferEvent>, Mono<Void>> createOfferHandle() {
-        return flux -> flux.doOnNext(
+        return flux -> flux.flatMap(
                 event ->
                         offerService.createOffer(new Offer(event.getId(),
                                 event.getHotel_name(),
@@ -46,7 +48,7 @@ public class OfferEvent {
 
     @Bean
     public Function<Flux<DeleteOfferEvent>, Mono<Void>> deleteOfferHandle() {
-        return flux -> flux.doOnNext(
+        return flux -> flux.flatMap(
                 event ->
                         offerService.deleteByOfferId(event.getId())
                 )
@@ -55,7 +57,7 @@ public class OfferEvent {
 
     @Bean
     public Function<Flux<UpdateOfferEvent>, Mono<Void>> updateOfferHandle() {
-        return flux -> flux.doOnNext(
+        return flux -> flux.flatMap(
                         event ->
                                 offerService.updateOffer(event.getId(),
                                         event.getHotel_name().orElse(null),

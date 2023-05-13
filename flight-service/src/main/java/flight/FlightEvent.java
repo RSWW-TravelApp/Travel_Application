@@ -7,12 +7,14 @@ import events.CQRS.flights.UpdateFlightEvent;
 import flight.data.Flight;
 import flight.data.FlightService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.function.Function;
 
+@Component
 public class FlightEvent {
     private final FlightService flightService;
 
@@ -22,7 +24,7 @@ public class FlightEvent {
 
     @Bean
     public Function<Flux<CreateFlightEvent>, Mono<Void>> createFlightHandle() {
-        return flux -> flux.doOnNext(
+        return flux -> flux.flatMap(
             event ->
                 flightService.createFlight(new Flight(event.getId(),
                     event.getDeparture_country(),
@@ -38,7 +40,7 @@ public class FlightEvent {
 
     @Bean
     public Function<Flux<DeleteFlightEvent>, Mono<Void>> deleteFlightHandle() {
-        return flux -> flux.doOnNext(
+        return flux -> flux.flatMap(
             event ->
                 flightService.deleteByFlightId(event.getId())
             )
@@ -47,7 +49,7 @@ public class FlightEvent {
 
     @Bean
     public Function<Flux<UpdateFlightEvent>, Mono<Void>> updateFlightHandle() {
-        return flux -> flux.doOnNext(
+        return flux -> flux.flatMap(
             event ->
                 flightService.updateFlight(event.getId(),
                     event.getDeparture_country().orElse(null),
