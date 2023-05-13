@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Offer details</title>
+  <div hidden id="gateway-config"> [[${@environment.getProperty('api-gateway.uri')}]]</div>
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/offerDetails.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
