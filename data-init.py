@@ -1,6 +1,7 @@
 import requests
 import json
 import random
+import uuid
 
 
 def initFlights():
@@ -14,6 +15,7 @@ def initFlights():
             ["Poland", "Spain", "Germany", "USA", "France", "UK", "Belgium", "Netherlands", "Italy"])
         srcCity = random.choice(["Warsaw", "Madrid", "Berlin", "Washington", "London", "Brussels", "Amsterdam", "Roma"])
         payload = json.dumps({
+            "flightId": uuid.uuid1().hex[:25],
             "departure_country": dstCountry,
             "departure_city": dstCity,
             "arrival_country": srcCountry,
@@ -45,6 +47,7 @@ def initOffers():
                                    "Grootbos Private Nature Reserve", "Amangiri", "Nihi Sumba", "Amanyara",
                                    "InterContinental Geneva"])
         payload = json.dumps({
+            "offerId": uuid.uuid1().hex[:25],
             "hotel_name": HotelName,
             "image": "img1",
             "country": Country,
