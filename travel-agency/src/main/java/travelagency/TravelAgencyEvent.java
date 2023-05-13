@@ -6,16 +6,12 @@ import events.CQRS.flights.UpdateFlightEvent;
 import events.CQRS.offers.CreateOfferEvent;
 import events.CQRS.offers.DeleteOfferEvent;
 import events.CQRS.offers.UpdateOfferEvent;
-import events.CQRS.reservations.CreateReservationEvent;
-import events.CQRS.reservations.DeleteReservationEvent;
-import events.CQRS.reservations.UpdateReservationEvent;
 import events.Saga.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-import travelagency.data.Flight;
 import travelagency.data.FlightNested;
 import travelagency.data.OfferNested;
 import travelagency.data.TravelAgencyService;
@@ -102,15 +98,6 @@ public class TravelAgencyEvent {
                 .map(event -> new RequirePaymentEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()));
     }
 
-//    @Bean
-//    public Function<Flux<RequirePaymentEvent>, Flux<RequirePaymentEvent>> receiveReservation2() {
-//        return flux -> flux
-//                .doOnNext(event -> System.out.println("blocking offer2:" + event.getOfferId()));
-//        //.map(event -> new MakeReservationEvent(123.0,"123", "123456", 59,"Big",3,0,0,0,"yes please", 5, "2020-04-04", "2020-04-09", "false", "false"));
-//
-//    }
-
-
     @Bean
     public Function<Flux<UnblockResourcesEvent>, Flux<RemoveReservationEvent>> unblockResources() {
         return flux -> flux
@@ -178,20 +165,6 @@ public class TravelAgencyEvent {
     public Supplier<Flux<UpdateOfferEvent>> updateOfferCQRSHandle() {
         return sink_CQRS_offers_update::asFlux;
     }
-//    @Bean
-//    public Function<Flux<String>,Mono<Void>> receiveReservation() {
-////        return flux -> flux.doOnNext(event -> System.out.println("U" + (new Flight(event.getId(),
-////                event.getAirline_name().orElse(null),
-////                event.getDeparture_country().orElse(null),
-////                event.getDeparture_city().orElse(null),
-////                event.getArrival_country().orElse(null),
-////                event.getArrival_city().orElse(null),
-////                event.getAvailable_seats().orElse(null),
-////                event.getDate().map(LocalDate::parse).orElse(null)
-////        )))).then();
-//        return flux -> flux
-//                .doOnNext(event -> System.out.println("blocking offer:" + event.toUpperCase(Locale.ROOT)))
-//                .then();
-//    }
+
 }
 
