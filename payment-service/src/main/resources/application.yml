@@ -5,7 +5,7 @@ spring:
     name: payment-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/travel_agency
+      uri: mongodb://localhost:27017/bills
   cloud:
     stream:
       function:

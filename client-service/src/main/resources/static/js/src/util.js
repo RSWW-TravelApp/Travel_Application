@@ -1,3 +1,11 @@
+function getEffectiveGatewayUri() {
+    const uri = document.getElementById('gateway-config').textContent;
+    if (uri === null) {
+        return "http://localhost:8080";
+    }
+    return uri;
+}
+
 function checkResponse(response) {
     if (response.status === 404) {
         throw new Error("Not found");
@@ -154,7 +162,7 @@ function createUserInfoBox(loginCallback, logOutCallback) {
         createNotLoggedUserInfoBox(logOutCallback);
         return;
     }
-    fetch("http://localhost:8080/login/" + `${currentUser}/password`, {method: "GET"})
+    fetch(getEffectiveGatewayUri() + "/login/" + `${currentUser}/password`, {method: "GET"})
     .then(response => response.text())
               .then(response => {
                   const [status, body] = response.split(",");

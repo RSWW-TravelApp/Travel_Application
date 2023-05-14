@@ -5,4 +5,4 @@ server:
       enabled: false
 
 api-gateway:
-  uri: http://localhost:8080
+  uri: ${API_GATEWAY_URI}

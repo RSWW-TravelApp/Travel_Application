@@ -6,27 +6,9 @@ import reactor.core.publisher.Mono;
 
 @Controller
 public class WebClientController {
-
-    public void onStart(String value) {
-        System.out.println("Received value: " + value);
-    }
-
-    public void onError(Throwable error) {
-        System.err.println("Error: " + error);
-    }
-
-    public void onComplete() {
-        System.out.println("Done!");
-    }
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Mono<String> homePage() {
-        Mono<String> monoObject = Mono.just("flights");
-        monoObject.subscribe(
-                value -> onStart(value),
-                error -> onError(error),
-                () -> onComplete());
-        return monoObject;
+        return Mono.just("flights");
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
