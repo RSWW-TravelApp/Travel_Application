@@ -103,6 +103,8 @@ public class ReservationMasterService {
             case "DeleteReservation":
                 ReservationMasterEvent.sink_CQRS_delete.tryEmitNext(new DeleteReservationEvent(reservationNested.getReservationId()));
                 break;
+            case "CompleteReservation":
+                break;
             default:
                 ReservationMasterEvent.sink_CQRS_update.tryEmitNext(new UpdateReservationEvent(reservationNested.getReservationId(),userId,offerId,flightId,isPaid,isCancelled,price,travellers,paymendId,isReserved));
         }

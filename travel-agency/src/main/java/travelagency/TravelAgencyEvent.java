@@ -13,6 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import travelagency.data.FlightNested;
+import travelagency.data.Offer;
 import travelagency.data.OfferNested;
 import travelagency.data.TravelAgencyService;
 
@@ -34,6 +35,12 @@ public class TravelAgencyEvent {
     }
     @Bean
     public Function<Flux<BlockResourcesEvent>, Flux<RequirePaymentEvent>> blockResources() {
+        Flux.just("apple", "banana", "cherry")
+                .filter(fruit -> fruit.startsWith("z"))
+                .switchIfEmpty(Flux.just("apricot", "blueberry", "cantaloupe"))
+                .filter(fruit -> fruit.startsWith("a"))
+                .switchIfEmpty(Flux.just("orange", "pear", "watermelon"))
+                .subscribe(System.out::println);
         return flux -> flux
                 .doOnNext(event -> {
                         System.out.println("attempting to block offer:" + event.getOfferId());
@@ -55,8 +62,10 @@ public class TravelAgencyEvent {
                                 null,
                                 false,
                                 "BlockResourcesEvent"))
-                                //.switchIfEmpty(Mono.empty())
-                                .doOnNext(a -> System.out.println("attempting to block flight:" + event.getFlight_id()))
+                                .doOnNext(a -> {
+                                    System.out.println("attempting to block flight:" + event.getFlight_id());
+                                    event.setSuccess_offer(true);
+                                })
                                 .flatMap(a ->
                                     travelAgencyService.addEventFlight(new FlightNested(
                                             event.getFlight_id(),
@@ -66,9 +75,16 @@ public class TravelAgencyEvent {
                                             null,
                                             event.getSeatsNeeded(),
                                             null,
-                                            "BlockResourcesEvent"))).doOnNext(a ->  event.setSuccess(true))
-                                .switchIfEmpty(travelAgencyService.addEventOffer(new OfferNested(
-                                        event.getOfferId(),
+                                            "BlockResourcesEvent"))).doOnNext(a ->  event.setSuccess_flight(true))
+                                .block();
+                })
+                .filter(a -> a.getSuccess_flight() && a.getSuccess_offer() )
+                .doOnDiscard(BlockResourcesEvent.class, a -> {
+                    System.out.println("Reservation of Resources failed!");
+                    if (a.getSuccess_offer())
+                    {
+                        travelAgencyService.addEventOffer(new OfferNested(
+                                        a.getOfferId(),
                                         null,
                                         null,
                                         null,
@@ -84,12 +100,8 @@ public class TravelAgencyEvent {
                                         null,
                                         null,
                                         true,
-                                        "UnblockResourcesEvent")).flatMap(a -> Mono.empty()))
-                                .block();
-                })
-                .filter(BlockResourcesEvent::getSuccess)
-                .doOnDiscard(BlockResourcesEvent.class, a -> {
-                    System.out.println("Reservation of Resources failed!");
+                                        "UnblockResourcesEvent")).subscribe();
+                    }
                     sink_cancelled_reservations.tryEmitNext(new RemoveReservationEvent(a.getPrice(),a.getUser_id(),a.getOfferId(),a.getFlight_id(),a.getPayment_id(),a.getReservation_id(),a.getSeatsNeeded()));
                 })
                 .doOnNext(a -> {

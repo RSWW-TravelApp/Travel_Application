@@ -117,6 +117,7 @@ public class TravelAgencyService {
                     .where("available").is(!offerNested.getAvailable().get()));
         }
         update.push("events", offerNested);
+
         String type = offerNested.getEventType();
         System.out.println(type);
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
@@ -175,6 +176,7 @@ public class TravelAgencyService {
 
         query.addCriteria(Criteria
                 .where("flightId").is(flightNested.getFlightId()));
+        System.out.println(event_type);
         Integer seats_relative = null;
         if(seats != null && event_type != null){
 

@@ -22,7 +22,7 @@ public class ReservationEvent {
 
     @Bean
     public Function<Flux<CreateReservationEvent>, Mono<Void>> createReservationHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(a -> System.out.println("CREATE id: " + a.getId())).flatMap(
                             event ->
                                 reservationService.createReservation(new Reservation(
                                     event.getId(),
@@ -49,7 +49,7 @@ public class ReservationEvent {
 
     @Bean
     public Function<Flux<UpdateReservationEvent>, Mono<Void>> updateReservationHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(a -> System.out.println("Update id: " + a.getId())).flatMap(
                         event ->
                                 reservationService.updateReservation(event.getId(),
                                     event.getUser_id().orElse(null),
@@ -64,6 +64,7 @@ public class ReservationEvent {
 
                                 )
                 )
+                .doOnNext(a -> System.out.println("DID IT WORK?"))
                 .then();
     }
 }

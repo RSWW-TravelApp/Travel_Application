@@ -32,12 +32,7 @@ public class ReservationMasterEvent {
     }
 
 
-//    @GetMapping("/create/")
-//    public void makeReservationRe() {
-//        System.out.println("making reservation entry");
-//        //sink.tryEmitNext(new MakeReservationEvent(123.0,"123", "123456", 59, "user_id", "offer_id", "flight_id", "Big",3,0,0,0,"yes please", 5, "2020-04-04", "2020-04-09", "false", "false"));
-//
-//    }
+
     @Bean
     public Function<Flux<MakeReservationEvent>, Flux<BlockResourcesEvent>> makeReservation() {
 
@@ -54,8 +49,6 @@ public class ReservationMasterEvent {
     {
         return flux -> flux
                 .doOnNext(event -> System.out.println("Received confirmation that resources have been blocked for: "+ event.getReservation_id()))
-//                .flatMap(event -> reservationMasterService.findByReservationId(event.getReservation_id()))
-//                .flatMap(event -> reservationMasterService.updateReservation(event.getReservation_id(),null, null, null,null,null,null, true))
                 .flatMap(event -> reservationMasterService.addEvent(new ReservationNested(event.getReservation_id(),null, null, null,null,null,null, null,null,true,"ReserveReservation")))
                 .doOnNext(event ->
                     event.setReserved(true))
@@ -81,15 +74,11 @@ public class ReservationMasterEvent {
     @Bean
     public Function<Flux<RemoveReservationEvent>, Mono<Void>> removeReservation() {
         return flux -> flux
-//                .flatMap(event ->
-//                    reservationMasterService.updateReservation(event.getReservation_id(), null, null, null, null,null,true,null)
-//                )
                 .flatMap(event -> reservationMasterService.addEvent(new ReservationNested(event.getReservation_id(),null, null, null,null,null,null, true,null,null,"CancelReservation")))
                 .doOnNext(event -> {
                     System.out.println("Cancelling reservation:" + event.getReservationId());
                     event.setReserved(false);
                 })
-                //.filter(Reservation::getIsPaid)
                 .doOnNext(event ->{
                     sink_refunds.tryEmitNext(new RefundPaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                 })
@@ -99,9 +88,6 @@ public class ReservationMasterEvent {
     @Bean
     public Function<Flux<PayReservationEvent>, Mono<Void>> receivePayment() {
         return flux -> flux
-//                .flatMap(event ->
-//                        reservationMasterService.updateReservation(event.getReservation_id(), null, null, null, true,null,null, null)
-//                )
                 .flatMap(event -> reservationMasterService.addEvent(new ReservationNested(event.getReservation_id(),null, null, null,null,null,true, null,null,null,"PayReservation")))
                 .doOnNext(event -> System.out.println("Marking reservation as paid :" + event.getReservationId()))
                 .filter(Reservation::getReserved)
@@ -113,13 +99,6 @@ public class ReservationMasterEvent {
                 .then();
     }
 
-
-//    @Bean
-//    public Function<Flux<PayReservationEvent>, Flux<TONotificationEvent>> finaliseReservation() {
-//        return flux -> flux
-//                .doOnNext(event -> System.out.println("marking reservation as paid for:" + event.getOfferId()))
-//                .map(event -> new TONotificationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getSeatsNeeded()));
-//    }
     @Bean
     public Supplier<Flux<ConfirmReservationIdEvent>> confirmReservationId() {
         return sink_payment_updates::asFlux;
