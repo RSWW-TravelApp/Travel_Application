@@ -159,7 +159,6 @@ public class ReservationMasterService {
             update.set("events", events);
         }
 
-        //update.push("events", new ReservationNested(reservationId,userId,offerId,flightId,"UpdateReservation"));
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
         return reactiveMongoTemplate.findAndModify(query, update, options, Reservation.class);
     }

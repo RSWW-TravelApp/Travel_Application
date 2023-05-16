@@ -30,8 +30,6 @@ spring:
           destination: saga_refunds
           group: 0
 
-
-
   rabbitmq:
     username: guest
     password: guest

@@ -50,55 +50,6 @@ public class ReservationMasterWebLayerHandler {
                 );
     }
 
-//    public Mono<ServerResponse> updateReservationById(ServerRequest request) {
-//        String id = request.pathVariable("reservationId");
-//        Mono<Reservation> updatedReservation = request.bodyToMono(Reservation.class);
-//
-//        return updatedReservation
-//                .flatMap(reservation -> {
-//                    String userId = reservation.getUserId();
-//                    String flightId = reservation.getFlightId();
-//                    String offerId = reservation.getOfferId();
-//                    Boolean isPaid = reservation.getIsPaid();
-//                    List<ReservationNested> events = reservation.getEvents();
-//                    Boolean isCancelled = reservation.getIsCancelled();
-//
-//                    return ServerResponse.ok()
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .body(
-//                                    reservationMasterService.updateReservation(id, userId, flightId, offerId, isPaid,
-//                                            events,isCancelled,reservation.getReserved()),
-//                                    Reservation.class
-//                            );
-//                })
-//                .switchIfEmpty(ServerResponse.notFound().build());
-//    }
-
-//    public Mono<ServerResponse> addEvent(ServerRequest request) {
-//        String id = request.pathVariable("reservationId");
-//        Mono<ReservationNested> updatedReservation = request.bodyToMono(ReservationNested.class);
-//
-//        return updatedReservation
-//                .flatMap(reservationNested -> {
-//                    String userId = reservationNested.getUserId().orElse(null);
-//                    String flightId = reservationNested.getFlightId().orElse(null);
-//                    String offerId = reservationNested.getOfferId().orElse(null);
-//                    Boolean isPaid = reservationNested.getIsPaid().orElse(null);
-//                    String eventType = reservationNested.getEventType().orElse(null);
-//
-//                    ReservationNested reservation1 = new ReservationNested(id, userId, flightId, offerId, isPaid,
-//                            eventType);
-//
-//                    return ServerResponse.ok()
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .body(
-//                                    reservationMasterService.addEvent(reservation1),
-//                                    ReservationNested.class
-//                            );
-//                })
-//                .switchIfEmpty(ServerResponse.notFound().build());
-//    }
-
     public Mono<ServerResponse> deleteReservationById(ServerRequest request){
         return Mono.from(reservationMasterService.deleteReservationById(request.pathVariable("reservationId")))
                 .flatMap(reservation -> ServerResponse
