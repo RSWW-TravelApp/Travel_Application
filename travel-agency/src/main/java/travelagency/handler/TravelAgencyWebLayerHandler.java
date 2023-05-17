@@ -79,7 +79,7 @@ public class TravelAgencyWebLayerHandler {
                     String meals = offer.getMeals().orElse(null);
                     Double price = offer.getPrice().orElse(null);
                     Boolean available = offer.getAvailable().orElse(null);
-                    String eventType = offer.getEventType().orElse(null);
+                    String eventType = offer.getEventType();
 
                     OfferNested offerNested = new OfferNested(id, hotel_name, image, country, city, stars, start_date,
                             end_date, room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18,
@@ -127,7 +127,7 @@ public class TravelAgencyWebLayerHandler {
                     String arrival_city = flight.getArrival_city().orElse(null);
                     Integer available_seats = flight.getAvailable_seats().orElse(null);
                     LocalDate date = flight.getDate().orElse(null);
-                    String eventType = flight.getEventType().orElse(null);
+                    String eventType = flight.getEventType();
 
                     FlightNested flightNested = new FlightNested(id, departure_country, departure_city, arrival_country,
                             arrival_city, available_seats, date, eventType);

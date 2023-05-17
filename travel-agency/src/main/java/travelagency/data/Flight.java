@@ -11,7 +11,6 @@ import java.util.Optional;
 public class Flight {
     @Id
     private String flightId;
-
     private String departure_country;
     private String departure_city;
     private String arrival_country;
@@ -21,6 +20,10 @@ public class Flight {
 
     private LocalDate date;
     private List<FlightNested> events;
+
+    public Flight() {
+
+    }
 
     public Flight(String flightId, String departure_country, String departure_city, String arrival_country,
                   String arrival_city, Integer available_seats, LocalDate date, List<FlightNested> events) {
@@ -47,29 +50,39 @@ public class Flight {
                 '}';
     }
 
+
+
     public String getFlightId() {
         return flightId;
     }
-    public Optional<String> getDeparture_country() {
-        return Optional.ofNullable(departure_country);
-    }
-    public Optional<String> getDeparture_city() {
-        return Optional.ofNullable(departure_city);
-    }
-    public Optional<String> getArrival_country() {
-        return Optional.ofNullable(arrival_country);
-    }
-    public Optional<String> getArrival_city() {
-        return Optional.ofNullable(arrival_city);
-    }
-    public Optional<Integer> getAvailable_seats() {
-        return Optional.ofNullable(available_seats);
-    }
-    public Optional<LocalDate> getDate() {
-        return Optional.ofNullable(date);
-    }
-    public Optional<List<FlightNested>> getEvents() {return Optional.ofNullable(events);}
 
+    public String getDeparture_country() {
+        return departure_country;
+    }
+
+    public String getDeparture_city() {
+        return departure_city;
+    }
+
+    public String getArrival_country() {
+        return arrival_country;
+    }
+
+    public String getArrival_city() {
+        return arrival_city;
+    }
+
+    public Integer getAvailable_seats() {
+        return available_seats;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public List<FlightNested> getEvents() {
+        return events;
+    }
 
     public void setFlightId(String flightId) { this.flightId = flightId; }
     public void setDeparture_country(String departure_country) {

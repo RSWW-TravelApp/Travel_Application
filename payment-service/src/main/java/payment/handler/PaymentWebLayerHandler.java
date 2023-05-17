@@ -1,10 +1,14 @@
 package payment.handler;
 
+import events.Saga.MakeReservationEvent;
+import events.Saga.PayReservationEvent;
+import events.Saga.ValidatePaymentEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import payment.PaymentEvent;
 import payment.data.Payment;
 import payment.data.PaymentService;
 import reactor.core.publisher.Mono;
@@ -40,13 +44,68 @@ public class PaymentWebLayerHandler {
 
     public Mono<ServerResponse> createUnpaidPayment(ServerRequest request) {
         Mono<Payment> paymentMono = request.bodyToMono(Payment.class);
-
         return paymentMono
+                .flatMap(paymentService::createUnpaidPayment)
+                .doOnNext(payment ->
+                    {
+                        System.out.println("Created Unpaid Payment Entry: " + payment.getPaymentId());
+                        payment.setIsPaid(false);
+
+                        PaymentEvent.sink_new_reservation.tryEmitNext(
+                            new MakeReservationEvent(
+                                    payment.getPrice(),
+                                    payment.getOfferId(),
+                                    payment.getFlightId(),
+                                    payment.getSeatsNeeded(),
+                                    payment.getUserId(),
+                                    payment.getPaymentId(),
+                                    null,
+                                    payment.getIsPaid().toString()))
+                        ;
+//                        PaymentEvent.sink_validation.tryEmitNext(
+//                            new ValidatePaymentEvent(
+//                                    payment.getPrice(),
+//                                    payment.getUserId(),
+//                                    payment.getOfferId(),
+//                                    payment.getFlightId(),
+//                                    payment.getSeatsNeeded(),
+//                                    payment.getPaymentId()
+//                            )
+//                        );
+                    })
                 .flatMap(paymentObject -> ServerResponse
                         .status(HttpStatus.CREATED)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(paymentService.createUnpaidPayment(paymentObject), Payment.class)
+                        .bodyValue(paymentObject)
+                        //.body(Mono.just(paymentObject), Payment.class)
                 );
+//                //.subscribe();
+//        return paymentMono
+//                .doOnNext(payment ->
+//                    PaymentEvent.sink_new_reservation.tryEmitNext(
+//                            new MakeReservationEvent(
+//                                    payment.getPrice(),
+//                                    payment.getOfferId(),
+//                                    payment.getFlightId(),
+//                                    payment.getSeatsNeeded(),
+//                                    payment.getUserId(),
+//                                    payment.getOfferId(),
+//                                    payment.getFlightId(),
+//                                    payment.getIsPaid().toString())).orThrow()
+////                        PaymentEvent.sink_validations.tryEmitNext(
+////                            new ValidatePaymentEvent(
+////                                    payment.getPrice(),
+////                                    payment.getUserId(),
+////                                    payment.getOfferId(),
+////                                    payment.getFlightId(),
+////                                    payment.getSeatsNeeded(),
+////                                    payment.getPaymentId()
+////                            )
+////                        );
+//                )
+//        //.subscribe();
+
+
     }
 
     public Mono<ServerResponse> createPaidPayment(ServerRequest request) {
@@ -63,12 +122,51 @@ public class PaymentWebLayerHandler {
                     switch (status) {
                         case "success":
                             return paymentService.createPaidPayment(paymentObject, true)
+                                    .doOnNext(payment ->
+                                    {
+                                        payment.setIsPaid(true);
+                                        PaymentEvent.sink_new_reservation.tryEmitNext(
+                                                new MakeReservationEvent(
+                                                        payment.getPrice(),
+                                                        payment.getOfferId(),
+                                                        payment.getFlightId(),
+                                                        payment.getSeatsNeeded(),
+                                                        payment.getUserId(),
+                                                        payment.getPaymentId(),
+                                                        null,
+                                                        payment.getIsPaid().toString()));
+//                                        PaymentEvent.sink_validation.tryEmitNext(
+//                                                new ValidatePaymentEvent(
+//                                                        payment.getPrice(),
+//                                                        payment.getUserId(),
+//                                                        payment.getOfferId(),
+//                                                        payment.getFlightId(),
+//                                                        payment.getSeatsNeeded(),
+//                                                        payment.getPaymentId()
+//                                                )
+//                                        );
+                                    })
+                                    .doOnNext(a -> System.out.println("Created Paid Payment Entry: " + a.getPaymentId()+a.getIsPaid()))
                                     .flatMap(updatedPayment ->
                                             ServerResponse.status(HttpStatus.OK)
                                                     .body(Mono.just("200,Entry created, Payment succeeded"), String.class)
                                     );
                         case "fail":
                             return paymentService.createPaidPayment(paymentObject, false)
+                                    .doOnNext(payment ->
+                                    {
+                                        payment.setIsPaid(false);
+                                        PaymentEvent.sink_new_reservation.tryEmitNext(
+                                                new MakeReservationEvent(
+                                                        payment.getPrice(),
+                                                        payment.getOfferId(),
+                                                        payment.getFlightId(),
+                                                        payment.getSeatsNeeded(),
+                                                        payment.getUserId(),
+                                                        payment.getPaymentId(),
+                                                        null,
+                                                        payment.getIsPaid().toString()));
+                                    })
                                     .flatMap(updatedPayment ->
                                             ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
                                                     .body(Mono.just("402, Entry created, Payment failed"), String.class)
@@ -77,6 +175,21 @@ public class PaymentWebLayerHandler {
                             Random rand = new Random();
                             if (rand.nextInt(0, 100) < 15) {
                                 return paymentService.createPaidPayment(paymentObject, false)
+                                        .doOnNext(payment ->
+                                        {
+                                            payment.setIsPaid(false);
+                                            PaymentEvent.sink_new_reservation.tryEmitNext(
+                                                    new MakeReservationEvent(
+                                                            payment.getPrice(),
+                                                            payment.getOfferId(),
+                                                            payment.getFlightId(),
+                                                            payment.getSeatsNeeded(),
+                                                            payment.getUserId(),
+                                                            payment.getPaymentId(),
+                                                            null,
+                                                            payment.getIsPaid().toString()));
+                                        })
+                                        .doOnNext(a -> System.out.println("Created Paid Payment Entry: " + a.getPaymentId()))
                                         .flatMap(updatedPayment ->
                                                 ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
                                                         .body(Mono.just("402, Entry created, Payment failed"), String.class)
@@ -84,6 +197,20 @@ public class PaymentWebLayerHandler {
                             }
                             // SAGA
                             return paymentService.createPaidPayment(paymentObject, true)
+                                    .doOnNext(payment ->
+                                    {
+                                        payment.setIsPaid(true);
+                                        PaymentEvent.sink_new_reservation.tryEmitNext(
+                                                new MakeReservationEvent(
+                                                        payment.getPrice(),
+                                                        payment.getOfferId(),
+                                                        payment.getFlightId(),
+                                                        payment.getSeatsNeeded(),
+                                                        payment.getUserId(),
+                                                        payment.getPaymentId(),
+                                                        null,
+                                                        payment.getIsPaid().toString()));
+                                    })
                                     .flatMap(updatedPayment ->
                                             ServerResponse.status(HttpStatus.OK)
                                                     .body(Mono.just("200, Entry created, Payment is processed"), String.class)
@@ -112,14 +239,28 @@ public class PaymentWebLayerHandler {
                     switch (status) {
                         case "fail":
                             // 100% for fail
-                            return paymentService.updatePayment(paymentId, false)
-                                    .flatMap(updatedPayment ->
-                                            ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
-                                                    .body(Mono.just("402,Payment cannot be processed"), String.class)
-                                    );
+                            return ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
+                                                    .body(Mono.just("402,Payment cannot be processed"), String.class);
+
                         case "success":
                             // ~0% for fail BUT SAGA can fail, so it is not exactly 0%
-                            return paymentService.updatePayment(paymentId, true)
+                            return
+                                    paymentService.findByPaymentId(paymentId)
+                                    .filter(a -> !a.getIsPaid() && a.getReservationId() != null)
+                                    .flatMap(a -> paymentService.updatePayment(paymentId, "isPaid", true))
+                                    .doOnNext(payment -> {
+                                        payment.setIsPaid(true);
+                                        System.out.println("Paid for payment:" + payment.getPaymentId());
+                                        PaymentEvent.sink_succeeded.tryEmitNext(
+                                                new PayReservationEvent(
+                                                        payment.getPrice(),
+                                                        payment.getUserId(),
+                                                        payment.getOfferId(),
+                                                        payment.getFlightId(),
+                                                        payment.getPaymentId(),
+                                                        payment.getReservationId(),
+                                                        payment.getSeatsNeeded()));
+                                    })
                                     .flatMap(updatedPayment ->
                                             ServerResponse.status(HttpStatus.OK)
                                                     .body(Mono.just("200,Payment is processed"), String.class)
@@ -128,14 +269,29 @@ public class PaymentWebLayerHandler {
                             // 15% for fail
                             Random rand = new Random();
                             if (rand.nextInt(0, 100) < 15) {
-                                return paymentService.updatePayment(paymentId, false)
-                                        .flatMap(updatedPayment ->
-                                                ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
-                                                        .body(Mono.just("402,Payment cannot be processed"), String.class)
-                                        );
+                                //return paymentService.updatePayment(paymentId, "isPaid", false)
+                                return ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
+                                                        .body(Mono.just("402,Payment cannot be processed"), String.class);
+
                             }
                             // SAGA
-                            return paymentService.updatePayment(paymentId, true)
+                            return
+                                    paymentService.findByPaymentId(paymentId)
+                                    .filter(a -> !a.getIsPaid() && a.getReservationId() != null)
+                                    .flatMap(a -> paymentService.updatePayment(paymentId, "isPaid", true))
+                                    .doOnNext(payment -> {
+                                        payment.setIsPaid(true);
+                                        System.out.println("Paid for payment:" + payment.getPaymentId());
+                                        PaymentEvent.sink_succeeded.tryEmitNext(
+                                                new PayReservationEvent(
+                                                        payment.getPrice(),
+                                                        payment.getUserId(),
+                                                        payment.getOfferId(),
+                                                        payment.getFlightId(),
+                                                        payment.getPaymentId(),
+                                                        payment.getReservationId(),
+                                                        payment.getSeatsNeeded()));
+                                    })
                                     .flatMap(updatedPayment ->
                                             ServerResponse.status(HttpStatus.OK)
                                                     .body(Mono.just("200,Payment is processed"), String.class)

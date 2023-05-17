@@ -11,12 +11,12 @@
 
     <artifactId>reservation-service</artifactId>
     <packaging>jar</packaging>
-
     <dependencies>
         <dependency>
             <groupId>com.rsww.project</groupId>
             <artifactId>events</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

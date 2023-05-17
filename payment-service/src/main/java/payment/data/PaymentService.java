@@ -30,43 +30,39 @@ public class PaymentService {
     }
 
     public Mono<Payment> createUnpaidPayment(Payment payment){
-        return paymentRepository.save(payment)
-                .flatMap(savedPayment -> {
-                    Query query = new Query();
-                    query.addCriteria(Criteria.where("paymentId").is(savedPayment.getPaymentId()));
+        payment.setIsPaid(false);
+        return paymentRepository.save(payment);
 
-                    Update update = new Update();
-                    update.set("isPaid", false);
-
-                    FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
-                    return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
-                });
     }
 
     public Mono<Payment> createPaidPayment(Payment payment, boolean isPaid) {
-        return paymentRepository.save(payment)
-                .flatMap(savedPayment -> {
-                    Query query = new Query();
-                    query.addCriteria(Criteria.where("paymentId").is(savedPayment.getPaymentId()));
+        payment.setIsPaid(isPaid);
+        return paymentRepository.save(payment);
 
-                    Update update = new Update();
-                    update.set("isPaid", isPaid);
-
-                    FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
-                    return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
-                });
     }
 
-    public Mono<Payment> updatePayment(String paymentId, boolean isPaid) {
+    public Mono<Payment> updatePayment(String paymentId, String field, boolean status) {
             Query query = new Query();
             query.addCriteria(Criteria.where("paymentId").is(paymentId));
 
             Update update = new Update();
-            update.set("isPaid", isPaid);
+            update.set(field, status);
 
             FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
             return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
     }
+
+    public Mono<Payment> updatePayment(String paymentId, String field, String status) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("paymentId").is(paymentId));
+
+        Update update = new Update();
+        update.set(field, status);
+
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
+        return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
+    }
+
 
 
 }
