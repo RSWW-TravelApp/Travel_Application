@@ -10,15 +10,15 @@ function createReservationListener() {
     createUserInfoBox(function() {}, function() {eventSource.close(); console.log("Connection closed")});
     eventSource.onmessage = (event) => {
     const result = document.getElementById('actionResult');
-    if (event.data == "Reservation success") {
+    if (event.data === "Reservation success") {
         result.textContent = event.data;
-    } else if (event.data == "Reservation failed") {
-        result.textContent = event.data;
-    }
-    else if (event.data == "Purchase success") {
+    } else if (event.data === "Reservation failed") {
         result.textContent = event.data;
     }
-    else if (event.data == "Purchase failed") {
+    else if (event.data === "Purchase success") {
+        result.textContent = event.data;
+    }
+    else if (event.data === "Purchase failed") {
         result.textContent = event.data;
     }
     };
@@ -91,24 +91,38 @@ async function reserveOffer() {
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
     const userId = sessionStorage.getItem("user");
-    if (Number(document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent) >
-        Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)) {
+    const seatsNeeded = Number(document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent) +
+                                Number(document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent) +
+                                Number(document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent) +
+                                Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent)
+    const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
+    const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
+    if (seatsNeeded > availableSeats) {
         alert("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
+        return;
+    }
+    if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId) || isNaN(seatsNeeded) ||
+        isNaN(availableSeats) || isNaN(price)) {
+        alert("Specified offer or flight does not exist");
         return;
     }
     if (!userId) {
         alert("Please log in to reserve")
         return;
     }
-    if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId)) {
-        alert("Specified offer or flight does not exist");
-        return;
-    }
     result.textContent = "Do not leave this page";
-    await fetch(getEffectiveGatewayUri() + '/reserve' + `/${offerId}/${flightId}`, {method: "POST"})
+    const reservation = {
+        flightId: flightId,
+        offerId: offerId,
+        userId: userId,
+        isExpired: false,
+        price: price,
+        seatsNeeded: seatsNeeded
+    };
+    await fetch(getEffectiveGatewayUri() + '/makereservation', {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(reservation)})
     .then(response => response.text())
     .then(response => {
         alert(response);
@@ -121,20 +135,23 @@ async function purchaseOffer(status) {
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
     const userId = sessionStorage.getItem("user");
-    if (Number(document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent) >
-        Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)) {
-        alert("Specified offer configuration cannot be purchased cause there is lack of available seats in a plane");
+    const seatsNeeded = Number(document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent) +
+                                Number(document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent) +
+                                Number(document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent) +
+                                Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent)
+    const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
+    const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
+    if (seatsNeeded > availableSeats) {
+        alert("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
+        return;
+    }
+    if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId) || isNaN(seatsNeeded) ||
+        isNaN(availableSeats) || isNaN(price)) {
+        alert("Specified offer or flight does not exist");
         return;
     }
     if (!userId) {
-        alert("Please log in to purchase");
-        return;
-    }
-    if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId)) {
-        alert("Specified offer or flight does not exist");
+        alert("Please log in to reserve")
         return;
     }
     result.textContent = "Do not leave this page";
