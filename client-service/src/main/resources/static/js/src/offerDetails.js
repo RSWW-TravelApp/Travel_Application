@@ -9,18 +9,9 @@ function createReservationListener() {
     console.log("Connection opened");
     createUserInfoBox(function() {}, function() {eventSource.close(); console.log("Connection closed")});
     eventSource.onmessage = (event) => {
-    const result = document.getElementById('actionResult');
-    if (event.data === "Reservation success") {
-        result.textContent = event.data;
-    } else if (event.data === "Reservation failed") {
-        result.textContent = event.data;
-    }
-    else if (event.data === "Purchase success") {
-        result.textContent = event.data;
-    }
-    else if (event.data === "Purchase failed") {
-        result.textContent = event.data;
-    }
+        const eventObj = JSON.parse(event.data);
+        document.getElementById('actionResult').textContent = eventObj.message;
+        console.log(eventObj.message);
     };
     eventSource.onerror = (error) => {
       console.log(error);

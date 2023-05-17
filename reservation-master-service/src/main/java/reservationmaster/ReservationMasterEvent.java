@@ -13,8 +13,11 @@ import reservationmaster.data.Reservation;
 import reservationmaster.data.ReservationMasterService;
 import reservationmaster.data.ReservationNested;
 
+import java.util.HashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.Map;
+
 
 @Component
 public class ReservationMasterEvent {
@@ -27,6 +30,7 @@ public class ReservationMasterEvent {
     public static final Sinks.Many<CreateReservationEvent> sink_CQRS_create = Sinks.many().multicast().onBackpressureBuffer();
     public static final Sinks.Many<DeleteReservationEvent> sink_CQRS_delete = Sinks.many().multicast().onBackpressureBuffer();
     public static final Sinks.Many<UpdateReservationEvent> sink_CQRS_update = Sinks.many().multicast().onBackpressureBuffer();
+    public static final Sinks.Many<ClientNotificationEvent> sink_notify_client = Sinks.many().multicast().onBackpressureBuffer();
     public ReservationMasterEvent(ReservationMasterService reservationMasterService) {
         this.reservationMasterService = reservationMasterService;
     }
@@ -58,6 +62,13 @@ public class ReservationMasterEvent {
                             System.out.println("Still have to wait for payment for "+ event.getReservationId());
                             sink_payment_updates.tryEmitNext(new ConfirmReservationIdEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                             sink_validation.tryEmitNext(new ValidatePaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
+                            sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                    event.getUserId(),
+                                    "Reservation successful",
+                                    new HashMap<String, String>() {{
+                                        put("reservationId", event.getReservationId());
+                                    }}
+                            ));
                         }
                 )
                 .flatMap(event -> reservationMasterService.addEvent(new ReservationNested(event.getReservationId(),null,null,null,null,null,null,null,null,null,"CompleteReservation")))
@@ -129,5 +140,9 @@ public class ReservationMasterEvent {
     @Bean
     public Supplier<Flux<UpdateReservationEvent>> updateReservationCQRSHandle() {
         return sink_CQRS_update::asFlux;
+    }
+    @Bean
+    public Supplier<Flux<ClientNotificationEvent>> notifyClient() {
+        return sink_notify_client::asFlux;
     }
 }

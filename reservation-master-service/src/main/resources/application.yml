@@ -18,7 +18,7 @@ spring:
               deadLetterQueueName: delay-topic.test
               deadLetterExchangeType: topic
       function:
-        definition: removeReservation; createReservationCQRSHandle; deleteReservationCQRSHandle; updateReservationCQRSHandle; finaliseReservation; makeReservation; confirmReservation; requireValidation; confirmReservationId; requestRefund; receivePayment
+        definition: removeReservation; createReservationCQRSHandle; deleteReservationCQRSHandle; updateReservationCQRSHandle; finaliseReservation; makeReservation; confirmReservation; requireValidation; confirmReservationId; requestRefund; receivePayment; notifyClient
       bindings:
         makeReservation-in-0:
           destination: sage_make_reservation
@@ -53,6 +53,9 @@ spring:
           group: 0
         receivePayment-in-0:
           destination: saga_paid_reservation
+          group: 0
+        notifyClient-out-0:
+          destination: notify_client
           group: 0
 
 

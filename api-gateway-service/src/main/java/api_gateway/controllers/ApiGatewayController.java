@@ -1,5 +1,7 @@
 package api_gateway.controllers;
 
+import events.Saga.ClientNotificationEvent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
@@ -7,16 +9,30 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import java.util.*;
+import java.util.function.Function;
 
 @CrossOrigin
 @RestController
 public class ApiGatewayController {
     private Map<String, String> users = new HashMap<>();
-    private Map<String, Sinks.Many<String>> SSEConnections = new HashMap<>();
+    private Map<String, Sinks.Many<ClientNotificationEvent>> SSEConnections = new HashMap<>();
+
+    @Bean
+    public Function<Flux<ClientNotificationEvent>, Mono<Void>> sendNotification() {
+        return flux -> flux
+                .doOnNext(event ->{
+                    System.out.println("Notification to send: " + event.getMessage());
+                    Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(event.getUserId());
+                    if (connection != null && users.get(event.getUserId()) != null) {
+                        connection.tryEmitNext(event);
+                    }
+                })
+                .then();
+    }
 
     @GetMapping(value = "/notifications/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> SSE(@PathVariable String userId) {
-        Sinks.Many<String> connection = SSEConnections.get(userId);
+    public Flux<ClientNotificationEvent> SSE(@PathVariable String userId) {
+        Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(userId);
         if (connection != null) {
             connection.tryEmitComplete();
             SSEConnections.remove(userId);
@@ -30,8 +46,8 @@ public class ApiGatewayController {
 
     @PostMapping(value = "/notifications/{userId}")
     public Mono<String> sendEvent(@PathVariable String userId,
-                       @RequestBody String event) {
-        Sinks.Many<String> connection = SSEConnections.get(userId);
+                       @RequestBody ClientNotificationEvent event) {
+        Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(userId);
         if (connection != null && users.get(userId) != null) {
             connection.tryEmitNext(event);
             return Mono.just("200");

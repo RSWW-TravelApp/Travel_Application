@@ -33,6 +33,19 @@ spring:
               - POST
               - PUT
               - OPTIONS
+    stream:
+      function:
+        definition: sendNotification
+      bindings:
+        sendNotification-in-0:
+          destination: notify_client
+          group: 0
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 127.0.0.1
+    port: 5672
 
 logging:
   level:
