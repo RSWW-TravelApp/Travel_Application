@@ -1,2 +1,20 @@
 server:
   port: 8900
+
+spring:
+  application:
+    name: tour-operator
+  cloud:
+    stream:
+      function:
+        definition: receivePaymentNotif
+      bindings:
+        receivePaymentNotif-in-0:
+          destination: to_notif_purchases
+          group: 0
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: ${RABBITMQ_HOST_ADDRESS}
+    port: 5672

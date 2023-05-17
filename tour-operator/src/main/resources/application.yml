@@ -1,5 +1,5 @@
 server:
-  port: 8085
+  port: 8900
 spring:
   application:
     name: tour-operator
@@ -10,6 +10,7 @@ spring:
       bindings:
         receivePaymentNotif-in-0:
           destination: to_notif_purchases
+          group: 0
   rabbitmq:
     username: guest
     password: guest

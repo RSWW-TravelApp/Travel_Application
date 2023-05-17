@@ -162,7 +162,7 @@ public class OfferService {
             update.set("price", price);
         }
         if(available != null) {
-            update.set("available", false);
+            update.set("available", available);
         }
 
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);

@@ -13,17 +13,23 @@ spring:
       bindings:
         makeReservation-out-0:
           destination: sage_make_reservation
+          group: 0
         validatePayment-in-0:
           destination: delay-topic
           group: test
         succeedTransaction-out-0:
           destination: saga_paid_reservation
+          group: 0
         failTransaction-out-0:
           destination: saga_unblock_resources
+          group: 0
         confirmReservationId-in-0:
           destination: saga_reservationId_update
+          group: 0
         refundPayment-in-0:
           destination: saga_refunds
+          group: 0
+
   rabbitmq:
     username: guest
     password: guest

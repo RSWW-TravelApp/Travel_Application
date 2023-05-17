@@ -27,7 +27,20 @@ public class ReservationMasterService {
     }
 
     public Mono<Reservation> createReservation(Reservation reservation){
-        return reservationMasterRepository.save(reservation).flatMap(savedReservation -> addEvent(new ReservationNested(savedReservation.getReservationId(),savedReservation.getUserId(),savedReservation.getFlightId(),savedReservation.getOfferId(),savedReservation.getPaymentId(),savedReservation.getPrice(),savedReservation.getIsPaid(),savedReservation.getIsCancelled(),savedReservation.getTravellers(), savedReservation.getReserved(),"CreateReservation")));
+        return reservationMasterRepository.save(reservation).flatMap(savedReservation ->
+                addEvent(new ReservationNested(
+                        savedReservation.getReservationId(),
+                        savedReservation.getUserId(),
+                        savedReservation.getFlightId(),
+                        savedReservation.getOfferId(),
+                        savedReservation.getPaymentId(),
+                        savedReservation.getPrice(),
+                        savedReservation.getIsPaid(),
+                        savedReservation.getIsCancelled(),
+                        savedReservation.getTravellers(),
+                        savedReservation.getReserved(),
+                        "CreateReservation"))
+        );
 
     }
 
@@ -90,6 +103,8 @@ public class ReservationMasterService {
             case "DeleteReservation":
                 ReservationMasterEvent.sink_CQRS_delete.tryEmitNext(new DeleteReservationEvent(reservationNested.getReservationId()));
                 break;
+            case "CompleteReservation":
+                break;
             default:
                 ReservationMasterEvent.sink_CQRS_update.tryEmitNext(new UpdateReservationEvent(reservationNested.getReservationId(),userId,offerId,flightId,isPaid,isCancelled,price,travellers,paymendId,isReserved));
         }
@@ -144,7 +159,6 @@ public class ReservationMasterService {
             update.set("events", events);
         }
 
-        //update.push("events", new ReservationNested(reservationId,userId,offerId,flightId,"UpdateReservation"));
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
         return reactiveMongoTemplate.findAndModify(query, update, options, Reservation.class);
     }

@@ -47,7 +47,7 @@ public class ReservationService {
 
     // updating the specific offer with the given parameters (null parameters - don't update the field)
     public Mono<Reservation> updateReservation(String reservationId, String userId, String offerId, String flightId,
-                                               Boolean isPaid, Boolean isCancelled, Double price, Integer Travellers, String paymentId, Boolean isReserved){
+                                               Boolean isPaid, Boolean isCancelled, Double price, Integer travellers, String paymentId, Boolean isReserved){
 
         Query query = new Query();
         query.addCriteria(Criteria.where("reservationId").is(reservationId));
@@ -65,22 +65,21 @@ public class ReservationService {
         if(isPaid != null) {
             update.set("isPaid", isPaid);
         }
-        if(isPaid != null) {
+        if(isCancelled != null) {
             update.set("isCancelled", isCancelled);
         }
-        if(isPaid != null) {
+        if(price != null) {
             update.set("price", price);
         }
-        if(isPaid != null) {
-            update.set("Travellers", Travellers);
+        if(travellers != null) {
+            update.set("Travellers", travellers);
         }
-        if(isPaid != null) {
+        if(paymentId != null) {
             update.set("paymentId", paymentId);
         }
-        if(isPaid != null) {
+        if(isReserved != null) {
             update.set("isReserved", isReserved);
         }
-
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
         return reactiveMongoTemplate.findAndModify(query, update, options, Reservation.class);
     }

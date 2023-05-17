@@ -67,7 +67,7 @@ public class FlightNested {
     public Optional<LocalDate> getDate() {
         return Optional.ofNullable(date);
     }
-    public Optional<String> getEventType() {return Optional.ofNullable(eventType);}
+    public String getEventType() {return eventType;}
 
     public void setFlightId(String flightId) { this.flightId = flightId; }
     public void setDeparture_country(String departure_country) {

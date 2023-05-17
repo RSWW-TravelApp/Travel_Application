@@ -1,5 +1,11 @@
 package travelagency.data;
 
+import events.CQRS.flights.CreateFlightEvent;
+import events.CQRS.flights.DeleteFlightEvent;
+import events.CQRS.flights.UpdateFlightEvent;
+import events.CQRS.offers.CreateOfferEvent;
+import events.CQRS.offers.DeleteOfferEvent;
+import events.CQRS.offers.UpdateOfferEvent;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -9,6 +15,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
+import travelagency.TravelAgencyEvent;
 
 @Service
 public class TravelAgencyService {
@@ -34,11 +41,44 @@ public class TravelAgencyService {
     }
 
     public Mono<Offer> createOffer(Offer offer) {
-        return offerRepository.save(offer);
+        return offerRepository.save(offer)
+                .flatMap(savedOffer ->
+                        addEventOffer(new OfferNested(
+                                savedOffer.getOfferId(),
+                                savedOffer.getHotel_name(),
+                                savedOffer.getImage(),
+                                savedOffer.getCountry(),
+                                savedOffer.getCity(),
+                                savedOffer.getStars(),
+                                savedOffer.getStart_date(),
+                                savedOffer.getEnd_date(),
+                                savedOffer.getRoom_type(),
+                                savedOffer.getMax_adults(),
+                                savedOffer.getMax_children_to_3(),
+                                savedOffer.getMax_children_to_10(),
+                                savedOffer.getMax_children_to_18(),
+                                savedOffer.getMeals(),
+                                savedOffer.getPrice(),
+                                savedOffer.getAvailable(),
+                                "CreateOffer")
+                            )
+                );
     }
 
     public Mono<Flight> createFlight(Flight flight){
-        return flightRepository.save(flight);
+        return flightRepository.save(flight)
+                .flatMap(savedFlight ->
+                        addEventFlight(new FlightNested(
+                                savedFlight.getFlightId(),
+                                savedFlight.getDeparture_country(),
+                                savedFlight.getDeparture_city(),
+                                savedFlight.getArrival_country(),
+                                savedFlight.getArrival_city(),
+                                savedFlight.getAvailable_seats(),
+                                savedFlight.getDate(),
+                                "CreateFlight")
+                        )
+                );
     }
 
     public Mono<Offer> deleteByOfferId(String offerId) {
@@ -71,14 +111,60 @@ public class TravelAgencyService {
         query.addCriteria(Criteria.where("offerId").is(offerNested.getOfferId()));
 
         Update update = new Update();
-
-        offerNested.getAvailable().ifPresent(available -> update.set("available", available));
-        query.addCriteria(Criteria
-                .where("available").is(!offerNested.getAvailable().get()));
+        if (offerNested.getEventType().equals("BlockResourcesEvent") || offerNested.getEventType().equals("UnblockResourcesEvent")) {
+            offerNested.getAvailable().ifPresent(available -> update.set("available", available));
+            query.addCriteria(Criteria
+                    .where("available").is(!offerNested.getAvailable().get()));
+        }
         update.push("events", offerNested);
 
+        String type = offerNested.getEventType();
+        System.out.println(type);
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
-        return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class);
+        return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class).doOnNext(a -> {
+            switch(type)
+            {
+                case ("CreateOffer"):
+                    TravelAgencyEvent.sink_CQRS_offers_create.tryEmitNext(new CreateOfferEvent(a.getOfferId(),
+                            a.getHotel_name(),
+                            a.getImage(),
+                            a.getCountry(),
+                            a.getCity(),
+                            a.getStars(),
+                            a.getStart_date().toString(),
+                            a.getEnd_date().toString(),
+                            a.getRoom_type(),
+                            a.getMax_adults(),
+                            a.getMax_children_to_3(),
+                            a.getMax_children_to_10(),
+                            a.getMax_children_to_18(),
+                            a.getMeals(),
+                            a.getPrice(),
+                            a.getAvailable().toString()));
+                    break;
+                case ("DeleteOffer"):
+                    TravelAgencyEvent.sink_CQRS_offers_delete.tryEmitNext(new DeleteOfferEvent(a.getOfferId()));
+                    break;
+                default:
+                    TravelAgencyEvent.sink_CQRS_offers_update.tryEmitNext(new UpdateOfferEvent(a.getOfferId(),
+                            a.getHotel_name(),
+                            a.getImage(),
+                            a.getCountry(),
+                            a.getCity(),
+                            a.getStars(),
+                            a.getStart_date().toString(),
+                            a.getEnd_date().toString(),
+                            a.getRoom_type(),
+                            a.getMax_adults(),
+                            a.getMax_children_to_3(),
+                            a.getMax_children_to_10(),
+                            a.getMax_children_to_18(),
+                            a.getMeals(),
+                            a.getPrice(),
+                            a.getAvailable().toString()));
+            }
+
+        });
     }
 
     public Mono<Flight> addEventFlight(FlightNested flightNested){
@@ -86,20 +172,22 @@ public class TravelAgencyService {
         Update update = new Update();
 
         Integer seats = flightNested.getAvailable_seats().orElse(null);
-        String event_type = flightNested.getEventType().orElse(null);
+        String event_type = flightNested.getEventType();
 
         query.addCriteria(Criteria
                 .where("flightId").is(flightNested.getFlightId()));
-
+        System.out.println(event_type);
+        Integer seats_relative = null;
         if(seats != null && event_type != null){
 
-
             if(event_type.equals("BlockResourcesEvent")){
+                seats_relative = -seats;
                 query.addCriteria(Criteria
                         .where("available_seats").gte(seats));
                 update.inc("available_seats",-seats);
             }
             else if(event_type.equals("UnblockResourcesEvent")){
+                seats_relative = seats;
                 update.inc("available_seats",seats);
             }
         }
@@ -108,73 +196,34 @@ public class TravelAgencyService {
         update.push("events", flightNested);
 
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
-        return reactiveMongoTemplate.findAndModify(query, update, options, Flight.class);
-    }
+        Integer finalSeats_relative = seats_relative;
+        return reactiveMongoTemplate.findAndModify(query, update, options, Flight.class).doOnNext(a -> {
+            switch(event_type)
+            {
+                case "CreateFlight":
+                    TravelAgencyEvent.sink_CQRS_flights_create.tryEmitNext(new CreateFlightEvent(a.getFlightId(),
+                            a.getDeparture_country(),
+                            a.getDeparture_city(),
+                            a.getDate().toString(),
+                            a.getArrival_country(),
+                            a.getArrival_city(),
+                            a.getAvailable_seats()));
+                    break;
+                case "DeleteFlight":
+                    TravelAgencyEvent.sink_CQRS_flights_delete.tryEmitNext(new DeleteFlightEvent(a.getFlightId()));
+                    break;
+                default:
+                    TravelAgencyEvent.sink_CQRS_flights_update.tryEmitNext(new UpdateFlightEvent(a.getFlightId(),
+                            a.getDeparture_country(),
+                            a.getDeparture_city(),
+                            a.getDate().toString(),
+                            a.getArrival_country(),
+                            a.getArrival_city(),
+                            a.getAvailable_seats()
+                    ));
+            }
 
-//    public Mono<Void> ModifyResources(OfferNested offerNested, FlightNested flightNested)
-//    {
-//        Query query_offer = new Query();
-//        Query query_flight = new Query();
-//        Update update_offer = new Update();
-//        Update update_flight = new Update();
-//        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
-//
-//        Integer seats = flightNested.getAvailable_seats().orElse(null);
-//        String event_type = flightNested.getEventType().orElse(null);
-//
-//        query_flight.addCriteria(Criteria
-//                .where("flightId").is(flightNested.getFlightId()));
-//        query_offer.addCriteria(Criteria
-//                .where("offerId").is(offerNested.getOfferId()));
-//        if(seats != null && event_type != null){
-//            query_flight.addCriteria(Criteria
-//                    .where("available_seats").gte(seats));
-//
-//            if(event_type.equals("BlockResourcesEvent")){
-//                update_flight.inc("available_seats",-seats);
-//            }
-//            else if(event_type.equals("UnblockResourcesEvent")){
-//                update_flight.inc("available_seats",seats);
-//            }
-//        }
-//
-//
-//
-//
-//        offerNested.getAvailable().ifPresent(available -> update_offer.set("available", available));
-//        query_offer.addCriteria(Criteria
-//                .where("available").is(true));
-//
-//        return Mono.zip(reactiveMongoTemplate.findAndModify(query_flight, update_flight, options, Flight.class),reactiveMongoTemplate.findAndModify(query_offer, update_offer, options, Offer.class))
-//                        .switchIfEmpty(
-//                                Mono.empty()
-//
-//                                //
-//                        )
-//                        .doOnNext(
-//                                event ->
-//                                {
-//                                    Query query_offer2 = new Query();
-//                                    Query query_flight2 = new Query();
-//                                    Update update_offer2 = new Update();
-//                                    Update update_flight2 = new Update();
-//                                    Flight flight = (Flight)event.get(0);
-//                                    Offer offer = (Offer)event.get(1);
-//                                    update_flight2.push("events", flight);
-//                                    update_offer2.push("events", offer);
-//                                    flight = (Flight)event.get(0);
-//                                    offer = (Offer)event.get(1);
-//                                    query_flight2.addCriteria(Criteria
-//                                            .where("flightId")
-//                                            .is(flight)
-//                                    );
-//                                    query_offer2.addCriteria(Criteria
-//                                            .where("offerId")
-//                                            .is(offer));
-//                                    reactiveMongoTemplate.findAndModify(query_flight2, update_flight2, options, Flight.class);
-//                                    reactiveMongoTemplate.findAndModify(query_offer2, update_offer2, options, Offer.class);
-//                                }
-//                ).then();
-//    }
+        });
+    }
 
 }

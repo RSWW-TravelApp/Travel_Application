@@ -35,19 +35,6 @@ public class Payment {
         this.seatsNeeded = seatsNeeded;
     }
     public Payment(){}
-//    @PersistenceConstructor
-//    public Payment(String paymentId, String userId, String reservationId, String offerId,
-//                   String flightId, Boolean isReserved, Boolean isPaid, Boolean isExpired, Double price) {
-//        this.paymentId = paymentId;
-//        this.userId = userId;
-//        this.reservationId = reservationId;
-//        this.offerId = offerId;
-//        this.flightId = flightId;
-//        this.isReserved = isReserved;
-//        this.isPaid = isPaid;
-//        this.isExpired = isExpired;
-//        this.price = price;
-//    }
 
     @Override
     public String toString() {

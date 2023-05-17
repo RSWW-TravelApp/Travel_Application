@@ -12,10 +12,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class RouterConfig {
 
-//    @Bean
-//    RouterFunction<ServerResponse> createReservation(ReservationMasterWebLayerHandler handler) {
-//        return route(POST("/reservations"), handler::createReservation);
-//    }
+    @Bean
+    RouterFunction<ServerResponse> createReservation(ReservationMasterWebLayerHandler handler) {
+        return route(POST("/reservations"), handler::createReservation);
+    }
 //
 //    @Bean
 //    RouterFunction<ServerResponse> addEvent(ReservationMasterWebLayerHandler handler) {
