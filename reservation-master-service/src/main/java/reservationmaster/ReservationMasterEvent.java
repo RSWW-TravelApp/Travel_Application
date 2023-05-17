@@ -89,6 +89,13 @@ public class ReservationMasterEvent {
                 .doOnNext(event -> {
                     System.out.println("Cancelling reservation:" + event.getReservationId());
                     event.setReserved(false);
+                    sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                            event.getUserId(),
+                            "Reservation cancelled",
+                            new HashMap<String, String>() {{
+                                put("reservationId", event.getReservationId());
+                            }}
+                    ));
                 })
                 .doOnNext(event ->{
                     sink_refunds.tryEmitNext(new RefundPaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
