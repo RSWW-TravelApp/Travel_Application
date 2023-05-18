@@ -1,11 +1,11 @@
 server:
-  port: 8083
+  port: 8085
 spring:
   application:
     name: reservation-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/reservations
+      uri: mongodb://localhost:27017/SI_180268
 eureka:
   instance:
     prefer-ip-address: true

@@ -5,7 +5,7 @@ spring:
     name: reservation-master-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/reservations_master
+      uri: mongodb://localhost:27017/SI_180268
 eureka:
   instance:
     prefer-ip-address: true

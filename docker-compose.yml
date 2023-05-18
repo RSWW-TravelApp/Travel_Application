@@ -44,11 +44,12 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      discovery-server:
-        condition: service_healthy
+      - discovery-server
+#        condition: service_healthy
+      - mongodb
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/hotels
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
       RABBITMQ_HOST_ADDRESS: localhost
     healthcheck:
       test: ["CMD", "curl", "-f", "http://offer-service:8081/offers"]
@@ -59,11 +60,12 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      discovery-server:
-        condition: service_healthy
+      - discovery-server
+#        condition: service_healthy
+      - mongodb
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/flights
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
       RABBITMQ_HOST_ADDRESS: localhost
     healthcheck:
       test: ["CMD", "curl", "-f", "http://flight-service:8082/flights"]
@@ -74,11 +76,12 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      discovery-server:
-        condition: service_healthy
+      - discovery-server
+#        condition: service_healthy
+      - mongodb
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/bills
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
       RABBITMQ_HOST_ADDRESS: localhost
 
   reservation-master-service:
@@ -87,24 +90,26 @@ services:
     ports:
       - "8084:8084"
     depends_on:
-      discovery-server:
-        condition: service_healthy
+      - discovery-server
+#        condition: service_healthy
+      - mongodb
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/reservations_master
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
       RABBITMQ_HOST_ADDRESS: localhost
-  
+
   reservation-service:
     container_name: reservation-service
     build: ./reservation-service
     ports:
       - "8085:8085"
     depends_on:
-      discovery-server:
-        condition: service_healthy
+      - discovery-server
+#        condition: service_healthy
+      - mongodb
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/reservations
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
       RABBITMQ_HOST_ADDRESS: localhost
 
   tour-operator:
@@ -122,12 +127,23 @@ services:
     ports:
       - "8087:8087"
     depends_on:
-      discovery-server:
-        condition: service_healthy
+      - discovery-server
+#        condition: service_healthy
+      - mongodb
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/travel_agency
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
       RABBITMQ_HOST_ADDRESS: localhost
   
-
-  
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: student
+#      MONGO_INITDB_DATABASE: SI_180268
+    volumes:
+      - ./initDb.js:/docker-entrypoint-initdb.d/mongo-init.js:ro

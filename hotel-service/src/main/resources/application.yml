@@ -5,7 +5,7 @@ spring:
     name: offer-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/hotels
+      uri: mongodb://172.17.0.1:27017/SI_180268
   cloud:
     stream:
       function:

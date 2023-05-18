@@ -5,7 +5,7 @@ spring:
     name: flight-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/flights
+      uri: mongodb://172.17.0.1:27017/SI_180268
   cloud:
     stream:
       function:

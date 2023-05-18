@@ -5,7 +5,7 @@ spring:
     name: travel-agency-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/travel_agency
+      uri: mongodb://localhost:27017/SI_180268
 eureka:
   instance:
     prefer-ip-address: true
