@@ -52,7 +52,7 @@ public class ReservationService {
     }
 
     public Flux<Reservation> fetchReservations(String userId, String flightId, String offerId, Boolean isPaid,
-                                               Boolean isCancelled){
+                                               Boolean isCancelled, Boolean isReserved){
 
         Query query = new Query();
 
@@ -70,6 +70,9 @@ public class ReservationService {
         }
         if(isCancelled != null){
             query.addCriteria(Criteria.where("isCancelled").is(isCancelled));
+        }
+        if(isCancelled != null){
+            query.addCriteria(Criteria.where("isReserved").is(isReserved));
         }
 
         return reactiveMongoTemplate.find(query, Reservation.class);

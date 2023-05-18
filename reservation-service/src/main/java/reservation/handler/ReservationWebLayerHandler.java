@@ -25,7 +25,7 @@ public class ReservationWebLayerHandler {
         if (boolStr == null) {
             return null;
         }
-        return Boolean.parseBoolean(request.queryParam("isPaid").orElse(null));
+        return Boolean.parseBoolean(boolStr);
     }
 
     public Mono<ServerResponse> getReservations(ServerRequest request) {
@@ -34,8 +34,9 @@ public class ReservationWebLayerHandler {
         String offerId = request.queryParam("offerId").orElse(null);
         Boolean isPaid = getBooleanParameter("isPaid", request);
         Boolean isCancelled = getBooleanParameter("isCancelled", request);
+        Boolean isReserved = getBooleanParameter("isReserved", request);
 
-        Flux<Reservation> offers = reservationService.fetchReservations(userId, flightId, offerId, isPaid, isCancelled);
+        Flux<Reservation> offers = reservationService.fetchReservations(userId, flightId, offerId, isPaid, isCancelled, isReserved);
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(offers, Reservation.class);
     }
 

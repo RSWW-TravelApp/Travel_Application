@@ -11,11 +11,11 @@ function createReservationListener() {
     eventSource.onmessage = (event) => {
         const eventObj = JSON.parse(event.data);
         document.getElementById('actionResult').textContent = eventObj.message;
-        console.log(eventObj.message);
-        console.log(eventObj.properties)
+        //console.log(eventObj.message);
+        //console.log(eventObj.properties)
     };
     eventSource.onerror = (error) => {
-      console.log(error);
+      //console.log(error);
     };
 }
 
@@ -78,8 +78,6 @@ async function fetchFlightDetails() {
 }
 
 async function reserveOffer() {
-    const result = document.getElementById('actionResult');
-    result.textContent = "";
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
     const userId = sessionStorage.getItem("user");
@@ -89,12 +87,7 @@ async function reserveOffer() {
                                 Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent)
     const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
     const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
-    if (seatsNeeded > availableSeats) {
-        alert("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
-        return;
-    }
-    if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId) || isNaN(seatsNeeded) ||
-        isNaN(availableSeats) || isNaN(price)) {
+    if (isNaN(availableSeats) || isNaN(price)) {
         alert("Specified offer or flight does not exist");
         return;
     }
@@ -102,23 +95,39 @@ async function reserveOffer() {
         alert("Please log in to reserve")
         return;
     }
-    result.textContent = "Do not leave this page";
-    const reservation = {
-        flightId: flightId,
-        offerId: offerId,
-        userId: userId,
-        isExpired: false,
-        price: price,
-        seatsNeeded: seatsNeeded
-    };
-    await fetch(getEffectiveGatewayUri() + '/makereservation', {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(reservation)})
-    .then(response => response.text())
-    .then(response => {
-        alert("Reservation is processing");
-    });
+    await fetch(getEffectiveGatewayUri() + '/reservations' + `?userId=${userId}&offerId=${offerId}&flightId=${flightId}&isReserved=true&isCancelled=false`,{method: "GET"})
+        .then(response => response.json())
+        .then(response => {
+            if (response.length !== 0) {
+                if (response[0].isPaid === false) {
+                    alert("Your reservation is already active");
+                    throw new Error("Your reservation is already active");
+                }
+                alert("You already purchased this offer");
+                throw new Error("You already purchased this offer");
+            }
+            if (seatsNeeded > availableSeats) {
+                alert("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
+                throw new Error("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
+            }
+
+            const reservation = {
+                flightId: flightId,
+                offerId: offerId,
+                userId: userId,
+                isExpired: false,
+                price: price,
+                seatsNeeded: seatsNeeded
+            };
+
+            return fetch(getEffectiveGatewayUri() + '/makereservation', {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(reservation)});
+        })
+        .then(response => response.text())
+        .then(response => { alert("Reservation is processing"); })
+        .catch(error => { document.getElementById('actionResult').textContent = error.message; });
 }
 
 async function purchaseOffer(status) {
@@ -134,7 +143,7 @@ async function purchaseOffer(status) {
     const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
     const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
     if (seatsNeeded > availableSeats) {
-        alert("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
+        alert("Specified offer configuration cannot be reserved cause there is lack of available seats in the plane");
         return;
     }
     if ([null, "", "null"].includes(offerId) || [null, "", "null"].includes(flightId) || isNaN(seatsNeeded) ||
