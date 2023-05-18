@@ -1,5 +1,6 @@
 package reservation.data;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -8,6 +9,11 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collections;
 
 
 @Service
@@ -43,6 +49,30 @@ public class ReservationService {
         return reservationRepository.findByReservationId(reservationId)
                 .flatMap(existingReservation -> reservationRepository.delete(existingReservation)
                         .then(Mono.just(existingReservation)));
+    }
+
+    public Flux<Reservation> fetchReservations(String userId, String flightId, String offerId, Boolean isPaid,
+                                               Boolean isCancelled){
+
+        Query query = new Query();
+
+        if(userId != null){
+            query.addCriteria(Criteria.where("userId").regex(userId));
+        }
+        if(flightId != null){
+            query.addCriteria(Criteria.where("flightId").regex(flightId));
+        }
+        if(offerId != null){
+            query.addCriteria(Criteria.where("offerId").regex(offerId));
+        }
+        if(isPaid != null){
+            query.addCriteria(Criteria.where("isPaid").is(isPaid));
+        }
+        if(isCancelled != null){
+            query.addCriteria(Criteria.where("isCancelled").is(isCancelled));
+        }
+
+        return reactiveMongoTemplate.find(query, Reservation.class);
     }
 
     // updating the specific offer with the given parameters (null parameters - don't update the field)

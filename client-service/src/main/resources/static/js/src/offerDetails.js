@@ -12,6 +12,7 @@ function createReservationListener() {
         const eventObj = JSON.parse(event.data);
         document.getElementById('actionResult').textContent = eventObj.message;
         console.log(eventObj.message);
+        console.log(eventObj.properties)
     };
     eventSource.onerror = (error) => {
       console.log(error);
@@ -116,7 +117,7 @@ async function reserveOffer() {
             body: JSON.stringify(reservation)})
     .then(response => response.text())
     .then(response => {
-        alert(response);
+        alert("Reservation is processing");
     });
 }
 

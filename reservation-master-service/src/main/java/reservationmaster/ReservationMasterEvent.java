@@ -91,7 +91,7 @@ public class ReservationMasterEvent {
                     event.setReserved(false);
                     sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                             event.getUserId(),
-                            "Reservation cancelled",
+                            "Reservation failed",
                             new HashMap<String, String>() {{
                                 put("reservationId", event.getReservationId());
                             }}
