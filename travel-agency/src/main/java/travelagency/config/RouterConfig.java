@@ -21,12 +21,12 @@ public class RouterConfig {
     RouterFunction<ServerResponse> getFlights(TravelAgencyWebLayerHandler handler) {
         return route(GET("/flights"), handler::getFlights);
     }
-
+*/
     @Bean
     RouterFunction<ServerResponse> createOffer(TravelAgencyWebLayerHandler handler) {
         return route(POST("/offers"), handler::createOffer);
     }
-
+/*
     @Bean
     RouterFunction<ServerResponse> addEventOffer(TravelAgencyWebLayerHandler handler) {
         return route(PUT("/offers/{offerId}"), handler::addEventOffer);
@@ -36,12 +36,12 @@ public class RouterConfig {
     RouterFunction<ServerResponse> deleteOfferById(TravelAgencyWebLayerHandler handler) {
         return route(DELETE("/offers/{offerId}"), handler::deleteOfferById);
     }
-
+*/
     @Bean
     RouterFunction<ServerResponse> createFlight(TravelAgencyWebLayerHandler handler) {
         return route(POST("/flights"), handler::createFlight);
     }
-
+/*
     @Bean
     RouterFunction<ServerResponse> addEventFlight(TravelAgencyWebLayerHandler handler) {
         return route(PUT("/flights/{flightId}"), handler::addEventFlight);

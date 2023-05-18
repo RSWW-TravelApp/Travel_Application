@@ -19,6 +19,11 @@ public class RouterConfig {
     }
 
     @Bean
+    RouterFunction<ServerResponse> getReservationsbyUser(ReservationWebLayerHandler handler) {
+        return route(GET("/reservations/{userId}"), handler::getReservationsByUserId);
+    }
+
+    @Bean
     RouterFunction<ServerResponse> getReservationById(ReservationWebLayerHandler handler) {
         return route(GET("/reservations/{reservationId}"), handler::getReservationById);
     }

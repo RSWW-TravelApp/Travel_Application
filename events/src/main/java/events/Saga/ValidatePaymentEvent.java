@@ -1,13 +1,11 @@
 package events.Saga;
 
 public class ValidatePaymentEvent extends SagaEvent{
-    private final String paymentId;
-    public ValidatePaymentEvent(Double price, String offerId, String flightId, Integer seatsNeeded, String paymentId) {
-        super(price, offerId, flightId, seatsNeeded);
-        this.paymentId = paymentId;
+
+    public ValidatePaymentEvent(Double price, String user_id, String offerId, String flightId, String paymentId, String reservation_id, Integer seatsNeeded) {
+        super(price, user_id, offerId, flightId, paymentId, reservation_id, seatsNeeded);
+
     }
 
-    public String getPaymentId() {
-        return paymentId;
-    }
+
 }

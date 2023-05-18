@@ -6,6 +6,25 @@ spring:
   data:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI}
+  cloud:
+    stream:
+      function:
+        definition: createReservationHandle;deleteReservationHandle;updateReservationHandle
+      bindings:
+        createReservationHandle-in-0:
+          destination: cqrs_reservations_create
+        deleteReservationHandle-in-0:
+          destination: cqrs_reservations_delete
+        updateReservationHandle-in-0:
+          destination: cqrs_reservations_update
+
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: ${RABBITMQ_HOST_ADDRESS}
+    port: 5672
+
 eureka:
   instance:
     prefer-ip-address: true

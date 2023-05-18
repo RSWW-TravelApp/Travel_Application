@@ -6,6 +6,62 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/SI_180268
+  cloud:
+    stream:
+      rabbit:
+        bindings:
+          requireValidation-out-0:
+            producer:
+              autoBindDlq: true
+              ttl: 20000
+              deadLetterExchange: delay-topic
+              deadLetterQueueName: delay-topic.test
+              deadLetterExchangeType: topic
+      function:
+        definition: removeReservation; createReservationCQRSHandle; deleteReservationCQRSHandle; updateReservationCQRSHandle; finaliseReservation; makeReservation; confirmReservation; requireValidation; confirmReservationId; requestRefund; receivePayment
+      bindings:
+        makeReservation-in-0:
+          destination: sage_make_reservation
+          group: 0
+        makeReservation-out-0:
+          destination: sage_block_resources
+          group: 0
+        removeReservation-in-0:
+          destination: saga_cancel_reservation
+          group: 0
+        createReservationCQRSHandle-out-0:
+          destination: cqrs_reservations_create
+        deleteReservationCQRSHandle-out-0:
+          destination: cqrs_reservations_delete
+        updateReservationCQRSHandle-out-0:
+          destination: cqrs_reservations_update
+        requireValidation-out-0:
+          destination: temp
+          producer:
+            requiredGroups: test
+        finaliseReservation-out-0:
+          destination: to_notif_purchases
+          group: 0
+        confirmReservation-in-0:
+          destination: saga_reservation_succesful
+          group: 0
+        confirmReservationId-out-0:
+          destination: saga_reservationId_update
+          group: 0
+        requestRefund-out-0:
+          destination: saga_refunds
+          group: 0
+        receivePayment-in-0:
+          destination: saga_paid_reservation
+          group: 0
+
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 127.0.0.1
+    port: 5672
+
 eureka:
   instance:
     prefer-ip-address: true

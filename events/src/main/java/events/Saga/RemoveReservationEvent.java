@@ -1,7 +1,11 @@
 package events.Saga;
 
+import java.util.Optional;
+
 public class RemoveReservationEvent extends SagaEvent{
-    public RemoveReservationEvent(Double price, String offerId, String flightId, Integer seatsNeeded) {
-        super(price, offerId, flightId, seatsNeeded);
+    public RemoveReservationEvent(Double price, String user_id, String offerId, String flightId, String payment_id, String reservation_id, Integer seatsNeeded) {
+        super(price, user_id, offerId, flightId, payment_id, reservation_id, seatsNeeded);
     }
+
+
 }
