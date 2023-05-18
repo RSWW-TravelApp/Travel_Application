@@ -52,7 +52,9 @@ public class ReservationMasterEvent {
     public Function<Flux<RequirePaymentEvent>, Mono<Void>> confirmReservation()
     {
         return flux -> flux
-                .doOnNext(event -> System.out.println("Received confirmation that resources have been blocked for: "+ event.getReservation_id()))
+                .doOnNext(event -> {
+                    System.out.println("Received confirmation that resources have been blocked for: "+ event.getReservation_id());
+                })
                 .flatMap(event -> reservationMasterService.addEvent(new ReservationNested(event.getReservation_id(),null, null, null,null,null,null, null,null,true,"ReserveReservation")))
                 .doOnNext(event ->
                     event.setReserved(true))
@@ -64,19 +66,22 @@ public class ReservationMasterEvent {
                             sink_validation.tryEmitNext(new ValidatePaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                     event.getUserId(),
-                                    "Reservation successful",
-                                    new HashMap<String, String>() {{
-                                        put("reservationId", event.getReservationId());
-                                    }}
+                                    "Reservation successful", //TODO Dont write when purchasing
+                                    new HashMap<>() {}
                             ));
                         }
                 )
                 .flatMap(event -> reservationMasterService.addEvent(new ReservationNested(event.getReservationId(),null,null,null,null,null,null,null,null,null,"CompleteReservation")))
                 .doOnNext(event ->
                     {
-                        System.out.println("Time to tell TO "+ event.getReservationId());
+                        System.out.println("Time to notify TO and client "+ event.getReservationId());
                         sink_payment_updates.tryEmitNext(new ConfirmReservationIdEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                         sink_successful_reservations.tryEmitNext(new TONotificationEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
+                        sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                event.getUserId(),
+                                "Purchase successful",
+                                new HashMap<>() {}
+                        ));
 
                 })
                 .then();
@@ -91,7 +96,7 @@ public class ReservationMasterEvent {
                     event.setReserved(false);
                     sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                             event.getUserId(),
-                            "Reservation failed",
+                            "Reservation failed", //TODO CAUSE OF FAIL
                             new HashMap<String, String>() {{
                                 put("reservationId", event.getReservationId());
                             }}
@@ -111,8 +116,15 @@ public class ReservationMasterEvent {
                 .filter(Reservation::getReserved)
                 .flatMap(event -> reservationMasterService.addEvent(new ReservationNested(event.getReservationId(),null,null,null,null,null,null,null,null,null,"CompleteReservation")))
                 .doOnNext(event -> {
-                    System.out.println("Time to tell TO "+ event.getReservationId());
+                    System.out.println("Time to notify TO and client "+ event.getReservationId());
                     sink_successful_reservations.tryEmitNext(new TONotificationEvent(event.getPrice(), event.getUserId(), event.getOfferId(), event.getFlightId(), event.getPaymentId(), event.getReservationId(), event.getTravellers()));
+                    sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                            event.getUserId(),
+                            "Purchase successful",
+                            new HashMap<String, String>() {{
+                                put("paymentId", event.getPaymentId());
+                            }}
+                    ));
                 })
                 .then();
     }

@@ -1,5 +1,6 @@
 package payment.handler;
 
+import events.Saga.ClientNotificationEvent;
 import events.Saga.MakeReservationEvent;
 import events.Saga.PayReservationEvent;
 import events.Saga.ValidatePaymentEvent;
@@ -11,8 +12,10 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import payment.PaymentEvent;
 import payment.data.Payment;
 import payment.data.PaymentService;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.Random;
 
 @Component
@@ -25,10 +28,10 @@ public class PaymentWebLayerHandler {
     }
 
     public Mono<ServerResponse> getPayments(ServerRequest request) {
-        return ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(paymentService.getPayments(), Payment.class);
+        String reservationId = request.queryParam("reservationId").orElse(null);
+
+        Flux<Payment> offers = paymentService.fetchPayments(reservationId);
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(offers, Payment.class);
     }
 
     public Mono<ServerResponse> getPaymentById(ServerRequest request) {
@@ -96,16 +99,6 @@ public class PaymentWebLayerHandler {
                                                         payment.getPaymentId(),
                                                         null,
                                                         payment.getIsPaid().toString()));
-//                                        PaymentEvent.sink_validation.tryEmitNext(
-//                                                new ValidatePaymentEvent(
-//                                                        payment.getPrice(),
-//                                                        payment.getUserId(),
-//                                                        payment.getOfferId(),
-//                                                        payment.getFlightId(),
-//                                                        payment.getSeatsNeeded(),
-//                                                        payment.getPaymentId()
-//                                                )
-//                                        );
                                     })
                                     .doOnNext(a -> System.out.println("Created Paid Payment Entry: " + a.getPaymentId()+a.getIsPaid()))
                                     .flatMap(updatedPayment ->
@@ -127,6 +120,15 @@ public class PaymentWebLayerHandler {
                                                         payment.getPaymentId(),
                                                         null,
                                                         payment.getIsPaid().toString()));
+                                    })
+                                    .doOnNext(payment ->{
+                                        PaymentEvent.sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                                payment.getUserId(),
+                                                "Purchase failed",
+                                                new HashMap<>() {{
+                                                    put("paymentId", payment.getPaymentId());
+                                                }}
+                                        ));
                                     })
                                     .flatMap(updatedPayment ->
                                             ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
@@ -151,6 +153,15 @@ public class PaymentWebLayerHandler {
                                                             payment.getIsPaid().toString()));
                                         })
                                         .doOnNext(a -> System.out.println("Created Paid Payment Entry: " + a.getPaymentId()))
+                                        .doOnNext(payment ->{
+                                            PaymentEvent.sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                                    payment.getUserId(),
+                                                    "Purchase failed",
+                                                    new HashMap<>() {{
+                                                        put("paymentId", payment.getPaymentId());
+                                                    }}
+                                            ));
+                                        })
                                         .flatMap(updatedPayment ->
                                                 ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
                                                         .body(Mono.just("402, Entry created, Payment failed"), String.class)

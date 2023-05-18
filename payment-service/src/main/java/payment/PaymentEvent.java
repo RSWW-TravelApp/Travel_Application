@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
+import java.util.HashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -24,6 +25,7 @@ public class PaymentEvent {
 
     public static final Sinks.Many<PayReservationEvent> sink_succeeded = Sinks.many().multicast().onBackpressureBuffer();
     public static final Sinks.Many<UnblockResourcesEvent> sink_failed = Sinks.many().multicast().onBackpressureBuffer();
+    public static final Sinks.Many<ClientNotificationEvent> sink_notify_client = Sinks.many().multicast().onBackpressureBuffer();
 
     @Bean
     public Function<Flux<ValidatePaymentEvent>, Mono<Void>> confirmReservationId() {
@@ -58,6 +60,13 @@ public class PaymentEvent {
                                         event.getReservation_id(),
                                         event.getSeatsNeeded()
                                 ));
+                                sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                        event.getUser_id(),
+                                        "Purchase failed",
+                                        new HashMap<String, String>() {{
+                                            put("paymentId", event.getPayment_id());
+                                        }}
+                                ));
                             })
                             .subscribe();
                 }).then();
@@ -90,7 +99,9 @@ public class PaymentEvent {
         return sink_new_reservation::asFlux;
     }
 
-
-
+    @Bean
+    public Supplier<Flux<ClientNotificationEvent>> notifyClient() {
+        return sink_notify_client::asFlux;
+    }
 }
 

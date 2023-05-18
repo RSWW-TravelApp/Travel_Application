@@ -25,8 +25,8 @@ spring:
         - id: payment-service
           uri: lb://payment-service
           predicates:
-            - Path=/makereservation,/pay/{paymentId}/{status},/pay/{status}
-            - Method=PUT,POST,OPTIONS
+            - Path=/makereservation,/pay/{paymentId}/{status},/pay/{status},/pay
+            - Method=GET,PUT,POST,OPTIONS
 
       globalcors:
         cors-configurations:
