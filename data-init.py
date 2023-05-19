@@ -6,7 +6,7 @@ import uuid
 
 def initFlights():
     url = "http://localhost:8082/flights"
-    master_url = "http://localhost:8086/flights"
+    master_url = "http://localhost:8085/flights"
     for i in range(200):
         dstCountry = random.choice(
             ["Poland", "Spain", "Germany", "USA", "France", "UK", "Belgium", "Netherlands", "Italy"])
@@ -20,7 +20,7 @@ def initFlights():
             "departure_city": dstCity,
             "arrival_country": srcCountry,
             "arrival_city": srcCity,
-            "available_seats": random.randint(1, 20),
+            "available_seats": random.randint(5, 40),
             "date": "2023-05-08"
         })
         headers = {
@@ -37,7 +37,7 @@ def initFlights():
 
 def initOffers():
     url = "http://localhost:8081/offers"
-    master_url = "http://localhost:8086/offers"
+    master_url = "http://localhost:8085/offers"
     for i in range(200):
         Country = random.choice(
             ["Poland", "Spain", "Germany", "USA", "France", "UK", "Belgium", "Netherlands", "Italy", "Greece"])
@@ -55,7 +55,7 @@ def initOffers():
             "stars": random.randint(1, 5),
             "start_date": "2023-05-01",
             "end_date": "2023-05-07",
-            "room_type": random.choice(["smallRoom", "mediumRoom", "apartament"]),
+            "room_type": random.choice(["small", "medium", "large", "apartment", "studio"]),
             "max_adults": random.randint(1, 5),
             "max_children_to_3": random.randint(0, 5),
             "max_children_to_10": random.randint(0, 5),
