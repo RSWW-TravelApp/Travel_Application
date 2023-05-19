@@ -47,7 +47,6 @@ spring:
     host: 127.0.0.1
     port: 5672
 
-      uri: mongodb://localhost:27017/SI_180268
 eureka:
   instance:
     prefer-ip-address: true
