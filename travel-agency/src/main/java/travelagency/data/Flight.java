@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Document(collection = "flights_travel_agency")
+@Document(collection = "flights")
 public class Flight {
     @Id
     private String flightId;

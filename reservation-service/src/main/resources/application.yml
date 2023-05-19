@@ -5,7 +5,7 @@ spring:
     name: reservation-service
   data:
     mongodb:
-      uri: mongodb://172.17.0.1:27017/RSWW_176003
+      uri: mongodb://172.17.0.1:27017/RSWW_176003_reservations
       username: root
       password: student
   cloud:
