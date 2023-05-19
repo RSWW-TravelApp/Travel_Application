@@ -5,7 +5,9 @@ spring:
     name: reservation-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/SI_180268
+      uri: mongodb://172.17.0.1:27017/RSWW_176003
+      username: root
+      password: student
   cloud:
     stream:
       function:

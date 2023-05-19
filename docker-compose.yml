@@ -43,26 +43,25 @@ services:
     build: ./hotel-service
     ports:
       - "8081:8081"
+      - "27017:27017"
     depends_on:
-      - discovery-server
-#        condition: service_healthy
-      - mongodb
+      discovery-server:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
       RABBITMQ_HOST_ADDRESS: localhost
     healthcheck:
       test: ["CMD", "curl", "-f", "http://offer-service:8081/offers"]
-  
+
   flight-service:
     container_name: flight-service
     build: ./flight-service
     ports:
       - "8082:8082"
     depends_on:
-      - discovery-server
-#        condition: service_healthy
-      - mongodb
+      discovery-server:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
@@ -76,9 +75,8 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      - discovery-server
-#        condition: service_healthy
-      - mongodb
+      discovery-server:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
@@ -90,9 +88,8 @@ services:
     ports:
       - "8084:8084"
     depends_on:
-      - discovery-server
-#        condition: service_healthy
-      - mongodb
+      discovery-server:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
@@ -104,9 +101,8 @@ services:
     ports:
       - "8085:8085"
     depends_on:
-      - discovery-server
-#        condition: service_healthy
-      - mongodb
+      discovery-server:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
@@ -127,23 +123,9 @@ services:
     ports:
       - "8087:8087"
     depends_on:
-      - discovery-server
-#        condition: service_healthy
-      - mongodb
+      discovery-server:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/SI_180268
       RABBITMQ_HOST_ADDRESS: localhost
-  
-  mongodb:
-    image: mongo
-    container_name: mongodb
-    ports:
-      - 27017:27017
-    restart: unless-stopped
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: student
-#      MONGO_INITDB_DATABASE: SI_180268
-    volumes:
-      - ./initDb.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
