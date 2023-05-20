@@ -11,7 +11,7 @@ async function fetchDestinations(el) {
   var queryParams = window.location.search;
   const numberOfPeople = getSearchRequestParams(['available_seats'])['available_seats'];
   if (!numberOfPeople) {
-    queryParams += (queryParams == "" ? "?" : "&") + `available_seats=${document.getElementById('available_seats').value}`
+    queryParams += (queryParams === "" ? "?" : "&") + `available_seats=${document.getElementById('available_seats').value}`
   }
   await fetch(getEffectiveGatewayUri() + '/flights' + queryParams, {method: "GET"})
   .then(response => checkResponse(response))

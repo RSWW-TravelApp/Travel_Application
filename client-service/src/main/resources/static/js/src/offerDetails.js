@@ -30,25 +30,8 @@ function buildOfferInfo(offerItem) {
     ])
 }
 
-function buildFlightInfo(flightItem) {
-    const flightDataFromContainer = document.getElementById('flightDataFrom');
-    appendChildren(flightDataFromContainer, [
-        createLabel("From", {'for': 'departureCountryInfo'}, 1),
-        squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.departure_country}`, {'class': 'svg-button', 'id': 'departureCountryInfo'}),
-        squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.departure_city}`, {'class': 'svg-button', 'id': 'departureCityInfo'})
-    ]);
-    const flightDataToContainer = document.getElementById('flightDataTo');
-    appendChildren(flightDataToContainer, [
-        createLabel("To", {'for': 'arrivalCountryInfo'}, 1),
-        squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.arrival_country}`, {'class': 'svg-button', 'id': 'arrivalCountryInfo'}),
-        squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.arrival_city}`, {'class': 'svg-button', 'id': 'arrivalCityInfo'})
-    ]);
-    const flightDataDateContainer = document.getElementById('flightDataDate');
-    appendChildren(flightDataDateContainer, [
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${flightItem.date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Flight date"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${flightItem.available_seats}`, {'class': 'svg-button', 'id': 'availableSeats'}, "Available seats")
-    ]);
-
+function buildSelectedFlightInfo(flightItem) {
+    buildFlightInfo(flightItem)
     setAttributes(document.getElementById("flightId"), {'value': flightItem.flightId});
     setAttributes(document.getElementById("flightArrivalCountry"), {'value': flightItem.arrival_country});
     setAttributes(document.getElementById("flightDate"), {'value': flightItem.date});
@@ -66,8 +49,8 @@ async function fetchFlightDetails() {
   const flightId = getSearchRequestParams(['flightId'])['flightId'];
   await fetch(getEffectiveGatewayUri() + '/flights/' + flightId, {method: "GET"})
   .then(response => checkResponse(response))
-  .then(flightItem => buildFlightInfo(flightItem))
-  .catch(error => buildFlightInfo(defaultFlightItem));
+  .then(flightItem => buildSelectedFlightInfo(flightItem))
+  .catch(error => buildSelectedFlightInfo(defaultFlightItem));
 }
 
 async function reserveOffer() {
