@@ -27,14 +27,14 @@ async function fetchDestinations(el) {
                 });
                 const arrivalCountryInput = createElement('input', {
                     'type': 'hidden',
-                    'id': 'arrival_country',
-                    'name': 'arrival_country',
+                    'id': 'country',
+                    'name': 'country',
                     'value': item.arrival_country
                 });
                 const departureCountryInput = createElement('input', {
                     'type': 'hidden',
-                    'id': 'date',
-                    'name': 'date',
+                    'id': 'start_date',
+                    'name': 'start_date',
                     'value': item.date
                 });
                 const numberOfPeopleInput = createElement('input', {

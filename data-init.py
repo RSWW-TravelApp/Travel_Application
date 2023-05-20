@@ -14,6 +14,7 @@ def initFlights():
         srcCountry = random.choice(
             ["Poland", "Spain", "Germany", "USA", "France", "UK", "Belgium", "Netherlands", "Italy"])
         srcCity = random.choice(["Warsaw", "Madrid", "Berlin", "Washington", "London", "Brussels", "Amsterdam", "Roma"])
+        date = random.choice(["2023-05-01", "2023-05-02"])
         payload = json.dumps({
             "flightId": uuid.uuid1().hex[:25],
             "departure_country": dstCountry,
@@ -21,7 +22,7 @@ def initFlights():
             "arrival_country": srcCountry,
             "arrival_city": srcCity,
             "available_seats": random.randint(5, 40),
-            "date": "2023-05-08"
+            "date": date
         })
         headers = {
             'Content-Type': 'application/json'
@@ -46,6 +47,8 @@ def initOffers():
                                    "Royal Mansour", "Hotel Château du Grand-Lucé", "Capella Ubud", "The Alpina Gstaad",
                                    "Grootbos Private Nature Reserve", "Amangiri", "Nihi Sumba", "Amanyara",
                                    "InterContinental Geneva"])
+        startDate = random.choice(["2023-05-01", "2023-05-02"])
+        endDate = random.choice(["2023-05-07", "2023-05-08"])
         payload = json.dumps({
             "offerId": uuid.uuid1().hex[:25],
             "hotel_name": HotelName,
@@ -53,8 +56,8 @@ def initOffers():
             "country": Country,
             "city": City,
             "stars": random.randint(1, 5),
-            "start_date": "2023-05-01",
-            "end_date": "2023-05-07",
+            "start_date": startDate,
+            "end_date": endDate,
             "room_type": random.choice(["small", "medium", "large", "apartment", "studio"]),
             "max_adults": random.randint(1, 5),
             "max_children_to_3": random.randint(0, 5),
