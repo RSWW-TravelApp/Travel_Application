@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 import java.util.Optional;
 
-@Document(collection = "offersNested")
+@Document(collection = "offers_nested")
 public class OfferNested {
     @Id
     private String offerId;

@@ -1,11 +1,11 @@
 server:
-  port: 8083
+  port: 8087
 spring:
   application:
     name: payment-service
   data:
     mongodb:
-      uri: mongodb://172.17.0.1:27017/RSWW_176003_payments
+      uri: mongodb://localhost:27017/bills
       username: root
       password: student
   cloud:
