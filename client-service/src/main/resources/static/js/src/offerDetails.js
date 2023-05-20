@@ -4,7 +4,7 @@ function createReservationListener() {
         function(event) {
             document.getElementById('eventLogs').textContent += event.message + "\r\n";
             document.getElementById('actionResult').textContent = event.message;
-            console.log(event.message);},
+            console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
         })

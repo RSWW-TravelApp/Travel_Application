@@ -66,7 +66,8 @@ public class ReservationMasterEvent {
                             sink_validation.tryEmitNext(new ValidatePaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                     event.getUserId(),
-                                    "Reservation successful", //TODO Dont write when purchasing
+                                    "Reservation successful",
+                                    "info",
                                     new HashMap<>() {}
                             ));
                         }
@@ -80,6 +81,7 @@ public class ReservationMasterEvent {
                         sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                 event.getUserId(),
                                 "Purchase successful",
+                                "info",
                                 new HashMap<>() {}
                         ));
 
@@ -97,9 +99,8 @@ public class ReservationMasterEvent {
                     sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                             event.getUserId(),
                             "Reservation failed", //TODO CAUSE OF FAIL
-                            new HashMap<String, String>() {{
-                                put("reservationId", event.getReservationId());
-                            }}
+                            "info",
+                            new HashMap<>() {}
                     ));
                 })
                 .doOnNext(event ->{
@@ -121,9 +122,8 @@ public class ReservationMasterEvent {
                     sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                             event.getUserId(),
                             "Purchase successful",
-                            new HashMap<String, String>() {{
-                                put("paymentId", event.getPaymentId());
-                            }}
+                            "info",
+                            new HashMap<>() {}
                     ));
                 })
                 .then();

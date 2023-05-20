@@ -1,7 +1,7 @@
 function createNotificationListener() {
     createEventListener(
         function(event) {
-            console.log(event.message);},
+            console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
         })

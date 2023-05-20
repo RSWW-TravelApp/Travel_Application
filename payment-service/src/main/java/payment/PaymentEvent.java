@@ -63,9 +63,8 @@ public class PaymentEvent {
                                 sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                         event.getUser_id(),
                                         "Purchase failed",
-                                        new HashMap<String, String>() {{
-                                            put("paymentId", event.getPayment_id());
-                                        }}
+                                        "info",
+                                        new HashMap<>() {}
                                 ));
                             })
                             .subscribe();

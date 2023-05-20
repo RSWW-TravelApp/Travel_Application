@@ -125,9 +125,8 @@ public class PaymentWebLayerHandler {
                                         PaymentEvent.sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                                 payment.getUserId(),
                                                 "Purchase failed",
-                                                new HashMap<>() {{
-                                                    put("paymentId", payment.getPaymentId());
-                                                }}
+                                                "info",
+                                                new HashMap<>() {}
                                         ));
                                     })
                                     .flatMap(updatedPayment ->
@@ -157,9 +156,8 @@ public class PaymentWebLayerHandler {
                                             PaymentEvent.sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                                     payment.getUserId(),
                                                     "Purchase failed",
-                                                    new HashMap<>() {{
-                                                        put("paymentId", payment.getPaymentId());
-                                                    }}
+                                                    "info",
+                                                    new HashMap<>() {}
                                             ));
                                         })
                                         .flatMap(updatedPayment ->
