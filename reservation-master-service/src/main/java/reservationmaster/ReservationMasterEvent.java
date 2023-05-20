@@ -67,7 +67,7 @@ public class ReservationMasterEvent {
                             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                     event.getUserId(),
                                     "Reservation successful",
-                                    "info",
+                                    "unicast",
                                     new HashMap<>() {}
                             ));
                         }
@@ -81,8 +81,11 @@ public class ReservationMasterEvent {
                         sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                 event.getUserId(),
                                 "Purchase successful",
-                                "info",
-                                new HashMap<>() {}
+                                "multicast",
+                                new HashMap<>() {{
+                                    put("offerId", event.getOfferId());
+                                    put("flightId", event.getFlightId());
+                                }}
                         ));
 
                 })
@@ -99,7 +102,7 @@ public class ReservationMasterEvent {
                     sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                             event.getUserId(),
                             "Reservation failed", //TODO CAUSE OF FAIL
-                            "info",
+                            "unicast",
                             new HashMap<>() {}
                     ));
                 })
@@ -122,8 +125,11 @@ public class ReservationMasterEvent {
                     sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                             event.getUserId(),
                             "Purchase successful",
-                            "info",
-                            new HashMap<>() {}
+                            "multicast",
+                            new HashMap<>() {{
+                                put("offerId", event.getOfferId());
+                                put("flightId", event.getFlightId());
+                            }}
                     ));
                 })
                 .then();

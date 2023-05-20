@@ -63,7 +63,7 @@ public class PaymentEvent {
                                 sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                         event.getUser_id(),
                                         "Purchase failed",
-                                        "info",
+                                        "unicast",
                                         new HashMap<>() {}
                                 ));
                             })

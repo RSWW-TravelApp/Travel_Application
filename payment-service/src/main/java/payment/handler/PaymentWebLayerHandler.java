@@ -125,7 +125,7 @@ public class PaymentWebLayerHandler {
                                         PaymentEvent.sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                                 payment.getUserId(),
                                                 "Purchase failed",
-                                                "info",
+                                                "unicast",
                                                 new HashMap<>() {}
                                         ));
                                     })
@@ -156,7 +156,7 @@ public class PaymentWebLayerHandler {
                                             PaymentEvent.sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                                     payment.getUserId(),
                                                     "Purchase failed",
-                                                    "info",
+                                                    "unicast",
                                                     new HashMap<>() {}
                                             ));
                                         })

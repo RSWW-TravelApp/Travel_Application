@@ -2,8 +2,14 @@
 function createReservationListener() {
     createEventListener(
         function(event) {
-            document.getElementById('eventLogs').textContent += event.message + "\r\n";
-            document.getElementById('actionResult').textContent = event.message;
+            const offerId = window.location.pathname.split("/").pop();
+            if (event.userId === sessionStorage.getItem("user")) {
+                document.getElementById('eventLogs').textContent += event.message + "\r\n";
+                document.getElementById('actionResult').textContent = event.message;
+            }
+            else if (event.type === "multicast" && event.properties['offerId'] === offerId) {
+                showNotification("Viewed offer has been \npurchased by " + event.userId).then();
+            }
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
@@ -13,25 +19,27 @@ function createReservationListener() {
 function buildOfferInfo(offerItem) {
     const offerDetailsContainer = document.getElementById('offerDetails');
     appendChildren(offerDetailsContainer, [
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.country}`, {'class': 'svg-button', 'id': 'arrivalCountryInfo'}, "Country"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.city}`, {'class': 'svg-button', 'id': 'arrivalCityInfo'}, "City"),
-        labeledSquareProperty(0, 0, 20 + offerItem.hotel_name.length * 10, 25, 2, 2, txt=`${offerItem.hotel_name}`, {'class': 'svg-button', 'id': 'hotelNameInfo'}, "Hotel name"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.stars}`, {'class': 'svg-button', 'id': 'stars'}, "Stars"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.start_date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Starting date"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.end_date}`, {'class': 'svg-button', 'id': 'endDateInfo'}, "Ending date"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_adults}`, {'class': 'svg-button', 'id': 'adultsInfo'}, "Adults"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_3}`, {'class': 'svg-button', 'id': 'ppl3plusInfo'}, "People up to 3"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_10}`, {'class': 'svg-button', 'id': 'ppl10plusInfo'}, "People up to 10"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.max_children_to_18}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "People up to 18"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.room_type}`, {'class': 'svg-button', 'id': 'room_type'}, "Room type"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.meals}`, {'class': 'svg-button', 'id': 'meals'}, "Meals"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.price}`, {'class': 'svg-button', 'id': 'price'}, "Price"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${offerItem.available}`, {'class': 'svg-button', 'id': 'availability'}, "Availability")
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.country}`, {'class': 'svg-button', 'id': 'arrivalCountryInfo'}, "Country"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.city}`, {'class': 'svg-button', 'id': 'arrivalCityInfo'}, "City"),
+        labeledSquareProperty(0, 0, 20 + offerItem.hotel_name.length * 10, 25, 2, 2, `${offerItem.hotel_name}`, {'class': 'svg-button', 'id': 'hotelNameInfo'}, "Hotel name"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.stars}`, {'class': 'svg-button', 'id': 'stars'}, "Stars"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.start_date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Starting date"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.end_date}`, {'class': 'svg-button', 'id': 'endDateInfo'}, "Ending date"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.max_adults}`, {'class': 'svg-button', 'id': 'adultsInfo'}, "Adults"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.max_children_to_3}`, {'class': 'svg-button', 'id': 'ppl3plusInfo'}, "People up to 3"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.max_children_to_10}`, {'class': 'svg-button', 'id': 'ppl10plusInfo'}, "People up to 10"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.max_children_to_18}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "People up to 18"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.room_type}`, {'class': 'svg-button', 'id': 'room_type'}, "Room type"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.meals}`, {'class': 'svg-button', 'id': 'meals'}, "Meals"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.price}`, {'class': 'svg-button', 'id': 'price'}, "Price"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.available}`, {'class': 'svg-button', 'id': 'availability'}, "Availability")
     ])
 }
 
 function buildSelectedFlightInfo(flightItem) {
     buildFlightInfo(flightItem)
+    appendChildren(document.getElementById('flightDataDate'), [
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${flightItem.available_seats}`, {'class': 'svg-button', 'id': 'availableSeats'}, "Available seats")])
     setAttributes(document.getElementById("flightId"), {'value': flightItem.flightId});
     setAttributes(document.getElementById("flightArrivalCountry"), {'value': flightItem.arrival_country});
     setAttributes(document.getElementById("flightDate"), {'value': flightItem.date});

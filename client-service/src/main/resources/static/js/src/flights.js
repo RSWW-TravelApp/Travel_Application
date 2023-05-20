@@ -43,7 +43,7 @@ async function fetchDestinations(el) {
                     'name': 'max_adults',
                     'value': document.getElementById('available_seats').value
                 });
-                const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`From: ${item.departure_country}, ${item.departure_city}\nTo: ${item.arrival_country}, ${item.arrival_city}\nAvailable seats: ${item.available_seats}`, {'class': 'svg-button'});
+                const postCard = squareFrame(0, 0, 250, 100, 2, 2, `From: ${item.departure_country}, ${item.departure_city}\nTo: ${item.arrival_country}, ${item.arrival_city}\nAvailable seats: ${item.available_seats}`, {'class': 'svg-button'});
                 appendChildren(button, [postCard]);
                 appendChildren(form, [button, arrivalCountryInput, departureCountryInput, numberOfPeopleInput]);
                 appendChildren(flightItem, [form]);

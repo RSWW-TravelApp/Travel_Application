@@ -78,7 +78,7 @@ function squareFrame(x, y, w, h, thickness = 2, padding = 2, txt = undefined, pa
     setAttributes(squareSVG, params);
 
 
-    pathway = `M${padding} ${padding} L${padding} ${h - padding} L${w - padding} ${h - padding} L${w - padding} ${padding} L${padding} ${padding}`
+    let pathway = `M${padding} ${padding} L${padding} ${h - padding} L${w - padding} ${h - padding} L${w - padding} ${padding} L${padding} ${padding}`
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     setAttributes(path,
     {'xmlns': 'http://www.w3.org/2000/svg',
@@ -89,7 +89,7 @@ function squareFrame(x, y, w, h, thickness = 2, padding = 2, txt = undefined, pa
     });
     squareSVG.appendChild(path);
 
-    if (txt != undefined) {
+    if (txt !== undefined) {
         const textObj = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         const textLines = txt.split("\n");
         const interline = 1.2;

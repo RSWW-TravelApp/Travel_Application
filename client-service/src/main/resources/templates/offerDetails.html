@@ -10,6 +10,7 @@
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
 <body onload="createReservationListener(); fetchOfferDetails(); fetchFlightDetails()">
+  <div id="notificationDiv" counter=0><ul id="notifications" style="position: absolute; right: 50%"></ul></div>
   <div>
     <form action="/offers">
       <input type="hidden" id="flightId" name="flightId" value="">
@@ -41,6 +42,24 @@
   <style>
       .svg-button:hover path{
           fill: lightgray;
+      }
+      @keyframes fade {
+        0% {
+          opacity: 0;
+        }
+        15% {
+          opacity: 1;
+        }
+        85% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .notification {
+        opacity: 0;
+        animation: fade 5s ease-in-out;
       }
   </style>
 </body>

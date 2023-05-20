@@ -17,3 +17,18 @@ function createEventListener(onmessage, onerror, userInfoBox= true) {
         onerror(error)
     };
 }
+
+async function showNotification(message) {
+    const notificationDiv = document.getElementById("notifications")
+    notificationDiv.counter += 1;
+    const listEntry = createElement('li', {"style": "color: transparent"});
+    const notificationBox = squareFrame(0, 0, 200, 100, 2, 2, message,
+        {"id": "notificationBox", "class": "notification appear", "style": "fill: lightgray"});
+    appendChildren(listEntry, [notificationBox])
+    appendChildren(notificationDiv, [listEntry]);
+    await new Promise(r => setTimeout(r, 5000))
+        .then(r => {
+            listEntry.remove();
+        })
+
+}
