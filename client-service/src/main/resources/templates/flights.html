@@ -6,10 +6,11 @@
   <h1>Travel Application Home Page</h1>
   <div hidden id="gateway-config"> [[${@environment.getProperty('api-gateway.uri')}]]</div>
   <script type="text/javascript" th:src="@{/js/src/flights.js}"></script>
+  <script type="text/javascript" th:src="@{/js/src/events.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
-<body onload="createUserInfoBox(); fetchDestinations(); setFilterStartingValues(); disableNullFields()">
+<body onload="fetchDestinations(); setFilterStartingValues(); disableNullFields(); createNotificationListener()">
 <main>
   <div id="container">
     <div id="userInfo" style="float:right"></div>

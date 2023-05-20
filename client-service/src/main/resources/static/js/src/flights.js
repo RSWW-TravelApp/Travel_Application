@@ -1,3 +1,12 @@
+function createNotificationListener() {
+    createEventListener(
+        function(event) {
+            console.log(event.message);},
+        function(error) {
+            console.log(error);
+        })
+}
+
 async function fetchDestinations(el) {
   var queryParams = window.location.search;
   const numberOfPeople = getSearchRequestParams(['available_seats'])['available_seats'];

@@ -6,10 +6,11 @@
   <h1>Check out our offers</h1>
   <div hidden id="gateway-config"> [[${@environment.getProperty('api-gateway.uri')}]]</div>
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
+  <script type="text/javascript" th:src="@{/js/src/events.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/offers.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
-<body onload="createUserInfoBox(); fetchOffers(); fetchChosenFlight(); setFilterStartingValues(); disableNullFields()">
+<body onload="fetchOffers(); fetchChosenFlight(); setFilterStartingValues(); disableNullFields(); createNotificationListener()">
 <main>
   <div id="userInfo" style="float:right"></div>
   <h3> Find a journey from your dreams!</h3>

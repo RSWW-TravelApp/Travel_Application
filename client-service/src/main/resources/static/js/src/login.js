@@ -1,3 +1,12 @@
+function createNotificationListener() {
+    createEventListener(
+        function(event) {
+            console.log(event.message);},
+        function(error) {
+            console.log(error);
+        }, false)
+}
+
 function cleanForm() {
     const form = document.getElementById('form');
     form.reset();
@@ -24,7 +33,8 @@ async function loginUser() {
               sessionStorage.setItem("user", login);
               const previousPage = sessionStorage.getItem('previousPage');
               if (previousPage == null) {
-                return;
+                  window.location.href = document.getElementById("homeButton").href;
+                  return;
               }
               sessionStorage.removeItem('previousPage');
               window.location.href = previousPage;

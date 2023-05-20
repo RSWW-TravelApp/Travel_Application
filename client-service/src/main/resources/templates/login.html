@@ -6,9 +6,10 @@
   <h1> Please fill in your credentials </h1>
   <div hidden id="gateway-config"> [[${@environment.getProperty('api-gateway.uri')}]]</div>
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
+  <script type="text/javascript" th:src="@{/js/src/events.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/login.js}"></script>
 </head>
-<body>
+<body onload="createNotificationListener()">
   <form id="form">
     <input type="text" id="login" value="" placeholder="login">
     <input type="password" id="password" value="" placeholder="password">
@@ -16,7 +17,7 @@
   </form>
   <button onclick="loginUser(); cleanForm()"> Login </button>
   <button onclick="registerUser(); cleanForm()"> Register </button><br><br><br>
-  <a href="/">
+  <a id="homeButton" href="/">
     <button> Go Home </button>
   </a>
 </body>

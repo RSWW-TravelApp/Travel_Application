@@ -1,3 +1,12 @@
+function createNotificationListener() {
+    createEventListener(
+        function(event) {
+            console.log(event.message);},
+        function(error) {
+            console.log(error);
+        })
+}
+
 function buildFlightInfo(flightItem) {
     const flightDataFromContainer = document.getElementById('flightDataFrom');
     appendChildren(flightDataFromContainer, [

@@ -166,7 +166,7 @@ function createUserInfoBox(loginCallback, logOutCallback) {
     .then(response => response.text())
               .then(response => {
                   const [status, body] = response.split(",");
-                  if (status == "404") {
+                  if (status === "404") {
                       createNotLoggedUserInfoBox(logOutCallback);
                       return;
                   }
