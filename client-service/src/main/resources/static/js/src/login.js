@@ -8,7 +8,7 @@ async function loginUser() {
     const password = document.getElementById('password').value;
     const result = document.getElementById('actionResult');
 
-    if (login == "" || password == "") {
+    if (login === "" || password === "") {
         result.textContent = "Login and password cannot be empty!";
         return;
     }
@@ -18,7 +18,7 @@ async function loginUser() {
           .then(response => {
               const [status, body] = response.split(",");
               result.textContent = body;
-              if (status == "404") {
+              if (status === "404" || status === "400") {
                   return;
               }
               sessionStorage.setItem("user", login);
@@ -36,7 +36,7 @@ async function registerUser() {
     const password = document.getElementById('password').value;
     const result = document.getElementById('actionResult');
 
-    if (login == "" || password == "") {
+    if (login === "" || password === "") {
         result.textContent = "Login and password cannot be empty!";
         return;
     }
@@ -46,7 +46,7 @@ async function registerUser() {
           .then(response => {
               const [status, body] = response.split(",");
               result.textContent = body;
-              if (status == "404") {
+              if (status === "404" || status === "400") {
                   return;
               }
               // cos robie

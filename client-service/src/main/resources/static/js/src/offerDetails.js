@@ -1,22 +1,13 @@
 
 function createReservationListener() {
-    const currentUser = sessionStorage.getItem("user");
-    if (!currentUser) {
-        createUserInfoBox();
-        return;
-    }
-    eventSource = new EventSource(getEffectiveGatewayUri() + "/notifications/" + currentUser);
-    console.log("Connection opened");
-    createUserInfoBox(function() {}, function() {eventSource.close(); console.log("Connection closed")});
-    eventSource.onmessage = (event) => {
-        const eventObj = JSON.parse(event.data);
-        document.getElementById('eventLogs').textContent += eventObj.message + "\r\n";
-        document.getElementById('actionResult').textContent = eventObj.message;
-        console.log(eventObj.message);
-    };
-    eventSource.onerror = (error) => {
-      console.log(error);
-    };
+    createEventListener(
+        function(event) {
+            document.getElementById('eventLogs').textContent += event.message + "\r\n";
+            document.getElementById('actionResult').textContent = event.message;
+            console.log(event.message);},
+        function(error) {
+            console.log(error);
+        })
 }
 
 function buildOfferInfo(offerItem) {

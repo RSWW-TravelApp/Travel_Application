@@ -76,6 +76,9 @@ public class ApiGatewayController {
         if (!Objects.equals(correctPassword, password)) {
             return Mono.just("400,Wrong password!");
         }
+        if (SSEConnections.get(login) != null) {
+            return Mono.just("400,This user is already logged in!");
+        }
         return Mono.just("200,Login successful");
     }
 
