@@ -72,7 +72,7 @@ services:
     container_name: RSWW_176003_payment-service
     image: puchaczek/rsww_176003_payment-service
     expose:
-      - "8083"
+      - "8087"
     depends_on:
       discovery-server:
         condition: service_healthy
@@ -98,7 +98,7 @@ services:
     container_name: RSWW_176003_reservation-service
     image: puchaczek/rsww_176003_reservation-service
     expose:
-      - "8085"
+      - "8083"
     depends_on:
       discovery-server:
         condition: service_healthy
@@ -111,7 +111,7 @@ services:
     container_name: RSWW_176003_tour-operator
     image: puchaczek/rsww_176003_tour-operator
     expose:
-      - ":8086"
+      - ":8900"
     environment:
       SPRING_PROFILES_ACTIVE: docker
       RABBITMQ_HOST_ADDRESS: localhost
@@ -120,7 +120,7 @@ services:
     container_name: RSWW_176003_travel-agency
     image: puchaczek/rsww_176003_travel-agency
     expose:
-      - "8087"
+      - "8085"
     depends_on:
       discovery-server:
         condition: service_healthy
