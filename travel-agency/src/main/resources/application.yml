@@ -6,6 +6,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/travel_agency
+      username: root
+      password: student
   cloud:
     stream:
       function:

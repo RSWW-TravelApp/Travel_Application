@@ -6,6 +6,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/reservations_master
+      username: root
+      password: student
   cloud:
     stream:
       rabbit:

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Document(collection = "bookings")
+@Document(collection = "bookings_master")
 public class Reservation{
 
     @Id

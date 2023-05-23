@@ -48,11 +48,11 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/hotels
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_offers
       RABBITMQ_HOST_ADDRESS: localhost
     healthcheck:
       test: ["CMD", "curl", "-f", "http://offer-service:8081/offers"]
-  
+
   flight-service:
     container_name: flight-service
     build: ./flight-service
@@ -63,7 +63,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/flights
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_trips
       RABBITMQ_HOST_ADDRESS: localhost
     healthcheck:
       test: ["CMD", "curl", "-f", "http://flight-service:8082/flights"]
@@ -78,7 +78,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/bills
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_payments
       RABBITMQ_HOST_ADDRESS: localhost
 
   reservation-master-service:
@@ -91,9 +91,9 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/reservations_master
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_reservations_master
       RABBITMQ_HOST_ADDRESS: localhost
-  
+
   reservation-service:
     container_name: reservation-service
     build: ./reservation-service
@@ -104,7 +104,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/reservations
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_reservations
       RABBITMQ_HOST_ADDRESS: localhost
 
   tour-operator:
@@ -126,8 +126,5 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/travel_agency
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_travel_agency
       RABBITMQ_HOST_ADDRESS: localhost
-  
-
-  
