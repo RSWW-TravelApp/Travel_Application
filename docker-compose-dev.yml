@@ -1,23 +1,23 @@
 services:
   discovery-server:
-    container_name: discovery-server
-    image: discovery-server-service
+    container_name: RSWW_176003_discovery-server
+    image: puchaczek/rsww_176003_discovery-server-service
     ports:
       - "17601:8761"
     environment:
       SPRING_PROFILES_ACTIVE: docker
 
   api-gateway:
-    container_name: api-gateway
-    image: api-gateway-service
-    expose:
-      - "8080"
+    container_name: RSWW_176003_api-gateway
+    image: puchaczek/rsww_176003_api-gateway-service
+    ports:
+      - "17602:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
 
   client:
-    container_name: client-service
-    image: client-service
+    container_name: RSWW_176003_client-service
+    image: puchaczek/rsww_176003_client-service
     ports:
       - "17600:10000"
     environment:
@@ -25,58 +25,58 @@ services:
       API_GATEWAY_URI: http://localhost:8080
 
   offer-service:
-    container_name: offer-service
-    image: hotel-service
+    container_name: RSWW_176003_offer-service
+    image: puchaczek/rsww_176003_hotel-service
     expose:
       - "8081"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/hotels
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_offers
       RABBITMQ_HOST_ADDRESS: localhost
 
   flight-service:
-    container_name: flight-service
-    image: flight-service
+    container_name: RSWW_176003_flight-service
+    image: puchaczek/rsww_176003_flight-service
     expose:
       - "8082"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/flights
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_trips
       RABBITMQ_HOST_ADDRESS: localhost
 
   payment-service:
-    container_name: payment-service
-    image: payment-service
+    container_name: RSWW_176003_payment-service
+    image: puchaczek/rsww_176003_payment-service
     expose:
       - "8083"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/bills
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_payments
       RABBITMQ_HOST_ADDRESS: localhost
 
   reservation-master-service:
-    container_name: reservation-master-service
-    image: reservation-master-service
+    container_name: RSWW_176003_reservation-master-service
+    image: puchaczek/rsww_176003_reservation-master-service
     expose:
       - "8084"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/reservations_master
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_reservations_master
       RABBITMQ_HOST_ADDRESS: localhost
 
   reservation-service:
-    container_name: reservation-service
-    image: reservation-service
+    container_name: RSWW_176003_reservation-service
+    image: puchaczek/rsww_176003_reservation-service
     expose:
       - "8085"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/reservations
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_reservations
       RABBITMQ_HOST_ADDRESS: localhost
 
   tour-operator:
-    container_name: tour-operator
-    image: tour-operator
+    container_name: RSWW_176003_tour-operator
+    image: puchaczek/rsww_176003_tour-operator
     expose:
       - ":8086"
     environment:
@@ -84,22 +84,20 @@ services:
       RABBITMQ_HOST_ADDRESS: localhost
 
   travel-agency:
-    container_name: travel-agency
-    image: travel-agency
+    container_name: RSWW_176003_travel-agency
+    image: puchaczek/rsww_176003_travel-agency
     expose:
       - "8087"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/travel_agency
+      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_travel_agency
       RABBITMQ_HOST_ADDRESS: localhost
 
   rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:management
+    container_name: RSWW_176003_rabbitmq
+    image: puchaczek/rsww_176003_rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     expose:
       - "5672"
-    ports:
-      - "17602:15672"
