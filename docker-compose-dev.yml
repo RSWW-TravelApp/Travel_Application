@@ -11,8 +11,8 @@ services:
   api-gateway:
     container_name: RSWW_176003_api-gateway
     image: puchaczek/rsww_176003_api-gateway-service
-    expose:
-      - "8080"
+    ports:
+      - "17602:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
 
@@ -23,7 +23,7 @@ services:
       - "17600:10000"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      API_GATEWAY_URI: http://api-gateway:8080
+      API_GATEWAY_URI: http://localhost:17602
 
   offer-service:
     container_name: RSWW_176003_offer-service
@@ -32,7 +32,7 @@ services:
       - "8081"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_offers
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_offers?authSource=admin
       RABBITMQ_HOST_ADDRESS: rabbitmq
 
   flight-service:
@@ -42,7 +42,7 @@ services:
       - "8082"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_trips
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_trips?authSource=admin
       RABBITMQ_HOST_ADDRESS: rabbitmq
 
   payment-service:
@@ -52,7 +52,7 @@ services:
       - "8087"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_payments
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_payments?authSource=admin
       RABBITMQ_HOST_ADDRESS: rabbitmq
 
   reservation-master-service:
@@ -62,7 +62,7 @@ services:
       - "8084"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_reservations_master
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_reservations_master?authSource=admin
       RABBITMQ_HOST_ADDRESS: rabbitmq
 
   reservation-service:
@@ -72,7 +72,7 @@ services:
       - "8083"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_reservations
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_reservations?authSource=admin
       RABBITMQ_HOST_ADDRESS: rabbitmq
 
   tour-operator:
@@ -91,7 +91,7 @@ services:
       - "8085"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_travel_agency
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_travel_agency?authSource=admin
       RABBITMQ_HOST_ADDRESS: rabbitmq
 
   rabbitmq:
