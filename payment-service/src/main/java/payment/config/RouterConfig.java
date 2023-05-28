@@ -16,7 +16,7 @@ public class RouterConfig {
     RouterFunction<ServerResponse> getPayments(PaymentWebLayerHandler handler) {
         return route(GET("/pay"), handler::getPayments);
     }
-    */
+     */
 
     @Bean
     RouterFunction<ServerResponse> getPaymentById(PaymentWebLayerHandler handler) {
