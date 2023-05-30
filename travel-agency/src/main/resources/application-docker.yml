@@ -6,6 +6,8 @@ spring:
   data:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI}
+      username: ${SPRING_DATA_MONGODB_USERNAME}
+      password: ${SPRING_DATA_MONGODB_PASSWORD}
   cloud:
     stream:
       function:
@@ -28,16 +30,22 @@ spring:
           group: 0
         createFlightCQRSHandle-out-0:
           destination: cqrs_flights_create
+          group: 0
         createOfferCQRSHandle-out-0:
           destination: cqrs_offers_create
+          group: 0
         deleteFlightCQRSHandle-out-0:
           destination: cqrs_flights_delete
+          group: 0
         deleteOfferCQRSHandle-out-0:
           destination: cqrs_offers_delete
+          group: 0
         updateFlightCQRSHandle-out-0:
           destination: cqrs_flights_update
+          group: 0
         updateOfferCQRSHandle-out-0:
           destination: cqrs_offers_update
+          group: 0
 
   rabbitmq:
     username: guest
