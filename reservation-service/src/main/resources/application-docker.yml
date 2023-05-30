@@ -15,10 +15,13 @@ spring:
       bindings:
         createReservationHandle-in-0:
           destination: cqrs_reservations_create
+          group: 0
         deleteReservationHandle-in-0:
           destination: cqrs_reservations_delete
+          group: 0
         updateReservationHandle-in-0:
           destination: cqrs_reservations_update
+          group: 0
 
 
   rabbitmq:

@@ -15,10 +15,13 @@ spring:
       bindings:
         createOfferHandle-in-0:
           destination: cqrs_offers_create
+          group: 0
         deleteOfferHandle-in-0:
           destination: cqrs_offers_delete
+          group: 0
         updateOfferHandle-in-0:
           destination: cqrs_offers_update
+          group: 0
 
   rabbitmq:
     username: guest

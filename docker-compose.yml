@@ -1,19 +1,20 @@
+version: '3.8'
 services:
   discovery-server:
-    container_name: discovery-server
-    build: ./discovery-server-service
+    container_name: RSWW_176003_discovery-server
+    image: puchaczek/rsww_176003_discovery-server-service
     ports:
-      - "8761:8761"
+      - "17601:8761"
     environment:
       SPRING_PROFILES_ACTIVE: docker
     healthcheck:
       test: ["CMD", "curl", "-f", "http://discovery-server:8761"]
 
   api-gateway:
-    container_name: api-gateway
-    build: ./api-gateway-service
+    container_name: RSWW_176003_api-gateway
+    image: puchaczek/rsww_176003_api-gateway-service
     ports:
-      - "8080:8080"
+      - "17602:8080"
     depends_on:
       discovery-server:
         condition: service_healthy
@@ -27,104 +28,113 @@ services:
       test: ["CMD", "curl", "-f", "http://api-gateway:8080/offers"]
 
   client:
-    container_name: client-service
-    build: ./client-service
+    container_name: RSWW_176003_client-service
+    image: puchaczek/rsww_176003_client-service
     ports:
-      - "10000:10000"
+      - "17600:10000"
     depends_on:
       api-gateway:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      API_GATEWAY_URI: http://localhost:8080
+      API_GATEWAY_URI: http://api-gateway:8080
 
   offer-service:
-    container_name: offer-service
-    build: ./hotel-service
-    ports:
-      - "8081:8081"
+    container_name: RSWW_176003_offer-service
+    image: puchaczek/rsww_176003_hotel-service
+    expose:
+      - "8081"
     depends_on:
       discovery-server:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_offers
-      RABBITMQ_HOST_ADDRESS: localhost
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_offers?authSource=admin
+      RABBITMQ_HOST_ADDRESS: rabbitmq
     healthcheck:
       test: ["CMD", "curl", "-f", "http://offer-service:8081/offers"]
 
   flight-service:
-    container_name: flight-service
-    build: ./flight-service
-    ports:
-      - "8082:8082"
+    container_name: RSWW_176003_flight-service
+    image: puchaczek/rsww_176003_flight-service
+    expose:
+      - "8082"
     depends_on:
       discovery-server:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_trips
-      RABBITMQ_HOST_ADDRESS: localhost
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_trips?authSource=admin
+      RABBITMQ_HOST_ADDRESS: rabbitmq
     healthcheck:
       test: ["CMD", "curl", "-f", "http://flight-service:8082/flights"]
 
   payment-service:
-    container_name: payment-service
-    build: ./payment-service
-    ports:
-      - "8083:8083"
+    container_name: RSWW_176003_payment-service
+    image: puchaczek/rsww_176003_payment-service
+    expose:
+      - "8087"
     depends_on:
       discovery-server:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_payments
-      RABBITMQ_HOST_ADDRESS: localhost
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_payments?authSource=admin
+      RABBITMQ_HOST_ADDRESS: rabbitmq
 
   reservation-master-service:
-    container_name: reservation-master-service
-    build: ./reservation-master-service
-    ports:
-      - "8084:8084"
+    container_name: RSWW_176003_reservation-master-service
+    image: puchaczek/rsww_176003_reservation-master-service
+    expose:
+      - "8084"
     depends_on:
       discovery-server:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_reservations_master
-      RABBITMQ_HOST_ADDRESS: localhost
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_reservations_master?authSource=admin
+      RABBITMQ_HOST_ADDRESS: rabbitmq
 
   reservation-service:
-    container_name: reservation-service
-    build: ./reservation-service
-    ports:
-      - "8085:8085"
+    container_name: RSWW_176003_reservation-service
+    image: puchaczek/rsww_176003_reservation-service
+    expose:
+      - "8083"
     depends_on:
       discovery-server:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_reservations
-      RABBITMQ_HOST_ADDRESS: localhost
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_reservations?authSource=admin
+      RABBITMQ_HOST_ADDRESS: rabbitmq
 
   tour-operator:
-    container_name: tour-operator
-    build: ./tour-operator
-    ports:
-      - "8086:8086"
+    container_name: RSWW_176003_tour-operator
+    image: puchaczek/rsww_176003_tour-operator
+    expose:
+      - ":8900"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      RABBITMQ_HOST_ADDRESS: localhost
+      RABBITMQ_HOST_ADDRESS: rabbitmq
 
   travel-agency:
-    container_name: travel-agency
-    build: ./travel-agency
-    ports:
-      - "8087:8087"
+    container_name: RSWW_176003_travel-agency
+    image: puchaczek/rsww_176003_travel-agency
+    expose:
+      - "8085"
     depends_on:
       discovery-server:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://172.17.0.1:27017/RSWW_176003_travel_agency
-      RABBITMQ_HOST_ADDRESS: localhost
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_travel_agency?authSource=admin
+      RABBITMQ_HOST_ADDRESS: rabbitmq
+
+  rabbitmq:
+    container_name: RSWW_176003_rabbitmq
+    image: puchaczek/rsww_176003_rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    expose:
+      - "5672"

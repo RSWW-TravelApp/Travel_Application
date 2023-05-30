@@ -33,10 +33,13 @@ spring:
           group: 0
         createReservationCQRSHandle-out-0:
           destination: cqrs_reservations_create
+          group: 0
         deleteReservationCQRSHandle-out-0:
           destination: cqrs_reservations_delete
+          group: 0
         updateReservationCQRSHandle-out-0:
           destination: cqrs_reservations_update
+          group: 0
         requireValidation-out-0:
           destination: temp
           producer:
