@@ -5,7 +5,6 @@ import uuid
 
 
 def initFlights():
-    url = "http://localhost:8082/flights"
     master_url = "http://localhost:8085/flights"
     for i in range(200):
         dstCountry = random.choice(
@@ -28,16 +27,13 @@ def initFlights():
             'Content-Type': 'application/json'
         }
 
-        response1 = requests.request("POST", url, headers=headers, data=payload)
-        response2 = requests.request("POST", master_url, headers=headers, data=payload)
+        response = requests.request("POST", master_url, headers=headers, data=payload)
 
-        print(response1.text)
-        print(response2.text)
+        print(response.text)
         print("-------------------------------------------------------------------------------------------------------")
 
 
 def initOffers():
-    url = "http://localhost:8081/offers"
     master_url = "http://localhost:8085/offers"
     for i in range(200):
         Country = random.choice(
@@ -71,11 +67,9 @@ def initOffers():
             'Content-Type': 'application/json'
         }
 
-        response1 = requests.request("POST", url, headers=headers, data=payload)
-        response2 = requests.request("POST", master_url, headers=headers, data=payload)
+        response = requests.request("POST", master_url, headers=headers, data=payload)
 
-        print(response1.text)
-        print(response2.text)
+        print(response.text)
         print("-------------------------------------------------------------------------------------------------------")
 
 
