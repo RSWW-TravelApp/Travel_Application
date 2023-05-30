@@ -64,7 +64,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_trips?authSource=admin
+      SPRING_DATA_MONGODB_URI: mongodb://root:student@172.17.0.1:27017/RSWW_176003_flights?authSource=admin
       RABBITMQ_HOST_ADDRESS: rabbitmq
     healthcheck:
       test: ["CMD", "curl", "-f", "http://flight-service:8082/flights"]
