@@ -64,7 +64,7 @@ public class ReservationEvent {
 
                                 )
                 )
-                .doOnNext(a -> System.out.println("DID IT WORK?"))
+                .doOnNext(a -> System.out.println("Update Done"))
                 .then();
     }
 }

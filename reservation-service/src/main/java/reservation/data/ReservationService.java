@@ -28,7 +28,8 @@ public class ReservationService {
     }
 
     public Mono<Reservation> createReservation(Reservation reservation){
-        return reservationRepository.save(reservation);
+        return  reservationRepository.findByReservationId(reservation.getReservationId()).switchIfEmpty(
+                reservationRepository.save(reservation));
     }
 
     public Flux<Reservation> getAllReservations(){
@@ -113,7 +114,7 @@ public class ReservationService {
         if(isReserved != null) {
             update.set("isReserved", isReserved);
         }
-        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(false).upsert(false);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
         return reactiveMongoTemplate.findAndModify(query, update, options, Reservation.class);
     }
 
