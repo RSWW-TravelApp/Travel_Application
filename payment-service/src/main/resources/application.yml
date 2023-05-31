@@ -11,7 +11,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: makeReservation; validatePayment; failTransaction; confirmReservationId; refundPayment; succeedTransaction
+        definition: makeReservation; validatePayment; failTransaction; confirmReservationId; refundPayment; succeedTransaction; notifyClient
       bindings:
         makeReservation-out-0:
           destination: sage_make_reservation
@@ -30,6 +30,9 @@ spring:
           group: 0
         refundPayment-in-0:
           destination: saga_refunds
+          group: 0
+        notifyClient-out-0:
+          destination: notify_client
           group: 0
 
   rabbitmq:

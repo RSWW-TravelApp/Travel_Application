@@ -52,15 +52,14 @@ public class FlightWebLayerHandler {
         String arrival_city = request.queryParam("arrival_city").orElse(null);
 
         Integer available_seats = getIntegerParam("available_seats", request);
+        if (available_seats == null) {
+            available_seats = 1;
+        }
 
         LocalDate date = request.queryParam("date").map(LocalDate::parse).orElse(null);
 
         Flux<Flight> flights = flightService.fetchFlights(departure_country, departure_city, arrival_country,
                 arrival_city, available_seats, date);
-
-        // For testing purposes
-        // flights.doOnNext(element -> System.out.println("Element: " + element))
-        //        .subscribe();
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)

@@ -13,13 +13,13 @@ spring:
       function:
         definition: createOfferHandle;deleteOfferHandle;updateOfferHandle
       bindings:
-        createFlightHandle-in-0:
+        createOfferHandle-in-0:
           destination: cqrs_offers_create
           group: 0
-        deleteFlightHandle-in-0:
+        deleteOfferHandle-in-0:
           destination: cqrs_offers_delete
           group: 0
-        updateFlightHandle-in-0:
+        updateOfferHandle-in-0:
           destination: cqrs_offers_update
           group: 0
 

@@ -11,12 +11,11 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class RouterConfig {
-    /*
     @Bean
     RouterFunction<ServerResponse> getPayments(PaymentWebLayerHandler handler) {
         return route(GET("/pay"), handler::getPayments);
     }
-     */
+
 
     @Bean
     RouterFunction<ServerResponse> getPaymentById(PaymentWebLayerHandler handler) {

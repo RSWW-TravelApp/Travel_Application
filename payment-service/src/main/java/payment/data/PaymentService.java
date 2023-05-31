@@ -52,6 +52,16 @@ public class PaymentService {
             return reactiveMongoTemplate.findAndModify(query, update, options, Payment.class);
     }
 
+    public Flux<Payment> fetchPayments(String reservationId){
+        Query query = new Query();
+
+        if(reservationId != null){
+            query.addCriteria(Criteria.where("reservationId").is(reservationId));
+        }
+
+        return reactiveMongoTemplate.find(query, Payment.class);
+    }
+
     public Mono<Payment> updatePayment(String paymentId, String field, String status) {
         Query query = new Query();
         query.addCriteria(Criteria.where("paymentId").is(paymentId));

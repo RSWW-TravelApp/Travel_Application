@@ -4,9 +4,12 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reservation.data.Reservation;
 import reservation.data.ReservationService;
+
+import java.time.LocalDate;
 
 @Component
 public class ReservationWebLayerHandler {
@@ -17,11 +20,24 @@ public class ReservationWebLayerHandler {
         this.reservationService = reservationService;
     }
 
+    private Boolean getBooleanParameter(String name, ServerRequest request) {
+        String boolStr = request.queryParam(name).orElse(null);
+        if (boolStr == null) {
+            return null;
+        }
+        return Boolean.parseBoolean(boolStr);
+    }
+
     public Mono<ServerResponse> getReservations(ServerRequest request) {
-        return ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(reservationService.getAllReservations(), Reservation.class);
+        String userId = request.queryParam("userId").orElse(null);
+        String flightId = request.queryParam("flightId").orElse(null);
+        String offerId = request.queryParam("offerId").orElse(null);
+        Boolean isPaid = getBooleanParameter("isPaid", request);
+        Boolean isCancelled = getBooleanParameter("isCancelled", request);
+        Boolean isReserved = getBooleanParameter("isReserved", request);
+
+        Flux<Reservation> offers = reservationService.fetchReservations(userId, flightId, offerId, isPaid, isCancelled, isReserved);
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(offers, Reservation.class);
     }
 
     public Mono<ServerResponse> getReservationsByUserId(ServerRequest request) {

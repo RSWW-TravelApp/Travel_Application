@@ -1,6 +1,5 @@
 package travelagency.handler;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,6 @@ public class TravelAgencyWebLayerHandler {
         this.travelAgencyService = travelAgencyService;
     }
 
-    @NotNull
     public Mono<ServerResponse> getOffers(ServerRequest request) {
         return ServerResponse
                 .ok()

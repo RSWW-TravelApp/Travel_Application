@@ -122,10 +122,6 @@ public class OfferWebLayerHandler {
         Flux<Offer> offers = offerService.fetchOffers(hotel_name, image, country, city, stars, start_date, end_date,
                 room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals, min_price, max_price);
 
-        // For testing purpose
-        // offers.doOnNext(element -> System.out.println("Element: " + element))
-        //        .subscribe();
-
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(offers, Offer.class);
     }
 

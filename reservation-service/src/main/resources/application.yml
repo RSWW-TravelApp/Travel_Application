@@ -22,8 +22,7 @@ spring:
         updateReservationHandle-in-0:
           destination: cqrs_reservations_update
           group: 0
-
-
+          
   rabbitmq:
     username: guest
     password: guest

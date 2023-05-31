@@ -11,19 +11,8 @@ spring:
         receivePaymentNotif-in-0:
           destination: to_notif_purchases
           group: 0
-
-
   rabbitmq:
     username: guest
     password: guest
     host: 127.0.0.1
     port: 5672
-
-eureka:
-  instance:
-    prefer-ip-address: true
-    hostname: ${spring.application.name}
-    instance-id: ${spring.application.name}:${server.port}:${random.value}
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/

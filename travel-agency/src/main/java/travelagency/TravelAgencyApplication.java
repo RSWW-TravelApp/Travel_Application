@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @EnableDiscoveryClient
 @EnableReactiveMongoRepositories
 public class TravelAgencyApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(TravelAgencyApplication.class, args);
     }

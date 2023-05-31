@@ -17,11 +17,16 @@ spring:
           predicates:
             - Path=/flights,/flights/{flightId}
             - Method=GET
+        - id: reservations-service
+          uri: lb://reservation-service
+          predicates:
+            - Path=/reservations,/reservations/{reservationId}
+            - Method=GET
         - id: payment-service
           uri: lb://payment-service
           predicates:
-            - Path=/payments/{paymentId}/{status}
-            - Method=POST
+            - Path=/makereservation,/pay/{paymentId}/{status},/pay/{status},/pay
+            - Method=GET,PUT,POST,OPTIONS
 
       globalcors:
         cors-configurations:
@@ -31,6 +36,21 @@ spring:
             allowedMethods:
               - GET
               - POST
+              - PUT
+              - OPTIONS
+    stream:
+      function:
+        definition: sendNotification
+      bindings:
+        sendNotification-in-0:
+          destination: notify_client
+          group: 0
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: ${RABBITMQ_HOST_ADDRESS}
+    port: 5672
 
 logging:
   level:

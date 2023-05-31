@@ -78,7 +78,7 @@ function squareFrame(x, y, w, h, thickness = 2, padding = 2, txt = undefined, pa
     setAttributes(squareSVG, params);
 
 
-    pathway = `M${padding} ${padding} L${padding} ${h - padding} L${w - padding} ${h - padding} L${w - padding} ${padding} L${padding} ${padding}`
+    let pathway = `M${padding} ${padding} L${padding} ${h - padding} L${w - padding} ${h - padding} L${w - padding} ${padding} L${padding} ${padding}`
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     setAttributes(path,
     {'xmlns': 'http://www.w3.org/2000/svg',
@@ -89,7 +89,7 @@ function squareFrame(x, y, w, h, thickness = 2, padding = 2, txt = undefined, pa
     });
     squareSVG.appendChild(path);
 
-    if (txt != undefined) {
+    if (txt !== undefined) {
         const textObj = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         const textLines = txt.split("\n");
         const interline = 1.2;
@@ -145,14 +145,19 @@ function createLabel(txt, params, horizontalBreaks = 0) {
 
 function labeledSquareProperty(x, y, w, h, thickness = 2, padding = 2, txt = undefined, params, labelText) {
     const container = createElement('div');
-    if (labelText != undefined && params['id'] != undefined) {
-        const label = createElement('label', {'for': params['id'], 'id': `${params['id']}-label`});
+    if (labelText !== undefined && params['id'] !== undefined) {
+        const label = createElement('label', {'id': `${params['id']}-label`});
         label.textContent = labelText;
         label.innerHTML += '&nbsp;';
+        const postCard = squareFrame(x, y, w, h, thickness, padding, txt, params);
+        appendChildren(label, [postCard])
         appendChildren(container, [label]);
     }
-    const postCard = squareFrame(x, y, w, h, thickness, padding, txt, params);
-    appendChildren(container, [postCard]);
+    else {
+        const postCard = squareFrame(x, y, w, h, thickness, padding, txt, params);
+        appendChildren(container, [postCard]);
+    }
+
     return container;
 }
 
@@ -166,7 +171,7 @@ function createUserInfoBox(loginCallback, logOutCallback) {
     .then(response => response.text())
               .then(response => {
                   const [status, body] = response.split(",");
-                  if (status == "404") {
+                  if (status === "404") {
                       createNotLoggedUserInfoBox(logOutCallback);
                       return;
                   }
@@ -184,10 +189,11 @@ function createLoggedUserInfoBox(currentUser, loginCallback, logOutCallback) {
                                 });
     button.onclick = function() { createNotLoggedUserInfoBox(logOutCallback); };
     const postCard = squareFrame(0, 0, 100, 50, 2, 2, "Log out", {'class': 'svg-button', 'id': 'loginButtonSVG'});
-    const label = createLabel(`Current user: ${currentUser}`, {'for': 'loginInfo', 'style': 'font-size:1.3em;'}, 2);
+    const label = createLabel(`Current user: ${currentUser}`, {'style': 'font-size:1.3em;'}, 2);
 
     appendChildren(button, [postCard]);
-    appendChildren(userInfoDiv, [label, button]);
+    appendChildren(label, [button])
+    appendChildren(userInfoDiv, [label]);
     appendChildren(parentDiv, [userInfoDiv]);
     if (loginCallback) {
         loginCallback();
@@ -222,3 +228,23 @@ function createNotLoggedUserInfoBox(logOutCallback) {
     }
 }
 
+function buildFlightInfo(flightItem) {
+    const flightDataFromContainer = document.getElementById('flightDataFrom');
+    const labeledProperty = appendChildren(createLabel("From", {}, 1),
+        [squareFrame(0, 0, 100, 25, 2, 2, `${flightItem.departure_country}`, {'class': 'svg-button', 'id': 'departureCountryInfo'}),])
+    appendChildren(flightDataFromContainer, [
+        labeledProperty,
+        squareFrame(0, 0, 100, 25, 2, 2, `${flightItem.departure_city}`, {'class': 'svg-button', 'id': 'departureCityInfo'})
+    ]);
+    const flightDataToContainer = document.getElementById('flightDataTo');
+    const anotherLabeledProperty = appendChildren(createLabel("To", {}, 1),
+        [squareFrame(0, 0, 100, 25, 2, 2, `${flightItem.arrival_country}`, {'class': 'svg-button', 'id': 'arrivalCountryInfo'}),])
+    appendChildren(flightDataToContainer, [
+        anotherLabeledProperty,
+        squareFrame(0, 0, 100, 25, 2, 2, `${flightItem.arrival_city}`, {'class': 'svg-button', 'id': 'arrivalCityInfo'})
+    ]);
+    const flightDataDateContainer = document.getElementById('flightDataDate');
+    appendChildren(flightDataDateContainer, [
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${flightItem.date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Flight date")
+    ]);
+}

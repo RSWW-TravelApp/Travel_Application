@@ -1,22 +1,52 @@
 package api_gateway.controllers;
 
+import events.Saga.ClientNotificationEvent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import java.util.*;
+import java.util.function.Function;
 
 @CrossOrigin
 @RestController
 public class ApiGatewayController {
     private Map<String, String> users = new HashMap<>();
-    private Map<String, Sinks.Many<String>> SSEConnections = new HashMap<>();
+    private Map<String, Sinks.Many<ClientNotificationEvent>> SSEConnections = new HashMap<>();
+
+    private void sendUnicastNotification(ClientNotificationEvent event) {
+        Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(event.getUserId());
+        if (connection != null && users.get(event.getUserId()) != null) {
+            connection.tryEmitNext(event);
+        }
+    }
+
+    private void sendMulticastNotification(ClientNotificationEvent event) {
+        for (Sinks.Many<ClientNotificationEvent> connection : SSEConnections.values()) {
+            connection.tryEmitNext(event);
+        }
+    }
+
+    @Bean
+    public Function<Flux<ClientNotificationEvent>, Mono<Void>> sendNotification() {
+        return flux -> flux
+                .doOnNext(event -> {
+                    System.out.println("Notification to send: " + event.getMessage());
+                    if (Objects.equals(event.getType(), "unicast")) {
+                        sendUnicastNotification(event);
+                    }
+                    else if (Objects.equals(event.getType(), "multicast")) {
+                        sendMulticastNotification(event);
+                    }
+                })
+                .then();
+    }
 
     @GetMapping(value = "/notifications/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> SSE(@PathVariable String userId) {
-        Sinks.Many<String> connection = SSEConnections.get(userId);
+    public Flux<ClientNotificationEvent> SSE(@PathVariable String userId) {
+        Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(userId);
         if (connection != null) {
             connection.tryEmitComplete();
             SSEConnections.remove(userId);
@@ -28,12 +58,15 @@ public class ApiGatewayController {
                 .doOnTerminate(() -> SSEConnections.remove(userId));
     }
 
-    @PostMapping(value = "/notifications/{userId}")
-    public Mono<String> sendEvent(@PathVariable String userId,
-                       @RequestBody String event) {
-        Sinks.Many<String> connection = SSEConnections.get(userId);
-        if (connection != null && users.get(userId) != null) {
-            connection.tryEmitNext(event);
+    @PostMapping(value = "/notifications")
+    public Mono<String> sendEvent(@RequestBody ClientNotificationEvent event) {
+        System.out.println("Notification to send: " + event.getMessage());
+        if (Objects.equals(event.getType(), "unicast")) {
+            sendUnicastNotification(event);
+            return Mono.just("200");
+        }
+        else if (Objects.equals(event.getType(), "multicast")) {
+            sendMulticastNotification(event);
             return Mono.just("200");
         }
         return Mono.just("400");
@@ -59,6 +92,9 @@ public class ApiGatewayController {
         }
         if (!Objects.equals(correctPassword, password)) {
             return Mono.just("400,Wrong password!");
+        }
+        if (SSEConnections.get(login) != null) {
+            return Mono.just("400,This user is already logged in!");
         }
         return Mono.just("200,Login successful");
     }

@@ -1,21 +1,12 @@
-function buildFlightInfo(flightItem) {
-    const flightDataFromContainer = document.getElementById('flightDataFrom');
-    appendChildren(flightDataFromContainer, [
-        createLabel("From", {'for': 'departureCountryInfo'}, 1),
-        squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.departure_country}`, {'class': 'svg-button', 'id': 'departureCountryInfo'}),
-        squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.departure_city}`, {'class': 'svg-button', 'id': 'departureCityInfo'})
-    ]);
-    const flightDataToContainer = document.getElementById('flightDataTo');
-    appendChildren(flightDataToContainer, [
-        createLabel("To", {'for': 'arrivalCountryInfo'}, 1),
-        squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.arrival_country}`, {'class': 'svg-button', 'id': 'arrivalCountryInfo'}),
-        squareFrame(0, 0, 100, 25, 2, 2, txt=`${flightItem.arrival_city}`, {'class': 'svg-button', 'id': 'arrivalCityInfo'})
-    ]);
-    const flightDataDateContainer = document.getElementById('flightDataDate');
-    appendChildren(flightDataDateContainer, [
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, txt=`${flightItem.date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Flight date")
-    ]);
+function createNotificationListener() {
+    createEventListener(
+        function(event) {
+            console.log(`[${event.type}] ${event.message}`);},
+        function(error) {
+            console.log(error);
+        })
 }
+
 
 async function fetchOffers(el) {
   const flightId = getSearchRequestParams(['flightId'])['flightId'];

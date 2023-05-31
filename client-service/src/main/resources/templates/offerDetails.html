@@ -5,15 +5,17 @@
   <title>Offer details</title>
   <div hidden id="gateway-config"> [[${@environment.getProperty('api-gateway.uri')}]]</div>
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
+  <script type="text/javascript" th:src="@{/js/src/events.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/offerDetails.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
 <body onload="createReservationListener(); fetchOfferDetails(); fetchFlightDetails()">
+  <div id="notificationDiv" counter=0><ul id="notifications" style="position: absolute; right: 50%"></ul></div>
   <div>
     <form action="/offers">
       <input type="hidden" id="flightId" name="flightId" value="">
-      <input type="hidden" id="flightArrivalCountry" name="arrival_country" value="">
-      <input type="hidden" id="flightDate" name="date" value="">
+      <input type="hidden" id="flightArrivalCountry" name="country" value="">
+      <input type="hidden" id="flightDate" name="start_date" value="">
       <button> Go back </button>
     </form>
   </div>
@@ -35,10 +37,29 @@
       <button onclick="purchaseOffer('fail')">Purchase offer failure</button>
     </div>
     <h2 id="actionResult"></h2>
+    <text id="eventLogs" style="white-space: pre"></text>
   </div>
   <style>
       .svg-button:hover path{
           fill: lightgray;
+      }
+      @keyframes fade {
+        0% {
+          opacity: 0;
+        }
+        15% {
+          opacity: 1;
+        }
+        85% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .notification {
+        opacity: 0;
+        animation: fade 5s ease-in-out;
       }
   </style>
 </body>

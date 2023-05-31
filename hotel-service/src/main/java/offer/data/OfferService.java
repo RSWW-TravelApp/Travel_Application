@@ -56,16 +56,16 @@ public class OfferService {
         Query query = new Query().with(Sort.by(Collections.singletonList(Sort.Order.asc("price"))));
 
         if(hotel_name != null){
-            query.addCriteria(Criteria.where("hotel_name").regex(hotel_name));
+            query.addCriteria(Criteria.where("hotel_name").is(hotel_name));
         }
         if(image != null){
-            query.addCriteria(Criteria.where("image").regex(image));
+            query.addCriteria(Criteria.where("image").is(image));
         }
         if(country != null){
-            query.addCriteria(Criteria.where("country").regex(country));
+            query.addCriteria(Criteria.where("country").is(country));
         }
         if(city != null){
-            query.addCriteria(Criteria.where("city").regex(city));
+            query.addCriteria(Criteria.where("city").is(city));
         }
         if(start_date != null){
             LocalDateTime startOfDay = start_date.atStartOfDay();
@@ -76,7 +76,7 @@ public class OfferService {
             query.addCriteria(Criteria.where("end_date").lte(endOfDay));
         }
         if(room_type != null){
-            query.addCriteria(Criteria.where("room_type").regex(room_type));
+            query.addCriteria(Criteria.where("room_type").is(room_type));
         }
         if(stars != null){
             query.addCriteria(Criteria.where("stars").gte(stars));
@@ -94,7 +94,7 @@ public class OfferService {
             query.addCriteria(Criteria.where("max_children_to_18").gte(max_children_to_18));
         }
         if(meals != null) {
-            query.addCriteria(Criteria.where("meals").regex(meals));
+            query.addCriteria(Criteria.where("meals").is(meals));
         }
         if(min_price != null && max_price != null) {
             query.addCriteria(Criteria.where("price").gte(min_price).lt(max_price));
@@ -105,6 +105,8 @@ public class OfferService {
         else if (min_price != null && max_price == null) {
             query.addCriteria(Criteria.where("price").gte(min_price));
         }
+        query.addCriteria(Criteria.where("available").is(true));
+
         return reactiveMongoTemplate.find(query, Offer.class);
     }
 

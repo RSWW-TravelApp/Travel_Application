@@ -1,8 +1,17 @@
+function createNotificationListener() {
+    createEventListener(
+        function(event) {
+            console.log(`[${event.type}] ${event.message}`);},
+        function(error) {
+            console.log(error);
+        })
+}
+
 async function fetchDestinations(el) {
   var queryParams = window.location.search;
   const numberOfPeople = getSearchRequestParams(['available_seats'])['available_seats'];
   if (!numberOfPeople) {
-    queryParams += (queryParams == "" ? "?" : "&") + `available_seats=${document.getElementById('available_seats').value}`
+    queryParams += (queryParams === "" ? "?" : "&") + `available_seats=${document.getElementById('available_seats').value}`
   }
   await fetch(getEffectiveGatewayUri() + '/flights' + queryParams, {method: "GET"})
   .then(response => checkResponse(response))
@@ -18,14 +27,14 @@ async function fetchDestinations(el) {
                 });
                 const arrivalCountryInput = createElement('input', {
                     'type': 'hidden',
-                    'id': 'arrival_country',
-                    'name': 'arrival_country',
+                    'id': 'country',
+                    'name': 'country',
                     'value': item.arrival_country
                 });
                 const departureCountryInput = createElement('input', {
                     'type': 'hidden',
-                    'id': 'date',
-                    'name': 'date',
+                    'id': 'start_date',
+                    'name': 'start_date',
                     'value': item.date
                 });
                 const numberOfPeopleInput = createElement('input', {
@@ -34,7 +43,7 @@ async function fetchDestinations(el) {
                     'name': 'max_adults',
                     'value': document.getElementById('available_seats').value
                 });
-                const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`From: ${item.departure_country}, ${item.departure_city}\nTo: ${item.arrival_country}, ${item.arrival_city}\nAvailable seats: ${item.available_seats}`, {'class': 'svg-button'});
+                const postCard = squareFrame(0, 0, 250, 100, 2, 2, `From: ${item.departure_country}, ${item.departure_city}\nTo: ${item.arrival_country}, ${item.arrival_city}\nAvailable seats: ${item.available_seats}`, {'class': 'svg-button'});
                 appendChildren(button, [postCard]);
                 appendChildren(form, [button, arrivalCountryInput, departureCountryInput, numberOfPeopleInput]);
                 appendChildren(flightItem, [form]);
