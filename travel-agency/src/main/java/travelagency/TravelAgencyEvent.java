@@ -35,12 +35,6 @@ public class TravelAgencyEvent {
     }
     @Bean
     public Function<Flux<BlockResourcesEvent>, Flux<RequirePaymentEvent>> blockResources() {
-        Flux.just("apple", "banana", "cherry")
-                .filter(fruit -> fruit.startsWith("z"))
-                .switchIfEmpty(Flux.just("apricot", "blueberry", "cantaloupe"))
-                .filter(fruit -> fruit.startsWith("a"))
-                .switchIfEmpty(Flux.just("orange", "pear", "watermelon"))
-                .subscribe(System.out::println);
         return flux -> flux
                 .doOnNext(event -> {
                         System.out.println("attempting to block offer:" + event.getOfferId());
