@@ -170,6 +170,4 @@ public class OfferNested {
     }
     public void setAvailable(Boolean available) { this.available = available; }
     public void setEventType(String eventType) {this.eventType = eventType;}
-
-
 }

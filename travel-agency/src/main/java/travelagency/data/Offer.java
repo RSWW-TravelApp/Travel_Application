@@ -1,11 +1,12 @@
 package travelagency.data;
 
+import events.CQRS.offers.UpdateOfferEvent;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import reactor.util.function.Tuple2;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Document(collection = "offers")
 public class Offer {
@@ -193,5 +194,68 @@ public class Offer {
     public void setAvailable(Boolean available) { this.available = available; }
     public void setEvents(List<OfferNested> events){this.events = events;}
 
-
+    public HashMap<String, Map.Entry<Object, Object>> getChanges(UpdateOfferEvent stateAfterEvent) {
+        return new HashMap<>() {{
+            if (stateAfterEvent.getHotel_name().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getHotel_name().orElse(null), getHotel_name())) {
+                put("hotel_name", new SimpleEntry<>(getHotel_name(), stateAfterEvent.getHotel_name().orElse(null)));
+            }
+            if (stateAfterEvent.getCity().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getCity().orElse(null), getCity())) {
+                put("city", new SimpleEntry<>(getCity(), stateAfterEvent.getCity().orElse(null)));
+            }
+            if (stateAfterEvent.getCountry().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getCountry().orElse(null), getCountry())) {
+                put("country", new SimpleEntry<>(getCountry(), stateAfterEvent.getCountry().orElse(null)));
+            }
+            if (stateAfterEvent.getAvailable().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getAvailable().map(Boolean::parseBoolean).orElse(null), getAvailable())) {
+                put("available", new SimpleEntry<>(getAvailable(), stateAfterEvent.getAvailable().orElse(null)));
+            }
+            if (stateAfterEvent.getEnd_date().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getEnd_date().map(LocalDate::parse).orElse(null), getEnd_date())) {
+                put("end_date", new SimpleEntry<>(getEnd_date(), stateAfterEvent.getEnd_date().orElse(null)));
+            }
+            if (stateAfterEvent.getStars().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getStars().orElse(null), getStars())) {
+                put("stars", new SimpleEntry<>(getStars(), stateAfterEvent.getStars().orElse(null)));
+            }
+            if (stateAfterEvent.getStart_date().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getStart_date().map(LocalDate::parse).orElse(null), getStart_date())) {
+                put("start_date", new SimpleEntry<>(getStart_date(), stateAfterEvent.getStart_date().orElse(null)));
+            }
+            if (stateAfterEvent.getImage().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getImage().orElse(null), getImage())) {
+                put("image", new SimpleEntry<>(getImage(), stateAfterEvent.getImage().orElse(null)));
+            }
+            if (stateAfterEvent.getMax_adults().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getMax_adults().orElse(null), getMax_adults())) {
+                put("max_adults", new SimpleEntry<>(getMax_adults(), stateAfterEvent.getMax_adults().orElse(null)));
+            }
+            if (stateAfterEvent.getMax_children_to_3().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getMax_children_to_3().orElse(null), getMax_children_to_3())) {
+                put("max_children_to_3", new SimpleEntry<>(getMax_children_to_3(), stateAfterEvent.getMax_children_to_3().orElse(null)));
+            }
+            if (stateAfterEvent.getMax_children_to_10().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getMax_children_to_10().orElse(null), getMax_children_to_10())) {
+                put("max_children_to_10", new SimpleEntry<>(getMax_children_to_10(), stateAfterEvent.getMax_children_to_10().orElse(null)));
+            }
+            if (stateAfterEvent.getMax_children_to_18().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getMax_children_to_18().orElse(null), getMax_children_to_18())) {
+                put("max_children_to_18", new SimpleEntry<>(getMax_children_to_18(), stateAfterEvent.getMax_children_to_18().orElse(null)));
+            }
+            if (stateAfterEvent.getPrice().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getPrice().orElse(null), getPrice())) {
+                put("price", new SimpleEntry<>(getPrice(), stateAfterEvent.getPrice().orElse(null)));
+            }
+            if (stateAfterEvent.getMeals().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getMeals().orElse(null), getMeals())) {
+                put("meals", new SimpleEntry<>(getMeals(), stateAfterEvent.getMeals().orElse(null)));
+            }
+            if (stateAfterEvent.getRoom_type().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getRoom_type().orElse(null), getRoom_type())) {
+                put("room_type", new SimpleEntry<>(getRoom_type(), stateAfterEvent.getRoom_type().orElse(null)));
+            }
+        }};
+    }
 }

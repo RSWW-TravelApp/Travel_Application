@@ -16,6 +16,7 @@ import travelagency.data.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -38,14 +39,15 @@ public class TravelAgencyEvent {
     public Function<Flux<UpdateOfferEvent>, Mono<Void>> modifyOffer()
     {
         return event -> event.flatMap(update -> travelAgencyService.getOffer(update.getId()).flatMap(originalOffer -> {
+            HashMap<String, Map.Entry<Object, Object>> changes = originalOffer.getChanges(update);
             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                     "",
                     "TO offer modification",
                     "multicast",
                     new HashMap<>() {{
                         put("groups", new String[]{"all"});
-                        put("before", originalOffer);
-                        put("after", update);
+                        put("offerId", update.getId());
+                        put("changes", changes);
                     }}
             ));
 
@@ -75,14 +77,15 @@ public class TravelAgencyEvent {
     public Function<Flux<UpdateFlightEvent>, Mono<Void>> modifyFlight()
     {
         return event -> event.flatMap(update -> travelAgencyService.getFlight(update.getId()).flatMap(originalFlight -> {
+            HashMap<String, Map.Entry<Object, Object>> changes = originalFlight.getChanges(update);
             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                     "",
                     "TO flight modification",
                     "multicast",
                     new HashMap<>() {{
                         put("groups", new String[]{"all"});
-                        put("before", originalFlight);
-                        put("after", update);
+                        put("flightId", update.getId());
+                        put("changes", changes);
                     }}
             ));
 

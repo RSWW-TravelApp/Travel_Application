@@ -1,11 +1,12 @@
 package travelagency.data;
 
+import events.CQRS.flights.UpdateFlightEvent;
+import events.CQRS.offers.UpdateOfferEvent;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Document(collection = "flights")
 public class Flight {
@@ -105,4 +106,32 @@ public class Flight {
     }
     public void setEvents(List<FlightNested> events){this.events = events;}
 
+    public HashMap<String, Map.Entry<Object, Object>> getChanges(UpdateFlightEvent stateAfterEvent) {
+        return new HashMap<>() {{
+            if (stateAfterEvent.getArrival_city().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getArrival_city().orElse(null), getArrival_city())) {
+                put("arrival_city", new SimpleEntry<>(getArrival_city(), stateAfterEvent.getArrival_city().orElse(null)));
+            }
+            if (stateAfterEvent.getDate().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getDate().map(LocalDate::parse).orElse(null), getDate())) {
+                put("date", new SimpleEntry<>(getDate(), stateAfterEvent.getDate().orElse(null)));
+            }
+            if (stateAfterEvent.getAvailable_seats().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getAvailable_seats().orElse(null), getAvailable_seats())) {
+                put("available_seats", new SimpleEntry<>(getAvailable_seats(), stateAfterEvent.getAvailable_seats().orElse(null)));
+            }
+            if (stateAfterEvent.getArrival_country().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getArrival_country().orElse(null), getArrival_country())) {
+                put("arrival_country", new SimpleEntry<>(getArrival_country(), stateAfterEvent.getArrival_country().orElse(null)));
+            }
+            if (stateAfterEvent.getDeparture_city().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getDeparture_city().orElse(null), getDeparture_city())) {
+                put("departure_city", new SimpleEntry<>(getDeparture_city(), stateAfterEvent.getDeparture_city().orElse(null)));
+            }
+            if (stateAfterEvent.getDeparture_country().orElse(null) != null &&
+                    !Objects.equals(stateAfterEvent.getDeparture_country().orElse(null), getDeparture_country())) {
+                put("departure_country", new SimpleEntry<>(getDeparture_country(), stateAfterEvent.getDeparture_country().orElse(null)));
+            }
+        }};
+    }
 }
