@@ -95,6 +95,18 @@ public class TravelAgencyService {
                         .then(Mono.just(existingFlight)));
     }
 
+    public Mono<Offer> getOffer(String offerId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("offerId").is(offerId));
+        return reactiveMongoTemplate.find(query, Offer.class).singleOrEmpty();
+    }
+
+    public Mono<Flight> getFlight(String flightId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("flightId").is(flightId));
+        return reactiveMongoTemplate.find(query, Flight.class).singleOrEmpty();
+    }
+
     public Mono<Offer> updateOffer(String offerId, Boolean available){
         Query query = new Query();
         query.addCriteria(Criteria.where("offerId").is(offerId));

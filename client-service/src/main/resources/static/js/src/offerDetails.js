@@ -10,6 +10,7 @@ function createReservationListener() {
             else if (event.type === "multicast" && event.properties['offerId'] === offerId) {
                 showNotification("Viewed offer has been \npurchased by " + event.userId).then();
             }
+            console.log(event.properties);
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
