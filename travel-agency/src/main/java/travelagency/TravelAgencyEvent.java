@@ -38,8 +38,7 @@ public class TravelAgencyEvent {
     @Bean
     public Function<Flux<UpdateOfferEvent>, Mono<Void>> modifyOffer()
     {
-        return event -> event.flatMap(update -> travelAgencyService.getOffer(update.getId()).flatMap(originalOffer -> {
-            HashMap<String, Map.Entry<Object, Object>> changes = originalOffer.getChanges(update);
+        return event -> event.flatMap(update -> {
             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                     "",
                     "TO offer modification",
@@ -47,7 +46,7 @@ public class TravelAgencyEvent {
                     new HashMap<>() {{
                         put("groups", new String[]{"all"});
                         put("offerId", update.getId());
-                        put("changes", changes);
+                        put("changes", update.getMap());
                     }}
             ));
 
@@ -70,7 +69,7 @@ public class TravelAgencyEvent {
                     update.getAvailable().map(Boolean::parseBoolean).orElse(null),
                     "TO_Update_Offer_Event"
             ));
-        })).log("Offer has been updated by Tour Operator").then();
+        }).log("Offer has been updated by Tour Operator").then();
     }
 
     @Bean
@@ -85,7 +84,7 @@ public class TravelAgencyEvent {
                     new HashMap<>() {{
                         put("groups", new String[]{"all"});
                         put("flightId", update.getId());
-                        put("changes", changes);
+                        put("changes", update.getMap());
                     }}
             ));
 
