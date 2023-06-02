@@ -5,7 +5,7 @@ spring:
     name: tour-operator
   integration:
     poller:
-      fixed-delay=1000
+      fixed-delay=10000
   cloud:
     stream:
       function:

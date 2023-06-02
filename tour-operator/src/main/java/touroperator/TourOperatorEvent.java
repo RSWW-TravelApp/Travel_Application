@@ -24,11 +24,11 @@ public class TourOperatorEvent {
 
     @PollableBean
     public Supplier<Flux<UpdateOfferEvent>> modifyOffer() {
-        return () -> Flux.just(new UpdateOfferEvent(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null));
+        return () -> Flux.just(new UpdateOfferEvent("64776c1a0878d17ae8fc6062",null,null,"China",null,null,null,null,null,null,null,null,null,null,null,null));
     }
 
     @PollableBean
     public Supplier<Flux<UpdateFlightEvent>> modifyFLight() {
-        return () -> Flux.just(new UpdateFlightEvent(null,null,null,null,null,null,null));
+        return () -> Flux.just(new UpdateFlightEvent("64776bee0878d17ae8fc6061","China",null,null,null,null,null));
     }
 }
