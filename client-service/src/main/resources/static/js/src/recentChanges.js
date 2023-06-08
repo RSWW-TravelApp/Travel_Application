@@ -21,7 +21,7 @@ function getChangesString(changesObject) {
 function createNotificationListener() {
     createEventListener(
         function(event) {
-            if (event.type !== 'multicast' || event.properties.changes === undefined) {
+            if (!event.properties.groups.includes("all") || event.type !== 'multicast' || event.properties.changes === undefined) {
                 return;
             }
             const recentChangesList = document.getElementById('recentChanges');
