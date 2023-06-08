@@ -50,7 +50,7 @@ public class TourOperatorEvent {
         List<String> listOfStrings;
         try {
             listOfStrings
-                    = Files.readAllLines(Paths.get("src/main/java/touroperator/offers_ids.txt"));
+                    = Files.readAllLines(Paths.get("/application/offers_ids.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -140,7 +140,7 @@ public class TourOperatorEvent {
         List<String> listOfStrings;
         try {
             listOfStrings
-                    = Files.readAllLines(Paths.get("src/main/java/touroperator/flights_ids.txt"));
+                    = Files.readAllLines(Paths.get("/application/flights_ids.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
