@@ -125,7 +125,8 @@ public class TourOperatorEvent {
                 available = null;
             }
 
-            return Flux.just(new UpdateOfferEvent(id,null,null,null,null, stars, start_date, end_date, room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals, price, available));
+            if(stars == null && start_date == null && end_date == null && room_type == null && max_adults == null && max_children_to_3 == null && max_children_to_10 == null & max_children_to_18 == null && meals == null && price == null && available == null) return null;
+            else return Flux.just(new UpdateOfferEvent(id,null,null,null,null, stars, start_date, end_date, room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals, price, available));
         };
     }
 
@@ -163,7 +164,8 @@ public class TourOperatorEvent {
             if(randomNumber<10) available_seats = random.nextInt(200);
             else available_seats = null;
 
-            return Flux.just(new UpdateFlightEvent(id,null,null,date,null,null,available_seats));
+            if(available_seats == null && date == null) return null;
+            else return Flux.just(new UpdateFlightEvent(id,null,null,date,null,null,available_seats));
         };
     }
 }
