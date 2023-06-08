@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -64,6 +65,9 @@ public class PaymentEvent {
                                         event.getUser_id(),
                                         "Purchase failed",
                                         "unicast",
+                                        new ArrayList<>(){{
+                                            add("offerDetails");
+                                        }},
                                         new HashMap<>() {}
                                 ));
                             })

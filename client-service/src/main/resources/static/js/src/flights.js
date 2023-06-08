@@ -4,7 +4,7 @@ function createNotificationListener() {
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
-        })
+        }, "flights")
 }
 
 function createRecentChangesButton() {

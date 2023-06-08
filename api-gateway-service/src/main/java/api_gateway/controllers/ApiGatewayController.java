@@ -15,19 +15,36 @@ import java.util.function.Function;
 @RestController
 public class ApiGatewayController {
     private Map<String, String> users = new HashMap<>();
-    private Map<String, Sinks.Many<ClientNotificationEvent>> SSEConnections = new HashMap<>();
+    private Map<String, Map<String, Sinks.Many<ClientNotificationEvent>>> SSEConnections = new HashMap<>(){{
+        put("offers", new HashMap<>());
+        put("flights", new HashMap<>());
+        put("offerDetails", new HashMap<>());
+        put("recentChanges", new HashMap<>());
+        put("public", new HashMap<>());
+    }};
     private CircularList<HashMap<String, Object>> recentChanges = new CircularList<>(10);
 
     private void sendUnicastNotification(ClientNotificationEvent event) {
-        Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(event.getUserId());
-        if (connection != null && users.get(event.getUserId()) != null) {
-            connection.tryEmitNext(event);
+        for (String group : event.getGroups()) {
+            if (!SSEConnections.containsKey(group)) {
+                continue;
+            }
+            Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(group).get(event.getUserId());
+            if (connection != null && users.get(event.getUserId()) != null) {
+                connection.tryEmitNext(event);
+                break;
+            }
         }
     }
 
     private void sendMulticastNotification(ClientNotificationEvent event) {
-        for (Sinks.Many<ClientNotificationEvent> connection : SSEConnections.values()) {
-            connection.tryEmitNext(event);
+        for (String group : event.getGroups()) {
+            if (!SSEConnections.containsKey(group)) {
+                continue;
+            }
+            for (Sinks.Many<ClientNotificationEvent> connection : SSEConnections.get(group).values()) {
+                connection.tryEmitNext(event);
+            }
         }
     }
 
@@ -51,18 +68,19 @@ public class ApiGatewayController {
                 .then();
     }
 
-    @GetMapping(value = "/notifications/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ClientNotificationEvent> SSE(@PathVariable String userId) {
-        Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(userId);
+    @GetMapping(value = "/notifications/{group}/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ClientNotificationEvent> SSE(@PathVariable String group, @PathVariable String userId) {
+        String effectiveGroup = SSEConnections.get(group) != null ? group : "public";
+        Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(effectiveGroup).get(userId);
         if (connection != null) {
             connection.tryEmitComplete();
-            SSEConnections.remove(userId);
+            SSEConnections.get(effectiveGroup).remove(userId);
         }
-        connection = SSEConnections.computeIfAbsent(userId, k -> Sinks.many().unicast().onBackpressureBuffer());
+        connection = SSEConnections.get(effectiveGroup).computeIfAbsent(userId, k -> Sinks.many().unicast().onBackpressureBuffer());
         return connection.asFlux()
-                .doFinally(signalType -> SSEConnections.remove(userId))
-                .doOnCancel(() -> SSEConnections.remove(userId))
-                .doOnTerminate(() -> SSEConnections.remove(userId));
+                .doFinally(signalType -> SSEConnections.get(effectiveGroup).remove(userId))
+                .doOnCancel(() -> SSEConnections.get(effectiveGroup).remove(userId))
+                .doOnTerminate(() -> SSEConnections.get(effectiveGroup).remove(userId));
     }
 
     @PostMapping(value = "/notifications")

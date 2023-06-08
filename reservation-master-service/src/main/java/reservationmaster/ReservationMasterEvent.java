@@ -13,6 +13,7 @@ import reservationmaster.data.Reservation;
 import reservationmaster.data.ReservationMasterService;
 import reservationmaster.data.ReservationNested;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -68,6 +69,9 @@ public class ReservationMasterEvent {
                                     event.getUserId(),
                                     "Reservation successful",
                                     "unicast",
+                                    new ArrayList<>(){{
+                                        add("offerDetails");
+                                    }},
                                     new HashMap<>() {}
                             ));
                         }
@@ -82,6 +86,9 @@ public class ReservationMasterEvent {
                                 event.getUserId(),
                                 "Purchase successful",
                                 "multicast",
+                                new ArrayList<>(){{
+                                    add("offerDetails");
+                                }},
                                 new HashMap<>() {{
                                     put("offerId", event.getOfferId());
                                     put("flightId", event.getFlightId());
@@ -103,6 +110,9 @@ public class ReservationMasterEvent {
                             event.getUserId(),
                             "Reservation failed", //TODO CAUSE OF FAIL
                             "unicast",
+                            new ArrayList<>(){{
+                                add("offerDetails");
+                            }},
                             new HashMap<>() {}
                     ));
                 })
@@ -126,6 +136,9 @@ public class ReservationMasterEvent {
                             event.getUserId(),
                             "Purchase successful",
                             "multicast",
+                            new ArrayList<>(){{
+                                add("offerDetails");
+                            }},
                             new HashMap<>() {{
                                 put("offerId", event.getOfferId());
                                 put("flightId", event.getFlightId());

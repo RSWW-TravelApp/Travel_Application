@@ -4,7 +4,9 @@ function createNotificationListener() {
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
-        }, false)
+        },
+        "login",
+        false)
 }
 
 function cleanForm() {

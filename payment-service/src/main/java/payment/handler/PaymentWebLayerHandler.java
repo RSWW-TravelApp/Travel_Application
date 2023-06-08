@@ -15,6 +15,7 @@ import payment.data.PaymentService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -126,6 +127,9 @@ public class PaymentWebLayerHandler {
                                                 payment.getUserId(),
                                                 "Purchase failed",
                                                 "unicast",
+                                                new ArrayList<>(){{
+                                                    add("offerDetails");
+                                                }},
                                                 new HashMap<>() {}
                                         ));
                                     })
@@ -157,6 +161,9 @@ public class PaymentWebLayerHandler {
                                                     payment.getUserId(),
                                                     "Purchase failed",
                                                     "unicast",
+                                                    new ArrayList<>(){{
+                                                        add("offerDetails");
+                                                    }},
                                                     new HashMap<>() {}
                                             ));
                                         })

@@ -21,7 +21,7 @@ function getChangesString(changesObject) {
 function createNotificationListener() {
     createEventListener(
         function(event) {
-            if (!event.properties.groups.includes("all") || event.type !== 'multicast' || event.properties.changes === undefined) {
+            if (event.type !== 'multicast' || event.properties.changes === undefined) {
                 return;
             }
             const recentChangesList = document.getElementById('recentChanges');
@@ -34,7 +34,7 @@ function createNotificationListener() {
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
-        })
+        }, "recentChanges")
 }
 
 async function fetchRecentChanges() {

@@ -15,6 +15,7 @@ import reactor.core.publisher.Sinks;
 import travelagency.data.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -43,8 +44,12 @@ public class TravelAgencyEvent {
                     "",
                     "TO offer modification",
                     "multicast",
+                    new ArrayList<>(){{
+                        add("recentChanges");
+                        add("offerDetails");
+                        add("offers");
+                    }},
                     new HashMap<>() {{
-                        put("groups", new String[]{"all"});
                         put("offerId", update.getId());
                         put("changes", update.getMap());
                     }}
@@ -81,8 +86,12 @@ public class TravelAgencyEvent {
                     "",
                     "TO flight modification",
                     "multicast",
+                    new ArrayList<>(){{
+                        add("recentChanges");
+                        add("offerDetails");
+                        add("flights");
+                    }},
                     new HashMap<>() {{
-                        put("groups", new String[]{"all"});
                         put("flightId", update.getId());
                         put("changes", update.getMap());
                     }}

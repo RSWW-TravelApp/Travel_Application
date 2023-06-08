@@ -1,10 +1,10 @@
-function createEventListener(onmessage, onerror, userInfoBox= true) {
+function createEventListener(onmessage, onerror, group, userInfoBox= true) {
     const currentUser = sessionStorage.getItem("user");
     if (!currentUser && userInfoBox) {
         createUserInfoBox();
         return;
     }
-    let eventSource = new EventSource(getEffectiveGatewayUri() + "/notifications/" + currentUser);
+    let eventSource = new EventSource(getEffectiveGatewayUri() + `/notifications/${group}/${currentUser}`);
     console.log("Connection opened");
     if (userInfoBox) {
         createUserInfoBox(function() {}, function() {eventSource.close(); console.log("Connection closed")});
