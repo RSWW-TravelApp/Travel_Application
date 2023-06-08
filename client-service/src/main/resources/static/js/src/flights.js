@@ -7,6 +7,36 @@ function createNotificationListener() {
         })
 }
 
+function createRecentChangesButton() {
+    const recentChangesDiv = document.getElementById('recentChanges');
+    const button = createElement('button', {
+        'name': 'recentChangesButton',
+        'id': 'recentChangesButton',
+        'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
+    });
+    button.onclick = function() {
+        window.location.href = "/recentChanges";
+    };
+    const postCard = squareFrame(0, 0, 100, 50, 2, 2, `Check changes\nin data`, {'class': 'svg-button', 'id': 'recentChangesPostCard'});
+    appendChildren(button, [postCard]);
+    appendChildren(recentChangesDiv, [button]);
+}
+
+function createStatisticsButton() {
+    const statisticsDiv = document.getElementById('statistics');
+    const button = createElement('button', {
+        'name': 'statisticsButton',
+        'id': 'statisticsButton',
+        'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
+    });
+    button.onclick = function() {
+        window.location.href = "/statistics";
+    };
+    const postCard = squareFrame(0, 0, 100, 50, 2, 2, `Check\nstatistics`, {'class': 'svg-button', 'id': 'statisticsPostCard'});
+    appendChildren(button, [postCard]);
+    appendChildren(statisticsDiv, [button]);
+}
+
 async function fetchDestinations(el) {
   var queryParams = window.location.search;
   const numberOfPeople = getSearchRequestParams(['available_seats'])['available_seats'];

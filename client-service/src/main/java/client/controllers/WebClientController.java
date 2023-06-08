@@ -30,4 +30,14 @@ public class WebClientController {
     public Mono<String> offerDetailsPage(@PathVariable String id) {
         return Mono.just("offerDetails");
     }
+
+    @RequestMapping(value = "/recentChanges", method = RequestMethod.GET)
+    public Mono<String> recentChangesPage() {
+        return Mono.just("recentChanges");
+    }
+
+    @RequestMapping(value = "/statistics", method = RequestMethod.GET)
+    public Mono<String> statisticsPage() {
+        return Mono.just("statistics");
+    }
 }

@@ -7,7 +7,6 @@ import java.util.Objects;
 public class CircularList<T> {
     private List<T> list = new ArrayList<T>();
     private final Integer capacity;
-    private Integer pointer = 0;
 
     public CircularList(Integer capacity) {
         this.capacity = capacity;
@@ -18,17 +17,9 @@ public class CircularList<T> {
     }
 
     public void add(T value) {
-        if (!Objects.equals(list.size(), capacity)) {
-            list.add(value);
-            pointer = list.size();
-            return;
+        list.add(0, value);
+        if (list.size() > capacity) {
+            list.remove(list.size() - 1);
         }
-        if (Objects.equals(pointer, capacity)) {
-            pointer = 0;
-        }
-        list.set(pointer, value);
-        pointer++;
     }
-
-
 }
