@@ -56,7 +56,7 @@ public class TravelAgencyEvent {
                 update.getPrice().orElse(null),
                 update.getAvailable().map(Boolean::parseBoolean).orElse(null),
                 "TO_Update_Offer_Event"
-        ))).then();
+        ))).log().then();
     }
 
     @Bean
@@ -71,7 +71,7 @@ public class TravelAgencyEvent {
                 update.getAvailable_seats().orElse(null),
                 update.getDate().map(LocalDate::parse).orElse(null),
                 "TO_Update_Flight_Event"
-        ))).then();
+        ))).log().then();
     }
 
     @Bean
@@ -142,7 +142,8 @@ public class TravelAgencyEvent {
                 .doOnNext(a -> {
                     System.out.println("Reservation of Resources, successful, pushing events.");
                 })
-                .map(event -> new RequirePaymentEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()));
+                .map(event -> new RequirePaymentEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
+                .log();
     }
 
     @Bean
@@ -181,7 +182,8 @@ public class TravelAgencyEvent {
                             "UnblockResourcesEvent")).switchIfEmpty(Mono.empty()
                     ).subscribe();
                 })
-                .map(event -> new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()));
+                .map(event -> new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
+                .log();
     }
 
     @Bean

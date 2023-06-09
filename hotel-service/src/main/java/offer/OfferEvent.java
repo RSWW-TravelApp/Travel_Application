@@ -23,7 +23,7 @@ public class OfferEvent {
 
     @Bean
     public Function<Flux<CreateOfferEvent>, Mono<Void>> createOfferHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(event -> System.out.println("Create id: " + event.getId())).flatMap(
                 event ->
                         offerService.createOffer(new Offer(event.getId(),
                                 event.getHotel_name(),
@@ -43,21 +43,23 @@ public class OfferEvent {
                                 Boolean.parseBoolean(event.getAvailable())
                         ))
                 )
+                .log()
                 .then();
     }
 
     @Bean
     public Function<Flux<DeleteOfferEvent>, Mono<Void>> deleteOfferHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(event -> System.out.println("Delete id: " + event.getId())).flatMap(
                 event ->
                         offerService.deleteByOfferId(event.getId())
                 )
+                .log()
                 .then();
     }
 
     @Bean
     public Function<Flux<UpdateOfferEvent>, Mono<Void>> updateOfferHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(event -> System.out.println("Update id: " + event.getId())).flatMap(
                         event ->
                                 offerService.updateOffer(event.getId(),
                                         event.getHotel_name().orElse(null),
@@ -77,6 +79,7 @@ public class OfferEvent {
                                         Boolean.parseBoolean(event.getAvailable().orElse(null)
                                 ))
                 )
+                .log()
                 .then();
     }
 }

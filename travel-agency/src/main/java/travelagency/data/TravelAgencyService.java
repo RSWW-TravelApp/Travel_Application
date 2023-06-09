@@ -126,7 +126,7 @@ public class TravelAgencyService {
         update.push("events", offerNested);
 
         String type = offerNested.getEventType();
-        System.out.println("Offer update "+type);
+        System.out.println("Offer update/create "+type);
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
         return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class).doOnNext(a -> {
             switch(type)
@@ -183,7 +183,7 @@ public class TravelAgencyService {
 
         query.addCriteria(Criteria
                 .where("flightId").is(flightNested.getFlightId()));
-        System.out.println("Flight update " + event_type);
+        System.out.println("Flight update/create " + event_type);
         Integer seats_relative = null;
         if(event_type != null){
 

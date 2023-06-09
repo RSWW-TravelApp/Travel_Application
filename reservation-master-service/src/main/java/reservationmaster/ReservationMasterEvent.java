@@ -45,7 +45,7 @@ public class ReservationMasterEvent {
                         reservationMasterService.createReservation(new Reservation(null,event.getUser_id(),event.getOfferId(), event.getFlight_id(), event.getPayment_id(), Boolean.parseBoolean(event.getIs_paid()),false,event.getSeatsNeeded(), event.getPrice(),false))
                 )
                 .map(event -> new BlockResourcesEvent(event.getPrice(),event.getUserId(),event.getOfferId(), event.getFlightId(), event.getPaymentId(),event.getReservationId(), event.getTravellers()))
-                .doOnNext(event -> System.out.println("Created reservation with ID" + event.getReservation_id()));
+                .doOnNext(event -> System.out.println("Created reservation with ID" + event.getReservation_id())).log();
     }
 
     @Bean
@@ -89,6 +89,7 @@ public class ReservationMasterEvent {
                         ));
 
                 })
+                .log()
                 .then();
     }
 
@@ -109,6 +110,7 @@ public class ReservationMasterEvent {
                 .doOnNext(event ->{
                     sink_refunds.tryEmitNext(new RefundPaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                 })
+                .log()
                 .then();
     }
 
@@ -132,6 +134,7 @@ public class ReservationMasterEvent {
                             }}
                     ));
                 })
+                .log()
                 .then();
     }
 

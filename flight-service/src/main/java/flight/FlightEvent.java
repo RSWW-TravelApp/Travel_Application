@@ -24,7 +24,7 @@ public class FlightEvent {
 
     @Bean
     public Function<Flux<CreateFlightEvent>, Mono<Void>> createFlightHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(event -> System.out.println("Create id: " + event.getId())).flatMap(
             event ->
                 flightService.createFlight(new Flight(event.getId(),
                     event.getDeparture_country(),
@@ -35,21 +35,23 @@ public class FlightEvent {
                     LocalDate.parse(event.getDate()))
                 )
         )
+        .log()
         .then();
     }
 
     @Bean
     public Function<Flux<DeleteFlightEvent>, Mono<Void>> deleteFlightHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(event -> System.out.println("Delete id: " + event.getId())).flatMap(
             event ->
                 flightService.deleteByFlightId(event.getId())
             )
+        .log()
         .then();
     }
 
     @Bean
     public Function<Flux<UpdateFlightEvent>, Mono<Void>> updateFlightHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(event -> System.out.println("Update id: " + event.getId())).flatMap(
             event ->
                 flightService.updateFlight(event.getId(),
                     event.getDeparture_country().orElse(null),
@@ -60,6 +62,7 @@ public class FlightEvent {
                     event.getDate().map(LocalDate::parse).orElse(null)
                 )
         )
+        .log()
         .then();
     }
 }
