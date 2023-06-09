@@ -13,7 +13,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import travelagency.data.FlightNested;
-import travelagency.data.Offer;
 import travelagency.data.OfferNested;
 import travelagency.data.TravelAgencyService;
 
