@@ -19,16 +19,16 @@ public class TourOperatorEvent {
     public Function<Flux<TONotificationEvent>, Mono<Void>> receivePaymentNotif() {
         return flux -> flux
                 .doOnNext(event -> System.out.println("notified of purchase. I earned: " + event.getPrice() + " From offer id: " + event.getOfferId()+ " bought by user: " + event.getUser_id()))
-                .then();
+                .log().then();
     }
 
     @PollableBean
     public Supplier<Flux<UpdateOfferEvent>> modifyOffer() {
-        return () -> Flux.just(new UpdateOfferEvent("64776c1a0878d17ae8fc6062",null,null,"China",null,null,null,null,null,null,null,null,null,null,null,null));
+        return () -> Flux.just(new UpdateOfferEvent("64776c1a0878d17ae8fc6062",null,null,"China",null,null,null,null,null,null,null,null,null,null,null,null, "true"));
     }
 
     @PollableBean
     public Supplier<Flux<UpdateFlightEvent>> modifyFLight() {
-        return () -> Flux.just(new UpdateFlightEvent("64776bee0878d17ae8fc6061","China",null,null,null,null,null));
+        return () -> Flux.just(new UpdateFlightEvent("64776bee0878d17ae8fc6061","China",null,null,null,null,null, "true"));
     }
 }

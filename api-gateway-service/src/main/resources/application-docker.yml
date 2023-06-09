@@ -10,7 +10,7 @@ spring:
         - id: offer-service
           uri: lb://offer-service
           predicates:
-            - Path=/offers,/offers/{offerId}
+            - Path=/offers,/offers/{offerId},/stats/offers
             - Method=GET
         - id: flight-service
           uri: lb://flight-service

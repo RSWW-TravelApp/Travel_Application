@@ -83,12 +83,12 @@ public class FlightWebLayerHandler {
 
         return updatedFlight
                 .flatMap(flight -> {
-                    String departure_country = flight.getDeparture_country().orElse(null);
-                    String departure_city = flight.getDeparture_city().orElse(null);
-                    String arrival_country = flight.getArrival_country().orElse(null);
-                    String arrival_city = flight.getArrival_city().orElse(null);
-                    Integer available_seats = flight.getAvailable_seats().orElse(null);
-                    LocalDate date = flight.getDate().orElse(null);
+                    String departure_country = flight.getDeparture_country();
+                    String departure_city = flight.getDeparture_city();
+                    String arrival_country = flight.getArrival_country();
+                    String arrival_city = flight.getArrival_city();
+                    Integer available_seats = flight.getAvailable_seats();
+                    LocalDate date = flight.getDate();
 
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)

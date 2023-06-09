@@ -1,10 +1,12 @@
 package flight.data;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,6 +14,8 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -19,12 +23,32 @@ public class FlightService {
 
     private final ReactiveMongoTemplate reactiveMongoTemplate;
     private final FlightRepository flightRepository;
-
+    private List<Pair<String,Integer>> currentDestinationsTop10 = new ArrayList<>();
     public FlightService(ReactiveMongoTemplate reactiveMongoTemplate, FlightRepository flightRepository) {
         this.reactiveMongoTemplate = reactiveMongoTemplate;
         this.flightRepository = flightRepository;
     }
+    public List<Pair<String,Integer>> getCurrentDestinationsTop10() {
+        return currentDestinationsTop10;
+    }
 
+    public String getCurrentDestinationsTop10String() {
+        return getString(currentDestinationsTop10);
+    }
+
+    public void setCurrentDestinationsTop10(List<Pair<String, Integer>> currentDestinationsTop10) {
+        this.currentDestinationsTop10 = currentDestinationsTop10;
+    }
+
+    @NotNull
+    private String getString(List<Pair<String,Integer>> list) {
+        StringBuilder temp = new StringBuilder();
+        for (int i = 0; i < list.size(); i++)
+        {
+            temp.append(i + 1).append(". ").append(list.get(i).getFirst()).append("\n");
+        }
+        return temp.toString();
+    }
     public Mono<Flight> createFlight(Flight flight){
         return flightRepository.save(flight);
     }

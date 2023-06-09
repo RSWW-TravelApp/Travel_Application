@@ -152,6 +152,10 @@ public class TravelAgencyService {
                     TravelAgencyEvent.sink_CQRS_offers_delete.tryEmitNext(new DeleteOfferEvent(a.getOfferId()));
                     break;
                 default:
+                    Boolean TO_generated = false;
+                    if(type.equals("TO_Update_Offer_Event"))
+                        TO_generated = true;
+
                     TravelAgencyEvent.sink_CQRS_offers_update.tryEmitNext(new UpdateOfferEvent(a.getOfferId(),
                             offerNested.getHotel_name().orElse(null),
                             offerNested.getImage().orElse(null),
@@ -167,7 +171,8 @@ public class TravelAgencyService {
                             offerNested.getMax_children_to_18().orElse(null),
                             offerNested.getMeals().orElse(null),
                             offerNested.getPrice().orElse(null),
-                            a.getAvailable().toString()));
+                            a.getAvailable().toString(),
+                            TO_generated.toString()));
             }
 
         });
@@ -222,13 +227,18 @@ public class TravelAgencyService {
                     TravelAgencyEvent.sink_CQRS_flights_delete.tryEmitNext(new DeleteFlightEvent(a.getFlightId()));
                     break;
                 default:
+                    Boolean TO_generated = false;
+                    if(event_type.equals("TO_Update_Flight_Event"))
+                        TO_generated = true;
+
                     TravelAgencyEvent.sink_CQRS_flights_update.tryEmitNext(new UpdateFlightEvent(a.getFlightId(),
                             flightNested.getDeparture_country().orElse(null),
                             flightNested.getDeparture_city().orElse(null),
                             flightNested.getDate().map(LocalDate::toString).orElse(null),
                             flightNested.getArrival_country().orElse(null),
                             flightNested.getArrival_city().orElse(null),
-                            a.getAvailable_seats()
+                            a.getAvailable_seats(),
+                            TO_generated.toString()
                     ));
             }
 
