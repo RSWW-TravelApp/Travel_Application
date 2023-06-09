@@ -1,13 +1,21 @@
+function getRandomId() {
+    return Math.random().toString(36).substring(2, 16);
+}
+
 function createEventListener(onmessage, onerror, userInfoBox= true) {
     const currentUser = sessionStorage.getItem("user");
+    const effectiveUserId = currentUser !== null ? currentUser : getRandomId();
+    let eventSource = new EventSource(getEffectiveGatewayUri() + "/notifications/" + effectiveUserId);
+    console.log(`Connection opened for ${effectiveUserId}`);
     if (!currentUser && userInfoBox) {
         createUserInfoBox();
-        return;
-    }
-    let eventSource = new EventSource(getEffectiveGatewayUri() + "/notifications/" + currentUser);
-    console.log("Connection opened");
-    if (userInfoBox) {
-        createUserInfoBox(function() {}, function() {eventSource.close(); console.log("Connection closed")});
+    } else if (userInfoBox) {
+        createUserInfoBox(function() {},
+            function() {
+                            eventSource.close();
+                            console.log("Connection closed");
+                            createEventListener(onmessage, onerror, userInfoBox);
+                        });
     }
     eventSource.onmessage = (event) => {
         const eventObj = JSON.parse(event.data);
