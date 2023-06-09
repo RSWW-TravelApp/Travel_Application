@@ -25,8 +25,8 @@ function updateOfferInfo(properties) {
     }
 
     const helperDict = {
-        'country': 'arrivalCountryInfo', 'city': 'arrivalCityInfo', 'hotel_name': 'hotelNameInfo',
-        'stars': 'Stars', 'start_date': 'dateInfo', 'end_date': 'endDateInfo', 'max_adults': 'adultsInfo',
+        'country': 'countryInfo', 'city': 'cityInfo', 'hotel_name': 'hotelNameInfo',
+        'stars': 'Stars', 'start_date': 'startDateInfo', 'end_date': 'endDateInfo', 'max_adults': 'adultsInfo',
         'max_children_to_3': 'ppl3plusInfo', 'max_children_to_10': 'ppl10plusInfo', 'max_children_to_18': 'ppl18plusInfo',
         'room_type': 'room_type', 'meals': 'meals', 'price': 'price', 'available': 'availability',
     }
