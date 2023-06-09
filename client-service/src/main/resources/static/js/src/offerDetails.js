@@ -1,4 +1,3 @@
-
 async function createReservationListener() {
     createEventListener(
         function(event) {
@@ -11,8 +10,10 @@ async function createReservationListener() {
             else if (event.type === "multicast" && event.properties['offerId'] === offerId && event.properties['changes'] === undefined) {
                 showNotification("Viewed offer has been\npurchased by " + event.userId).then();
             } else if (event.type === "multicast" && event.properties['offerId'] === offerId && event.properties['changes'] !== undefined) {
+                updateOfferInfo(event.properties);
                 showNotification("Picked hotel offer\nhas been modified");
             } else if (event.type === "multicast" && event.properties['flightId'] === flightId && event.properties['changes'] !== undefined) {
+                updateFlightInfo(event.properties);
                 showNotification("Picked flight offer\nhas been modified");
             }
             console.log(event.properties);

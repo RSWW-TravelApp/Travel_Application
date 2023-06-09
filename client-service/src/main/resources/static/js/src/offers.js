@@ -13,26 +13,6 @@ function updateOfferPostCard(properties) {
     textLines[2].innerHTML = `${hotel_name}`;
 }
 
-function updateFlightInfo(properties) {
-    const pickedFlightId = getSearchRequestParams(['flightId'])['flightId'];
-    const changedFlightId = properties.flightId;
-    const flightInfoDataList = document.getElementById(`flightData`).getElementsByTagName(`svg`);
-    if (changedFlightId !== pickedFlightId || changedFlightId === undefined) {
-        return;
-    }
-
-    const helperDict = {
-        'departure_country': 'departureCountryInfo', 'departure_city': 'departureCityInfo',
-        'arrival_country': 'arrivalCountryInfo', 'arrival_city': 'arrivalCityInfo', 'date': 'dateInfo'
-    }
-    for (const propertyKey in properties.changes) {
-        if (!propertyKey in helperDict) {
-            continue;
-        }
-        document.getElementById(helperDict[propertyKey]).getElementsByTagName('tspan')[0].textContent = properties.changes[propertyKey];
-    }
-}
-
 async function createNotificationListener() {
     createEventListener(
         function(event) {
