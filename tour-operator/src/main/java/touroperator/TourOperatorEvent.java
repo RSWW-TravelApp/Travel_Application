@@ -32,7 +32,7 @@ public class TourOperatorEvent {
             List<String> givenList = Arrays.asList("Kazakhstan", "Japan", "Tajikistan", "Russia", "England", "Arabia", "France", "Germany", "China", "Spain");
             String randomElement = givenList.get(rand.nextInt(givenList.size()));
             System.out.println(randomElement);
-            return Flux.just(new UpdateOfferEvent("a0b4c80eff0f11ed8dc418c04",null,null,randomElement,null,null,null,null,null,null,null,null,null,null,null,null));
+            return Flux.just(new UpdateOfferEvent("a14d3781ff0f11edab8a18c04",null,null,randomElement,null,null,null,null,null,null,null,null,null,null,null,null));
         };
     }
 

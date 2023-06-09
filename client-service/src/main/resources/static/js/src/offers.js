@@ -1,6 +1,52 @@
+function updateOfferPostCard(properties) {
+    const changedOfferId = properties.offerId;
+    const changedOfferPostCard = document.getElementById(changedOfferId);
+    if (changedOfferPostCard === null || changedOfferId === undefined) {
+        return;
+    }
+    const textLines = changedOfferPostCard.getElementsByTagName('tspan');
+    const country = properties.changes['country'] !== undefined ? properties.changes['country'] : changedOfferPostCard.getAttribute('country');
+    const city = properties.changes['city'] !== undefined ? properties.changes['city'] : changedOfferPostCard.getAttribute('city');
+    const hotel_name = properties.changes['hotel_name'] !== undefined ? properties.changes['hotel_name'] : changedOfferPostCard.getAttribute('hotel_name');
+    textLines[0].innerHTML = `${country}`;
+    textLines[1].innerHTML = `${city}`;
+    textLines[2].innerHTML = `${hotel_name}`;
+}
+
+function updateFlightInfo(properties) {
+    const pickedFlightId = getSearchRequestParams(['flightId'])['flightId'];
+    const changedFlightId = properties.flightId;
+    const flightInfoDataList = document.getElementById(`flightData`).getElementsByTagName(`svg`);
+    if (changedFlightId !== pickedFlightId || changedFlightId === undefined) {
+        return;
+    }
+
+    const helperDict = {
+        'departure_country': 'departureCountryInfo', 'departure_city': 'departureCityInfo',
+        'arrival_country': 'arrivalCountryInfo', 'arrival_city': 'arrivalCityInfo', 'date': 'dateInfo'
+    }
+    for (const propertyKey in properties.changes) {
+        if (!propertyKey in helperDict) {
+            continue;
+        }
+        document.getElementById(helperDict[propertyKey]).getElementsByTagName('tspan')[0].textContent = properties.changes[propertyKey];
+    }
+}
+
 async function createNotificationListener() {
     createEventListener(
         function(event) {
+            const properties = event.properties;
+            if (!properties.groups.includes("all") || event.type !== "multicast" || properties.changes === undefined) {
+                return;
+            }
+
+            if (properties.offerId !== undefined) {
+                updateOfferPostCard(properties);
+            } else if (properties.flightId !== undefined) {
+                updateFlightInfo(properties);
+                showNotification("Picked flight offer\nhas been modified");
+            }
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
@@ -15,7 +61,12 @@ async function fetchOffers(el) {
   .then(data => {
     const listOfOffers = createElement('div');
     data.forEach(item => {
-                const offerItem = createElement('div', {'id': item.offerId});
+                const offerItem = createElement('div', {
+                    'id': item.offerId,
+                    'country': item.country,
+                    'city': item.city,
+                    'hotel_name': item.hotel_name
+                });
                 const form = createElement('form', {'action': `/offers/${item.offerId}`});
                 const button = createElement('button', {
                     'name': 'flightId',
