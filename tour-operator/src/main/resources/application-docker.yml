@@ -26,3 +26,6 @@ spring:
     password: guest
     host: ${RABBITMQ_HOST_ADDRESS}
     port: 5672
+
+path-to-offer-ids-file: /application/offers_ids.txt
+path-to-flight-ids-file: /application/flights_ids.txt
