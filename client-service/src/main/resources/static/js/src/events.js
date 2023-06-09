@@ -4,7 +4,12 @@ function getRandomId() {
 
 function createEventListener(onmessage, onerror, userInfoBox= true) {
     const currentUser = sessionStorage.getItem("user");
-    const effectiveUserId = currentUser !== null ? currentUser : getRandomId();
+    let notLoggedUserId = sessionStorage.getItem("notLoggedUserId");
+    if (notLoggedUserId === null) {
+        notLoggedUserId = getRandomId();
+        sessionStorage.setItem("notLoggedUserId", notLoggedUserId);
+    }
+    const effectiveUserId = currentUser !== null ? currentUser : notLoggedUserId;
     console.log("Getting event source...");
     let eventSource = new EventSource(getEffectiveGatewayUri() + "/notifications/" + effectiveUserId);
     console.log(`Connection opened for ${effectiveUserId}`);
