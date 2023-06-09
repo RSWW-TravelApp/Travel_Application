@@ -3,12 +3,17 @@ function createReservationListener() {
     createEventListener(
         function(event) {
             const offerId = window.location.pathname.split("/").pop();
+            const flightId = getSearchRequestParams(['flightId'])['flightId'];
             if (event.userId === sessionStorage.getItem("user")) {
                 document.getElementById('eventLogs').textContent += event.message + "\r\n";
                 document.getElementById('actionResult').textContent = event.message;
             }
-            else if (event.type === "multicast" && event.properties['offerId'] === offerId) {
-                showNotification("Viewed offer has been \npurchased by " + event.userId).then();
+            else if (event.type === "multicast" && event.properties['offerId'] === offerId && event.properties['changes'] === undefined) {
+                showNotification("Viewed offer has been\npurchased by " + event.userId).then();
+            } else if (event.type === "multicast" && event.properties['offerId'] === offerId && event.properties['changes'] !== undefined) {
+                showNotification("Picked hotel offer\nhas been modified");
+            } else if (event.type === "multicast" && event.properties['flightId'] === flightId && event.properties['changes'] !== undefined) {
+                showNotification("Picked flight offer\nhas been modified");
             }
             console.log(event.properties);
             console.log(`[${event.type}] ${event.message}`);},
