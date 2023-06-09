@@ -18,7 +18,7 @@ function getChangesString(changesObject) {
     return txt;
 }
 
-function createNotificationListener() {
+async function createNotificationListener() {
     createEventListener(
         function(event) {
             if (!event.properties.groups.includes("all") || event.type !== 'multicast' || event.properties.changes === undefined) {

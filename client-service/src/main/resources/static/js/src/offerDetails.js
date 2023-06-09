@@ -1,5 +1,5 @@
 
-function createReservationListener() {
+async function createReservationListener() {
     createEventListener(
         function(event) {
             const offerId = window.location.pathname.split("/").pop();

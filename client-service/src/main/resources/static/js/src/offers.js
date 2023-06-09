@@ -1,4 +1,4 @@
-function createNotificationListener() {
+async function createNotificationListener() {
     createEventListener(
         function(event) {
             console.log(`[${event.type}] ${event.message}`);},
