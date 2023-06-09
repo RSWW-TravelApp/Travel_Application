@@ -17,6 +17,8 @@ import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import travelagency.TravelAgencyEvent;
 
+import java.time.LocalDate;
+
 @Service
 public class TravelAgencyService {
 
@@ -116,10 +118,15 @@ public class TravelAgencyService {
             query.addCriteria(Criteria
                     .where("available").is(!offerNested.getAvailable().get()));
         }
+        else if(offerNested.getEventType().equals("TO_Update_Offer_Event"))
+        {
+            offerNested.getAvailable().ifPresent(a -> update.set("available", a.toString()));
+        }
+
         update.push("events", offerNested);
 
         String type = offerNested.getEventType();
-        System.out.println(type);
+        System.out.println("Offer update "+type);
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
         return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class).doOnNext(a -> {
             switch(type)
@@ -147,20 +154,20 @@ public class TravelAgencyService {
                     break;
                 default:
                     TravelAgencyEvent.sink_CQRS_offers_update.tryEmitNext(new UpdateOfferEvent(a.getOfferId(),
-                            a.getHotel_name(),
-                            a.getImage(),
-                            a.getCountry(),
-                            a.getCity(),
-                            a.getStars(),
-                            a.getStart_date().toString(),
-                            a.getEnd_date().toString(),
-                            a.getRoom_type(),
-                            a.getMax_adults(),
-                            a.getMax_children_to_3(),
-                            a.getMax_children_to_10(),
-                            a.getMax_children_to_18(),
-                            a.getMeals(),
-                            a.getPrice(),
+                            offerNested.getHotel_name().orElse(null),
+                            offerNested.getImage().orElse(null),
+                            offerNested.getCountry().orElse(null),
+                            offerNested.getCity().orElse(null),
+                            offerNested.getStars().orElse(null),
+                            offerNested.getStart_date().map(LocalDate::toString).orElse(null),
+                            offerNested.getEnd_date().map(LocalDate::toString).orElse(null),
+                            offerNested.getRoom_type().orElse(null),
+                            offerNested.getMax_adults().orElse(null),
+                            offerNested.getMax_children_to_3().orElse(null),
+                            offerNested.getMax_children_to_10().orElse(null),
+                            offerNested.getMax_children_to_18().orElse(null),
+                            offerNested.getMeals().orElse(null),
+                            offerNested.getPrice().orElse(null),
                             a.getAvailable().toString()));
             }
 
@@ -176,27 +183,30 @@ public class TravelAgencyService {
 
         query.addCriteria(Criteria
                 .where("flightId").is(flightNested.getFlightId()));
-        System.out.println(event_type);
+        System.out.println("Flight update " + event_type);
         Integer seats_relative = null;
-        if(seats != null && event_type != null){
+        if(event_type != null){
 
-            if(event_type.equals("BlockResourcesEvent")){
+            if(seats != null && event_type.equals("BlockResourcesEvent")){
                 seats_relative = -seats;
                 query.addCriteria(Criteria
                         .where("available_seats").gte(seats));
                 update.inc("available_seats",-seats);
             }
-            else if(event_type.equals("UnblockResourcesEvent")){
+            else if(seats != null && event_type.equals("UnblockResourcesEvent")){
                 seats_relative = seats;
                 update.inc("available_seats",seats);
+            }
+            else if(event_type.equals("TO_Update_Flight_Event"))
+            {
+                flightNested.getAvailable_seats().ifPresent(a -> update.set("available_seats", a));
             }
         }
 
 
-        update.push("events", flightNested);
 
+        update.push("events", flightNested);
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
-        Integer finalSeats_relative = seats_relative;
         return reactiveMongoTemplate.findAndModify(query, update, options, Flight.class).doOnNext(a -> {
             switch(event_type)
             {
@@ -214,11 +224,11 @@ public class TravelAgencyService {
                     break;
                 default:
                     TravelAgencyEvent.sink_CQRS_flights_update.tryEmitNext(new UpdateFlightEvent(a.getFlightId(),
-                            a.getDeparture_country(),
-                            a.getDeparture_city(),
-                            a.getDate().toString(),
-                            a.getArrival_country(),
-                            a.getArrival_city(),
+                            flightNested.getDeparture_country().orElse(null),
+                            flightNested.getDeparture_city().orElse(null),
+                            flightNested.getDate().map(LocalDate::toString).orElse(null),
+                            flightNested.getArrival_country().orElse(null),
+                            flightNested.getArrival_city().orElse(null),
                             a.getAvailable_seats()
                     ));
             }
