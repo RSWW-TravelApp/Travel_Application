@@ -166,7 +166,8 @@ public class TravelAgencyEvent {
                 .doOnNext(a -> {
                     System.out.println("Reservation of Resources, successful, pushing events.");
                 })
-                .map(event -> new RequirePaymentEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()));
+                .map(event -> new RequirePaymentEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
+                .log("Blocking Resources");
     }
 
     @Bean
@@ -205,7 +206,8 @@ public class TravelAgencyEvent {
                             "UnblockResourcesEvent")).switchIfEmpty(Mono.empty()
                     ).subscribe();
                 })
-                .map(event -> new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()));
+                .map(event -> new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
+                .log("Unblocking Resources");
     }
 
     @Bean

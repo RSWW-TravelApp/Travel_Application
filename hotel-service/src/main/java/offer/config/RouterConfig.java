@@ -28,6 +28,16 @@ public class RouterConfig {
     }
 
     @Bean
+    RouterFunction<ServerResponse> getStatsRooms(OfferWebLayerHandler handler) {
+        return route(GET("/statistics/offers/rooms"), handler::getRoomStats);
+    }
+
+    @Bean
+    RouterFunction<ServerResponse> getStatsHotels(OfferWebLayerHandler handler) {
+        return route(GET("/statistics/offers/hotels"), handler::getHotelStats);
+    }
+
+    @Bean
     RouterFunction<ServerResponse> updateOfferById(OfferWebLayerHandler handler) {
         return route(PUT("/offers/{offerId}"), handler::updateOfferById);
     }

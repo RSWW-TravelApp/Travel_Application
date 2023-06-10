@@ -30,7 +30,7 @@ public class TourOperatorEvent {
     public Function<Flux<TONotificationEvent>, Mono<Void>> receivePaymentNotif() {
         return flux -> flux
                 .doOnNext(event -> System.out.println("notified of purchase. I earned: " + event.getPrice() + " From offer id: " + event.getOfferId()+ " bought by user: " + event.getUser_id()))
-                .then();
+                .log("Buying Offer Complete").then();
     }
 
     @PollableBean
@@ -131,7 +131,11 @@ public class TourOperatorEvent {
             }
 
             if(stars == null && start_date == null && end_date == null && room_type == null && max_adults == null && max_children_to_3 == null && max_children_to_10 == null & max_children_to_18 == null && meals == null && price == null && available == null) return null;
-            else return Flux.just(new UpdateOfferEvent(id,null,null,null,null, stars, start_date, end_date, room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals, price, available));
+            else {
+                UpdateOfferEvent event = new UpdateOfferEvent(id,null,null,null,null, stars, start_date, end_date, room_type, max_adults, max_children_to_3, max_children_to_10, max_children_to_18, meals, price, available);
+                event.setTO_generated("true");
+                return Flux.just(event);
+            }
         };
     }
 
@@ -170,7 +174,11 @@ public class TourOperatorEvent {
             else available_seats = null;
 
             if(available_seats == null && date == null) return null;
-            else return Flux.just(new UpdateFlightEvent(id,null,null,date,null,null,available_seats));
+            else {
+                UpdateFlightEvent event = new UpdateFlightEvent(id,null,null,date,null,null,available_seats);
+                event.setTO_generated("true");
+                return Flux.just();
+            }
         };
     }
 }
