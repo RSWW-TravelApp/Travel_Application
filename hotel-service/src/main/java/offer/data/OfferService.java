@@ -45,8 +45,28 @@ public class OfferService {
         return currentHotelsTop10;
     }
 
+    public List<String> getCurrentRoomsTop10Names()
+    {
+        return getNames(currentRoomsTop10);
+    }
+
+    public List<String> getCurrentHotelsTop10Names()
+    {
+        return getNames(currentHotelsTop10);
+    }
+
     public String getCurrentHotelsTop10String() {
         return getString(currentHotelsTop10);
+    }
+
+    private List<String> getNames(List<Pair<String, Integer>> list)
+    {
+        List<String> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++)
+        {
+            temp.add(list.get(i).getFirst());
+        }
+        return temp;
     }
 
     @NotNull

@@ -78,7 +78,7 @@ public class FlightEvent {
                                                 flightService.setCurrentDestinationsTop10(sortedRooms.subList(0, Math.min(topN, sortedRooms.size())));
                                                 //TODO SINK HERE
                                             }
-                                            System.out.println(destination);
+                                            System.out.println(destinationStats);
                                             System.out.println(flightService.getCurrentDestinationsTop10String());
                                         }
                                     }

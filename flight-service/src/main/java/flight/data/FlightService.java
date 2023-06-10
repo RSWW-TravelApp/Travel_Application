@@ -57,6 +57,20 @@ public class FlightService {
         return flightRepository.findAll()
                 .switchIfEmpty(Flux.empty());
     }
+    public List<String> getCurrentRoomsTop10Names()
+    {
+        return getNames(currentDestinationsTop10);
+    }
+
+    private List<String> getNames(List<Pair<String, Integer>> list)
+    {
+        List<String> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++)
+        {
+            temp.add(list.get(i).getFirst());
+        }
+        return temp;
+    }
 
     public Mono<Flight> findByFlightId(String flightId){
         return flightRepository.findByFlightId(flightId)

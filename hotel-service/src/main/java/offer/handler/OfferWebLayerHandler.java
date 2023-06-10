@@ -45,14 +45,20 @@ public class OfferWebLayerHandler {
                 )
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
-    public Mono<ServerResponse> getStats(ServerRequest request) {
+    public Mono<ServerResponse> getHotelStats(ServerRequest request) {
         return ServerResponse.ok()
-                .contentType(MediaType.TEXT_PLAIN)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                        Mono.just("TRENDING HOTELS: \n" +
-                                offerService.getCurrentHotelsTop10String() +
-                                "TRENDING ROOM TYPES: \n" +
-                                offerService.getCurrentRoomsTop10String()),
+                        Flux.fromIterable(offerService.getCurrentHotelsTop10Names()),
+                        String.class
+                );
+    }
+
+    public Mono<ServerResponse> getRoomStats(ServerRequest request) {
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        Flux.fromIterable(offerService.getCurrentRoomsTop10Names()),
                         String.class
                 );
     }

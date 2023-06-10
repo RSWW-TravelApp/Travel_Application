@@ -66,6 +66,14 @@ public class FlightWebLayerHandler {
                 .body(flights, Flight.class);
     }
 
+    public Mono<ServerResponse> getDestinationStats(ServerRequest request) {
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        Flux.fromIterable(flightService.getCurrentRoomsTop10Names()),
+                        String.class
+                );
+    }
     public Mono<ServerResponse> createFlight(ServerRequest request) {
         Mono<Flight> flight = request.bodyToMono(Flight.class);
 

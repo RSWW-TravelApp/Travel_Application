@@ -10,12 +10,12 @@ spring:
         - id: offer-service
           uri: lb://offer-service
           predicates:
-            - Path=/offers,/offers/{offerId},/stats/offers
+            - Path=/offers,/offers/{offerId},/statistics/offers/rooms,/statistics/offers/hotels
             - Method=GET
         - id: flight-service
           uri: lb://flight-service
           predicates:
-            - Path=/flights,/flights/{flightId}
+            - Path=/flights,/flights/{flightId},/statistics/flights/destinations
             - Method=GET
         - id: reservations-service
           uri: lb://reservation-service
