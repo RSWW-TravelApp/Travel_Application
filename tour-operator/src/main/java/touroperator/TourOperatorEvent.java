@@ -177,7 +177,7 @@ public class TourOperatorEvent {
             else {
                 UpdateFlightEvent event = new UpdateFlightEvent(id,null,null,date,null,null,available_seats);
                 event.setTO_generated("true");
-                return Flux.just();
+                return Flux.just(event);
             }
         };
     }
