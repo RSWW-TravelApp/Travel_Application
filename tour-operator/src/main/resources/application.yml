@@ -5,7 +5,7 @@ spring:
     name: tour-operator
   integration:
     poller:
-      fixedDelay: 60000
+      fixedDelay: 10000
   cloud:
     stream:
       function:
@@ -26,5 +26,5 @@ spring:
     host: 127.0.0.1
     port: 5672
 
-path-to-offer-ids-file: src/main/java/touroperator/offers_ids.txt
-path-to-flight-ids-file: src/main/java/touroperator/flights_ids.txt
+path-to-offer-ids-file: tour-operator/src/main/java/touroperator/offers_ids.txt
+path-to-flight-ids-file: tour-operator/src/main/java/touroperator/flights_ids.txt

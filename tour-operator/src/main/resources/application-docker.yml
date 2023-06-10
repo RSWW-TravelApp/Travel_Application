@@ -4,10 +4,11 @@ server:
 spring:
   application:
     name: tour-operator
+  integration:
+    poller:
+      fixedDelay: 10000
   cloud:
     stream:
-      poller:
-        fixed-delay: 10000
       function:
         definition: receivePaymentNotif; modifyOffer; modifyFLight
       bindings:

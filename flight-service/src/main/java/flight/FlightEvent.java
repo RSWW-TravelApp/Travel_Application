@@ -40,7 +40,7 @@ public class FlightEvent {
                     LocalDate.parse(event.getDate()))
                 )
         )
-        .log()
+        .log("Create Flight")
         .then();
     }
 
@@ -50,7 +50,7 @@ public class FlightEvent {
             event ->
                 flightService.deleteByFlightId(event.getId())
             )
-        .log()
+        .log("Delete Flight")
         .then();
     }
 
@@ -97,7 +97,7 @@ public class FlightEvent {
                     event.getDate().map(LocalDate::parse).orElse(null)
                 )
         )
-        .log()
+        .log("Update Flight")
         .then();
     }
 }

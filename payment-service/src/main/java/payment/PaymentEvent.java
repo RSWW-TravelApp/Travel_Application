@@ -35,7 +35,7 @@ public class PaymentEvent {
                     paymentService.findByPaymentId(event.getPayment_id())
                             .flatMap(payment ->  paymentService.updatePayment(payment.getPaymentId(),"reservationId", event.getReservation_id()))
                             .doOnNext(a -> System.out.println("Added reservation id to payment id: "+ a.getPaymentId()))
-                            .log()
+                            .log("Updating Reservation ID")
                             .subscribe();
                 })
 
@@ -69,7 +69,7 @@ public class PaymentEvent {
                                         new HashMap<>() {}
                                 ));
                             })
-                            .log()
+                            .log("Checking Payment")
                             .subscribe();
                 }).then();
     }
@@ -83,7 +83,7 @@ public class PaymentEvent {
                         .flatMap(payment ->  paymentService.updatePayment(payment.getPaymentId(),"isExpired",true))
                 .filter(Payment::getIsPaid)
                 .doOnNext(a -> System.out.println("Refunding Payment"+ a.getPaymentId()))
-                .log()
+                .log("Refunding Payment")
                 .then();
     }
 

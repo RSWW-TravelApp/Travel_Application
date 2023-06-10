@@ -36,7 +36,7 @@ public class ReservationEvent {
                                     event.getPaymentId(),
                                     Boolean.parseBoolean(event.getIsReserved()))
                                 ))
-                .log()
+                .log("Create Reservation")
                 .then();
     }
 
@@ -46,7 +46,7 @@ public class ReservationEvent {
                         event ->
                                 reservationService.deleteReservationById(event.getId())
                 )
-                .log()
+                .log("Delete Reservation")
                 .then();
     }
 
@@ -68,7 +68,7 @@ public class ReservationEvent {
                                 )
                 )
                 .doOnNext(a -> System.out.println("Update Done"))
-                .log()
+                .log("Update Reservation")
                 .then();
     }
 }

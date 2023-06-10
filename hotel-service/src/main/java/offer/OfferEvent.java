@@ -50,7 +50,7 @@ public class OfferEvent {
                                 Boolean.parseBoolean(event.getAvailable())
                         ))
                 )
-                .log()
+                .log("Create Offer")
                 .then();
     }
 
@@ -60,7 +60,7 @@ public class OfferEvent {
                 event ->
                         offerService.deleteByOfferId(event.getId())
                 )
-                .log()
+                .log("Delete Offer")
                 .then();
     }
 
@@ -131,7 +131,7 @@ public class OfferEvent {
                                         Boolean.parseBoolean(event.getAvailable().orElse(null)
                                 ))
                 )
-                .log()
+                .log("Update Offer")
                 .then();
     }
 }

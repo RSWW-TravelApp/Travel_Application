@@ -110,7 +110,7 @@ public class ReservationMasterService {
                 ReservationMasterEvent.sink_CQRS_update.tryEmitNext(new UpdateReservationEvent(reservationNested.getReservationId(),userId,offerId,flightId,isPaid,isCancelled,price,travellers,paymendId,isReserved));
         }
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
-        return reactiveMongoTemplate.findAndModify(query, update, options, Reservation.class).log();
+        return reactiveMongoTemplate.findAndModify(query, update, options, Reservation.class).log("Adding event");
     }
 
     public Flux<Reservation> getAllReservations(){

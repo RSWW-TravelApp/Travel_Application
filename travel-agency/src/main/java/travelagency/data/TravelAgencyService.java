@@ -130,34 +130,30 @@ public class TravelAgencyService {
         System.out.println("Offer update/create "+type);
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
         return reactiveMongoTemplate.findAndModify(query, update, options, Offer.class).doOnNext(a -> {
-            switch(type)
-            {
-                case ("CreateOffer"):
-                    TravelAgencyEvent.sink_CQRS_offers_create.tryEmitNext(new CreateOfferEvent(a.getOfferId(),
-                            a.getHotel_name(),
-                            a.getImage(),
-                            a.getCountry(),
-                            a.getCity(),
-                            a.getStars(),
-                            a.getStart_date().toString(),
-                            a.getEnd_date().toString(),
-                            a.getRoom_type(),
-                            a.getMax_adults(),
-                            a.getMax_children_to_3(),
-                            a.getMax_children_to_10(),
-                            a.getMax_children_to_18(),
-                            a.getMeals(),
-                            a.getPrice(),
-                            a.getAvailable().toString()));
-                    break;
-                case ("DeleteOffer"):
-                    TravelAgencyEvent.sink_CQRS_offers_delete.tryEmitNext(new DeleteOfferEvent(a.getOfferId()));
-                    break;
-                default:
+            switch (type) {
+                case ("CreateOffer") ->
+                        TravelAgencyEvent.sink_CQRS_offers_create.tryEmitNext(new CreateOfferEvent(a.getOfferId(),
+                                a.getHotel_name(),
+                                a.getImage(),
+                                a.getCountry(),
+                                a.getCity(),
+                                a.getStars(),
+                                a.getStart_date().toString(),
+                                a.getEnd_date().toString(),
+                                a.getRoom_type(),
+                                a.getMax_adults(),
+                                a.getMax_children_to_3(),
+                                a.getMax_children_to_10(),
+                                a.getMax_children_to_18(),
+                                a.getMeals(),
+                                a.getPrice(),
+                                a.getAvailable().toString()));
+                case ("DeleteOffer") ->
+                        TravelAgencyEvent.sink_CQRS_offers_delete.tryEmitNext(new DeleteOfferEvent(a.getOfferId()));
+                default -> {
                     Boolean TO_generated = false;
-                    if(type.equals("TO_Update_Offer_Event"))
+                    if (type.equals("TO_Update_Offer_Event"))
                         TO_generated = true;
-
                     TravelAgencyEvent.sink_CQRS_offers_update.tryEmitNext(new UpdateOfferEvent(a.getOfferId(),
                             offerNested.getHotel_name().orElse(null),
                             offerNested.getImage().orElse(null),
@@ -175,6 +171,7 @@ public class TravelAgencyService {
                             offerNested.getPrice().orElse(null),
                             a.getAvailable().toString(),
                             TO_generated.toString()));
+                }
             }
 
         });
@@ -214,9 +211,7 @@ public class TravelAgencyService {
         update.push("events", flightNested);
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
         return reactiveMongoTemplate.findAndModify(query, update, options, Flight.class).doOnNext(a -> {
-            Boolean TO_generated = false;
-            if(event_type.equals("TO_Update_Flight_Event"))
-                TO_generated = true;
+
             switch (Objects.requireNonNull(event_type)) {
                 case "CreateFlight" ->
                         TravelAgencyEvent.sink_CQRS_flights_create.tryEmitNext(new CreateFlightEvent(a.getFlightId(),
@@ -228,15 +223,20 @@ public class TravelAgencyService {
                                 a.getAvailable_seats()));
                 case "DeleteFlight" ->
                         TravelAgencyEvent.sink_CQRS_flights_delete.tryEmitNext(new DeleteFlightEvent(a.getFlightId()));
-                default -> TravelAgencyEvent.sink_CQRS_flights_update.tryEmitNext(new UpdateFlightEvent(a.getFlightId(),
-                        flightNested.getDeparture_country().orElse(null),
-                        flightNested.getDeparture_city().orElse(null),
-                        flightNested.getDate().map(LocalDate::toString).orElse(null),
-                        flightNested.getArrival_country().orElse(null),
-                        flightNested.getArrival_city().orElse(null),
-                        a.getAvailable_seats(),
-                        TO_generated.toString()
-                ));
+                default -> {
+                    Boolean TO_generated = false;
+                    if(event_type.equals("TO_Update_Flight_Event"))
+                        TO_generated = true;
+                    TravelAgencyEvent.sink_CQRS_flights_update.tryEmitNext(new UpdateFlightEvent(a.getFlightId(),
+                            flightNested.getDeparture_country().orElse(null),
+                            flightNested.getDeparture_city().orElse(null),
+                            flightNested.getDate().map(LocalDate::toString).orElse(null),
+                            flightNested.getArrival_country().orElse(null),
+                            flightNested.getArrival_city().orElse(null),
+                            a.getAvailable_seats(),
+                            TO_generated.toString()
+                    ));
+                }
             }
 
         });

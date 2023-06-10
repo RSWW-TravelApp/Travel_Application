@@ -45,7 +45,7 @@ public class TravelAgencyEvent {
                     new HashMap<>() {{
                         put("groups", new String[]{"all"});
                         put("offerId", update.getId());
-                        put("changes", update.getMap());
+                        //put("changes", update.getMap());
                     }}
             ));
 
@@ -81,7 +81,7 @@ public class TravelAgencyEvent {
                     new HashMap<>() {{
                         put("groups", new String[]{"all"});
                         put("flightId", update.getId());
-                        put("changes", update.getMap());
+                        //put("changes", update.getMap());
                     }}
             ));
 
@@ -167,7 +167,7 @@ public class TravelAgencyEvent {
                     System.out.println("Reservation of Resources, successful, pushing events.");
                 })
                 .map(event -> new RequirePaymentEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
-                .log();
+                .log("Blocking Resources");
     }
 
     @Bean
@@ -207,7 +207,7 @@ public class TravelAgencyEvent {
                     ).subscribe();
                 })
                 .map(event -> new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
-                .log();
+                .log("Unblocking Resources");
     }
 
     @Bean
