@@ -74,24 +74,6 @@ public class Flight {
     public LocalDate getDate() {
         return date;
     }
-    //    public Optional<String> getDeparture_country() {
-//        return Optional.ofNullable(departure_country);
-//    }
-//    public Optional<String> getDeparture_city() {
-//        return Optional.ofNullable(departure_city);
-//    }
-//    public Optional<String> getArrival_country() {
-//        return Optional.ofNullable(arrival_country);
-//    }
-//    public Optional<String> getArrival_city() {
-//        return Optional.ofNullable(arrival_city);
-//    }
-//    public Optional<Integer> getAvailable_seats() {
-//        return Optional.ofNullable(available_seats);
-//    }
-//    public Optional<LocalDate> getDate() {
-//        return Optional.ofNullable(date);
-//    }
 
     public void setFlightId(String flightId) { this.flightId = flightId; }
     public void setDeparture_country(String departure_country) {
