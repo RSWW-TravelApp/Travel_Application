@@ -35,7 +35,7 @@ function setFilterStartingValues() {
         const formElement = document.getElementById(key);
         if (formElement != null) {
             formElement.setAttribute('value', value);
-            if (formElement.nodeName == "SELECT") {
+            if (formElement.nodeName === "SELECT") {
                         const option = formElement.querySelector(`[value="${value}"]`);
                         option.setAttribute('selected', 'selected');
             }
@@ -50,7 +50,7 @@ function disableNullFields() {
         form.addEventListener('formdata', function(event) {
           let formData = event.formData;
           for (let [name, value] of Array.from(formData.entries())) {
-            if (value === '' || value == "null") formData.delete(name);
+            if (value === '' || value === "null") formData.delete(name);
           }
         });
       }
@@ -189,11 +189,10 @@ function createLoggedUserInfoBox(currentUser, loginCallback, logOutCallback) {
                                 });
     button.onclick = function() { createNotLoggedUserInfoBox(logOutCallback); };
     const postCard = squareFrame(0, 0, 100, 50, 2, 2, "Log out", {'class': 'svg-button', 'id': 'loginButtonSVG'});
-    const label = createLabel(`Current user: ${currentUser}`, {'style': 'font-size:1.3em;'}, 2);
+    const label = createLabel(`${currentUser}`, {'style': 'font-size:1.3em; position:relative; top:-15px'}, 2);
 
     appendChildren(button, [postCard]);
-    appendChildren(label, [button])
-    appendChildren(userInfoDiv, [label]);
+    appendChildren(userInfoDiv, [label, button]);
     appendChildren(parentDiv, [userInfoDiv]);
     if (loginCallback) {
         loginCallback();

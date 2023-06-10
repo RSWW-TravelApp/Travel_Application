@@ -3,6 +3,7 @@ package touroperator;
 import events.CQRS.flights.UpdateFlightEvent;
 import events.CQRS.offers.UpdateOfferEvent;
 import events.Saga.TONotificationEvent;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.function.context.PollableBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,10 @@ import java.util.function.Supplier;
 
 @Component
 public class TourOperatorEvent {
+    @Value("${path-to-offer-ids-file}")
+    private String pathToOffersIds;
+    @Value("${path-to-flight-ids-file}")
+    private String pathToFlightsIds;
     @Bean
     public Function<Flux<TONotificationEvent>, Mono<Void>> receivePaymentNotif() {
         return flux -> flux
@@ -50,7 +55,7 @@ public class TourOperatorEvent {
             List<String> listOfStrings;
             try {
                 listOfStrings
-                        = Files.readAllLines(Paths.get("/application/offers_ids.txt"));
+                        = Files.readAllLines(Paths.get(pathToOffersIds));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -143,7 +148,7 @@ public class TourOperatorEvent {
             List<String> listOfStrings;
             try {
                 listOfStrings
-                        = Files.readAllLines(Paths.get("/application/flights_ids.txt"));
+                        = Files.readAllLines(Paths.get(pathToFlightsIds));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

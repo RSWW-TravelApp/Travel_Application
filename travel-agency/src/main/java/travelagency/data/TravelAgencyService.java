@@ -18,6 +18,7 @@ import reactor.util.function.Tuple2;
 import travelagency.TravelAgencyEvent;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 public class TravelAgencyService {
@@ -208,29 +209,25 @@ public class TravelAgencyService {
         update.push("events", flightNested);
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
         return reactiveMongoTemplate.findAndModify(query, update, options, Flight.class).doOnNext(a -> {
-            switch(event_type)
-            {
-                case "CreateFlight":
-                    TravelAgencyEvent.sink_CQRS_flights_create.tryEmitNext(new CreateFlightEvent(a.getFlightId(),
-                            a.getDeparture_country(),
-                            a.getDeparture_city(),
-                            a.getDate().toString(),
-                            a.getArrival_country(),
-                            a.getArrival_city(),
-                            a.getAvailable_seats()));
-                    break;
-                case "DeleteFlight":
-                    TravelAgencyEvent.sink_CQRS_flights_delete.tryEmitNext(new DeleteFlightEvent(a.getFlightId()));
-                    break;
-                default:
-                    TravelAgencyEvent.sink_CQRS_flights_update.tryEmitNext(new UpdateFlightEvent(a.getFlightId(),
-                            flightNested.getDeparture_country().orElse(null),
-                            flightNested.getDeparture_city().orElse(null),
-                            flightNested.getDate().map(LocalDate::toString).orElse(null),
-                            flightNested.getArrival_country().orElse(null),
-                            flightNested.getArrival_city().orElse(null),
-                            a.getAvailable_seats()
-                    ));
+            switch (Objects.requireNonNull(event_type)) {
+                case "CreateFlight" ->
+                        TravelAgencyEvent.sink_CQRS_flights_create.tryEmitNext(new CreateFlightEvent(a.getFlightId(),
+                                a.getDeparture_country(),
+                                a.getDeparture_city(),
+                                a.getDate().toString(),
+                                a.getArrival_country(),
+                                a.getArrival_city(),
+                                a.getAvailable_seats()));
+                case "DeleteFlight" ->
+                        TravelAgencyEvent.sink_CQRS_flights_delete.tryEmitNext(new DeleteFlightEvent(a.getFlightId()));
+                default -> TravelAgencyEvent.sink_CQRS_flights_update.tryEmitNext(new UpdateFlightEvent(a.getFlightId(),
+                        flightNested.getDeparture_country().orElse(null),
+                        flightNested.getDeparture_city().orElse(null),
+                        flightNested.getDate().map(LocalDate::toString).orElse(null),
+                        flightNested.getArrival_country().orElse(null),
+                        flightNested.getArrival_city().orElse(null),
+                        a.getAvailable_seats()
+                ));
             }
 
         });

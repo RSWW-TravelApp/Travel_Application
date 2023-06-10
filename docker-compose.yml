@@ -24,6 +24,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      RABBITMQ_HOST_ADDRESS: rabbitmq
     healthcheck:
       test: ["CMD", "curl", "-f", "http://api-gateway:8080/offers"]
 
