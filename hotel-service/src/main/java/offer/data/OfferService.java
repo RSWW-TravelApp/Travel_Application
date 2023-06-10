@@ -1,7 +1,5 @@
 package offer.data;
 
-
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -16,7 +14,9 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 @Service
@@ -69,7 +69,6 @@ public class OfferService {
         return temp;
     }
 
-    @NotNull
     private String getString(List<Pair<String,Integer>> list) {
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i < list.size(); i++)

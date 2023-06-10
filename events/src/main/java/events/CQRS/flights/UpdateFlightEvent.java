@@ -12,10 +12,10 @@ public class UpdateFlightEvent{
     private final String arrival_city;
     private final Integer available_seats;
 
-    private final String TO_generated;
+    private String TO_generated;
 
     public UpdateFlightEvent(String id, String departure_country, String departure_city, String date,
-                             String arrival_country, String arrival_city, Integer available_seats, String TO_generated) {
+                             String arrival_country, String arrival_city, Integer available_seats){
         this.id = id;
         this.departure_country = departure_country;
         this.departure_city = departure_city;
@@ -23,9 +23,11 @@ public class UpdateFlightEvent{
         this.arrival_country = arrival_country;
         this.arrival_city = arrival_city;
         this.available_seats = available_seats;
+        this.TO_generated = "false";
+    }
+    public void setTO_generated(String TO_generated) {
         this.TO_generated = TO_generated;
     }
-
     public HashMap<String, Object> getMap() {
         return new HashMap<>() {{
             if (getDate().orElse(null) != null) {
