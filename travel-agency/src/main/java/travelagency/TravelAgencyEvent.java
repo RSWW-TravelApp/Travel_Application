@@ -36,8 +36,7 @@ public class TravelAgencyEvent {
     }
 
     @Bean
-    public Function<Flux<UpdateOfferEvent>, Mono<Void>> modifyOffer()
-    {
+    public Function<Flux<UpdateOfferEvent>, Mono<Void>> modifyOffer() {
         return event -> event.flatMap(update -> {
             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                     "",
@@ -73,10 +72,8 @@ public class TravelAgencyEvent {
     }
 
     @Bean
-    public Function<Flux<UpdateFlightEvent>, Mono<Void>> modifyFlight()
-    {
-        return event -> event.flatMap(update -> travelAgencyService.getFlight(update.getId()).flatMap(originalFlight -> {
-            HashMap<String, Map.Entry<Object, Object>> changes = originalFlight.getChanges(update);
+    public Function<Flux<UpdateFlightEvent>, Mono<Void>> modifyFlight() {
+        return event -> event.flatMap(update -> {
             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                     "",
                     "TO flight modification",
@@ -98,7 +95,7 @@ public class TravelAgencyEvent {
                     update.getDate().map(LocalDate::parse).orElse(null),
                     "TO_Update_Flight_Event"
             ));
-        })).log("Flight has been updated by Tour Operator").then();
+        }).log("Flight has been updated by Tour Operator").then();
     }
 
     @Bean
