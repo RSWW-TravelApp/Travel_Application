@@ -45,7 +45,7 @@ public class TravelAgencyEvent {
                     new HashMap<>() {{
                         put("groups", new String[]{"all"});
                         put("offerId", update.getId());
-                        //put("changes", update.getMap());
+                        put("changes", update.getMap());
                     }}
             ));
 
@@ -81,7 +81,7 @@ public class TravelAgencyEvent {
                     new HashMap<>() {{
                         put("groups", new String[]{"all"});
                         put("flightId", update.getId());
-                        //put("changes", update.getMap());
+                        put("changes", update.getMap());
                     }}
             ));
 

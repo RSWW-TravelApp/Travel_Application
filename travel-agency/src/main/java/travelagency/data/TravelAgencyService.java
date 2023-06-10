@@ -121,7 +121,7 @@ public class TravelAgencyService {
         }
         else if(offerNested.getEventType().equals("TO_Update_Offer_Event"))
         {
-            offerNested.getAvailable().ifPresent(a -> update.set("available", a.toString()));
+            offerNested.getAvailable().ifPresent(a -> update.set("available", a));
         }
 
         update.push("events", offerNested);
