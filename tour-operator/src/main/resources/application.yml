@@ -25,3 +25,6 @@ spring:
     password: guest
     host: 127.0.0.1
     port: 5672
+
+path-to-offer-ids-file: src/main/java/touroperator/offers_ids.txt
+path-to-flight-ids-file: src/main/java/touroperator/flights_ids.txt

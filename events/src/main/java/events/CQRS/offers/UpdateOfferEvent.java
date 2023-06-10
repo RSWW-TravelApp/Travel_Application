@@ -1,5 +1,6 @@
 package events.CQRS.offers;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 public class UpdateOfferEvent{
@@ -40,6 +41,56 @@ public class UpdateOfferEvent{
         this.price = price;
         this.available = available;
         this.TO_generated = TO_generated;
+    }
+
+    public HashMap<String, Object> getMap() {
+        return new HashMap<>() {{
+            if (getHotel_name().orElse(null) != null) {
+                put("hotel_name", getHotel_name());
+            }
+            if (getCity().orElse(null) != null) {
+                put("city", getCity());
+            }
+            if (getCountry().orElse(null) != null) {
+                put("country", getCountry());
+            }
+            if (getAvailable().orElse(null) != null) {
+                put("available", getAvailable());
+            }
+            if (getEnd_date().orElse(null) != null) {
+                put("end_date", getEnd_date());
+            }
+            if (getStart_date().orElse(null) != null) {
+                put("start_date", getStart_date());
+            }
+            if (getImage().orElse(null) != null) {
+                put("image", getImage());
+            }
+            if (getMax_adults().orElse(null) != null) {
+                put("max_adults", getMax_adults());
+            }
+            if (getMax_children_to_3().orElse(null) != null) {
+                put("max_children_to_3", getMax_children_to_3());
+            }
+            if (getMax_children_to_10().orElse(null) != null) {
+                put("max_children_to_10", getMax_children_to_10());
+            }
+            if (getMax_children_to_18().orElse(null) != null) {
+                put("max_children_to_18", getMax_children_to_18());
+            }
+            if (getMeals().orElse(null) != null) {
+                put("meals", getMeals());
+            }
+            if (getPrice().orElse(null) != null) {
+                put("price", getPrice());
+            }
+            if (getRoom_type().orElse(null) != null) {
+                put("room_type", getRoom_type());
+            }
+            if (getStars().orElse(null) != null) {
+                put("stars", getStars());
+            }
+        }};
     }
 
     public String getId() {

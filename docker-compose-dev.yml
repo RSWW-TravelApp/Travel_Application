@@ -15,6 +15,7 @@ services:
       - "17602:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      RABBITMQ_HOST_ADDRESS: rabbitmq
 
   client:
     container_name: RSWW_176003_client-service

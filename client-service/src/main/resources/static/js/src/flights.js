@@ -1,10 +1,57 @@
-function createNotificationListener() {
+async function createNotificationListener() {
     createEventListener(
         function(event) {
-            console.log(`[${event.type}] ${event.message}`);},
+                const properties = event.properties;
+                const changedFlightId = properties.flightId;
+                const changedFlightPostCard = document.getElementById(changedFlightId);
+                if (!properties.groups.includes("all") || event.type !== "multicast" || properties.changes === undefined
+                    || changedFlightPostCard === null || changedFlightId === null) {
+                    return;
+                }
+                const textLines = changedFlightPostCard.getElementsByTagName('tspan');
+                const departure_country = properties.changes['departure_country'] !== undefined ? properties.changes['departure_country'] : changedFlightPostCard.getAttribute('departure_country');
+                const departure_city = properties.changes['departure_city'] !== undefined ? properties.changes['departure_city'] : changedFlightPostCard.getAttribute('departure_city');
+                const arrival_country = properties.changes['arrival_country'] !== undefined ? properties.changes['arrival_country'] : changedFlightPostCard.getAttribute('arrival_country');
+                const arrival_city = properties.changes['arrival_city'] !== undefined ? properties.changes['arrival_city'] : changedFlightPostCard.getAttribute('arrival_city');
+                const available_seats = properties.changes['available_seats'] !== undefined ? properties.changes['available_seats'] : changedFlightPostCard.getAttribute('available_seats');
+                textLines[0].innerHTML = `From: ${departure_country}, ${departure_city}`;
+                textLines[1].innerHTML = `To: ${arrival_country}, ${arrival_city}`;
+                textLines[2].innerHTML = `Available seats: ${available_seats}`;
+                console.log(`[${event.type}] ${event.message}`);
+            },
         function(error) {
             console.log(error);
         })
+}
+
+function createRecentChangesButton() {
+    const recentChangesDiv = document.getElementById('recentChanges');
+    const button = createElement('button', {
+        'name': 'recentChangesButton',
+        'id': 'recentChangesButton',
+        'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
+    });
+    button.onclick = function() {
+        window.location.href = "/recentChanges";
+    };
+    const postCard = squareFrame(0, 0, 100, 50, 2, 2, `Check changes\nin data`, {'class': 'svg-button', 'id': 'recentChangesPostCard'});
+    appendChildren(button, [postCard]);
+    appendChildren(recentChangesDiv, [button]);
+}
+
+function createStatisticsButton() {
+    const statisticsDiv = document.getElementById('statistics');
+    const button = createElement('button', {
+        'name': 'statisticsButton',
+        'id': 'statisticsButton',
+        'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
+    });
+    button.onclick = function() {
+        window.location.href = "/statistics";
+    };
+    const postCard = squareFrame(0, 0, 100, 50, 2, 2, `Check\nstatistics`, {'class': 'svg-button', 'id': 'statisticsPostCard'});
+    appendChildren(button, [postCard]);
+    appendChildren(statisticsDiv, [button]);
 }
 
 async function fetchDestinations(el) {
@@ -18,7 +65,14 @@ async function fetchDestinations(el) {
   .then(data => {
     const listOfFlights = createElement('div');
     data.forEach(item => {
-                const flightItem = createElement('div', {'id': item.flightId})
+                const flightItem = createElement('div', {
+                    'id': item.flightId,
+                    'departure_country': item.departure_country,
+                    'departure_city': item.departure_city,
+                    'arrival_country': item.arrival_country,
+                    'arrival_city': item.arrival_city,
+                    'available_seats': item.available_seats
+                })
                 const form = createElement('form', {'action': '/offers'});
                 const button = createElement('button', {
                     'name': 'flightId',

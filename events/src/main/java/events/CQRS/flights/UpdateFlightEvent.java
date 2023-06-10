@@ -1,5 +1,6 @@
 package events.CQRS.flights;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 public class UpdateFlightEvent{
@@ -23,6 +24,29 @@ public class UpdateFlightEvent{
         this.arrival_city = arrival_city;
         this.available_seats = available_seats;
         this.TO_generated = TO_generated;
+    }
+
+    public HashMap<String, Object> getMap() {
+        return new HashMap<>() {{
+            if (getDate().orElse(null) != null) {
+                put("date", getDate());
+            }
+            if (getArrival_city().orElse(null) != null) {
+                put("arrival_city", getArrival_city());
+            }
+            if (getArrival_country().orElse(null) != null) {
+                put("arrival_country", getArrival_country());
+            }
+            if (getDeparture_city().orElse(null) != null) {
+                put("departure_city", getDeparture_city());
+            }
+            if (getDeparture_country().orElse(null) != null) {
+                put("departure_country", getDeparture_country());
+            }
+            if (getAvailable_seats().orElse(null) != null) {
+                put("available_seats", getAvailable_seats());
+            }
+        }};
     }
 
     public String getId() {
