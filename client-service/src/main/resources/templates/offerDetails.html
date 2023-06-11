@@ -28,13 +28,26 @@
       <div id="flightDataFrom"></div>
       <div id="flightDataTo"></div>
       <div id="flightDataDate"></div>
-    </div>
-    <div id="actionButtons">
-      <br>
-      <button onclick="reserveOffer()">Reserve offer</button><br>
-      <button onclick="purchaseOffer('random')">Purchase offer</button><br><br>
-      <button onclick="purchaseOffer('success')">Purchase offer success</button>
-      <button onclick="purchaseOffer('fail')">Purchase offer failure</button>
+    </div><br><br>
+    <div>
+      <form >
+        <p> Mark how many seats you want to book</p>
+        <label for="adults">Adults</label>
+        <input type="number" id="adults" name="max_adults" min="1" max="99">&nbsp&nbsp&nbsp&nbsp
+        <label for="children_to_3">Children up to 3 years</label>
+        <input type="number" id="children_to_3" name="max_children_to_3" min="0" max="99">&nbsp&nbsp&nbsp&nbsp
+        <label for="children_to_10">Children up to 10 years</label>
+        <input type="number" id="children_to_10" name="max_children_to_10" min="0" max="99">&nbsp&nbsp&nbsp&nbsp
+        <label for="children_to_18">Children up to 18 years</label>
+        <input type="number" id="children_to_18" name="max_children_to_18" min="0" max="99">&nbsp&nbsp&nbsp&nbsp<br>
+      </form>
+      <div id="actionButtons">
+        <br>
+        <button onclick="reserveOffer()">Reserve offer</button><br>
+        <button onclick="purchaseOffer('random')">Purchase offer</button><br><br>
+        <button onclick="purchaseOffer('success')">Purchase offer success</button>
+        <button onclick="purchaseOffer('fail')">Purchase offer failure</button>
+      </div>
     </div>
     <h2 id="actionResult"></h2>
     <text id="eventLogs" style="white-space: pre"></text>

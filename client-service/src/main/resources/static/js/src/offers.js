@@ -17,7 +17,8 @@ async function createNotificationListener() {
     createEventListener(
         function(event) {
             const properties = event.properties;
-            if (!properties.groups.includes("all") || event.type !== "multicast" || properties.changes === undefined) {
+            if (properties.groups === undefined || !properties.groups.includes("all") || event.type !== "multicast" ||
+                properties.changes === undefined) {
                 return;
             }
 
