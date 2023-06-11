@@ -40,4 +40,8 @@ public class WebClientController {
     public Mono<String> statisticsPage() {
         return Mono.just("statistics");
     }
+    @RequestMapping(value = "/reservations", method = RequestMethod.GET)
+    public Mono<String> userReservationsPage() {
+        return Mono.just("reservations");
+    }
 }
