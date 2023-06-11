@@ -1,21 +1,3 @@
-function getListEntry(item) {
-    const id = item.reservationId;
-    let txt = getChangesString(item)
-    const listEntry = createElement('li', {"style": "color: transparent"});
-    const postCard = squareFrame(0, 0, 400, 25 * (Object.keys(item).length + 1), 2, 2, txt,
-        {"id": `${id}`, "class": "svg-button", "style": "fill: lightgray"});
-    appendChildren(listEntry, [postCard])
-    return listEntry;
-}
-
-function getChangesString(changesObject) {
-    let txt = "";
-    for (let key in changesObject) {
-        txt += `${key}: ${changesObject[key]}\n`;
-    }
-    return txt;
-}
-
 async function fetchReservations(el) {
     const userId = sessionStorage.getItem("user");
     if (!userId) {
@@ -23,12 +5,31 @@ async function fetchReservations(el) {
         return;
     }
     await fetch(getEffectiveGatewayUri() + '/reservations/' + userId, {method: "GET"})
-        .then(response => checkResponse(response))
+        .then(response => response.json())
         .then(data => {
-            const listOfReservations = document.getElementById('reservations');
+            const listOfReservations = createElement('div');
             data.forEach(item => {
-                const listEntry = getListEntry(item);
-                appendChildren(listOfReservations, [listEntry])
+                const reservationItem = createElement('div', {
+                    'id': item.reservationId,
+                    'user_id': item.userId,
+                    'offer_id': item.offerId,
+                    'flight_id': item.flightId,
+                    'is_paid': item.isPaid,
+                    'is_cancelled': item.isCancelled
+                });
+                const form = createElement('form', {'action': `/offers/${item.offerId}?flightId=${item.flightId}`});
+                const button = createElement('button', {
+                    'name': 'offerId',
+                    'value': data.offerId,
+                    'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
+                });
+                const postCard = squareFrame(0, 0, 300, 100, 2, 2, txt = `Resrvation ID: ${item.reservationId}\nOffer ID: ${item.offerId}\nFlight ID: ${item.flightId}`, {'class': 'svg-button'});
+                appendChildren(button, [postCard]);
+                appendChildren(form, [button]);
+                appendChildren(reservationItem, [form]);
+                appendChildren(listOfReservations, [reservationItem]);
             });
-        })
+            const container = document.getElementById('container');
+            appendChildren(container, [listOfReservations]);
+        });
 }
