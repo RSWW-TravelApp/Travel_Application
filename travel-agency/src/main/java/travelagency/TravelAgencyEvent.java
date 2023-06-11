@@ -206,7 +206,12 @@ public class TravelAgencyEvent {
                             "UnblockResourcesEvent")).switchIfEmpty(Mono.empty()
                     ).subscribe();
                 })
-                .map(event -> new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
+                .map(event -> {
+                    RemoveReservationEvent remove = new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded());
+                    remove.setExpiry(event.getExpiry());
+                    return remove;
+                }
+                )
                 .log("Unblocking Resources");
     }
 

@@ -53,7 +53,7 @@ public class PaymentEvent {
                             .doOnNext(payment ->
                             {
                                 System.out.println("Payment failed. Rollback. ");
-                                sink_failed.tryEmitNext(new UnblockResourcesEvent(
+                                UnblockResourcesEvent unblocking = new UnblockResourcesEvent(
                                         event.getPrice(),
                                         event.getUser_id(),
                                         event.getOfferId(),
@@ -61,10 +61,12 @@ public class PaymentEvent {
                                         event.getPayment_id(),
                                         event.getReservation_id(),
                                         event.getSeatsNeeded()
-                                ));
+                                );
+                                unblocking.setExpiry(true);
+                                sink_failed.tryEmitNext(unblocking);
                                 sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                         event.getUser_id(),
-                                        "Purchase failed",
+                                        "Purchase window Expired",
                                         "unicast",
                                         new HashMap<>() {}
                                 ));
@@ -82,7 +84,15 @@ public class PaymentEvent {
                         .filter(a -> !a.getIsExpired())
                         .flatMap(payment ->  paymentService.updatePayment(payment.getPaymentId(),"isExpired",true))
                 .filter(Payment::getIsPaid)
-                .doOnNext(a -> System.out.println("Refunding Payment"+ a.getPaymentId()))
+                .doOnNext(a -> {
+                    System.out.println("Refunding Payment"+ a.getPaymentId());
+                    sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                            a.getUserId(),
+                            "Purchase Refunded!",
+                            "unicast",
+                            new HashMap<>() {}
+                    ));
+                })
                 .log("Refunding Payment")
                 .then();
     }
