@@ -209,6 +209,14 @@ public class PaymentWebLayerHandler {
                     switch (status) {
                         case "fail":
                             // 100% for fail
+                            paymentService.findByPaymentId(paymentId).doOnNext(event -> {
+                                PaymentEvent.sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                        event.getUserId(),
+                                        "Purchase failed",
+                                        "unicast",
+                                        new HashMap<>() {}
+                                ));
+                            }).subscribe();
                             return ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
                                                     .body(Mono.just("402,Payment cannot be processed"), String.class);
 
@@ -239,7 +247,15 @@ public class PaymentWebLayerHandler {
                             // 15% for fail
                             Random rand = new Random();
                             if (rand.nextInt(0, 100) < 15) {
-                                //return paymentService.updatePayment(paymentId, "isPaid", false)
+                                paymentService.findByPaymentId(paymentId).doOnNext(event -> {
+                                    PaymentEvent.sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                            event.getUserId(),
+                                            "Purchase failed",
+                                            "unicast",
+                                            new HashMap<>() {}
+                                    ));
+                                }).subscribe();
+
                                 return ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
                                                         .body(Mono.just("402,Payment cannot be processed"), String.class);
 

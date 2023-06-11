@@ -9,14 +9,17 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
 @CrossOrigin
 @RestController
 public class ApiGatewayController {
-    private Map<String, String> users = new HashMap<>();
-    private Map<String, Sinks.Many<ClientNotificationEvent>> SSEConnections = new HashMap<>();
-    private CircularList<HashMap<String, Object>> recentChanges = new CircularList<>(10);
+    private Map<String, String> users = new ConcurrentHashMap<>();
+    private Map<String, Sinks.Many<ClientNotificationEvent>> SSEConnections = new ConcurrentHashMap<>() {
+    };
+    private CircularList<ConcurrentHashMap<String, Object>> recentChanges = new CircularList<>(10);
 
     private void sendUnicastNotification(ClientNotificationEvent event) {
         Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(event.getUserId());
@@ -26,7 +29,8 @@ public class ApiGatewayController {
     }
 
     private void sendMulticastNotification(ClientNotificationEvent event) {
-        for (Sinks.Many<ClientNotificationEvent> connection : SSEConnections.values()) {
+        var temp = new ConcurrentHashMap<>(SSEConnections);
+        for (Sinks.Many<ClientNotificationEvent> connection : temp.values()) {
             connection.tryEmitNext(event);
         }
     }
@@ -44,7 +48,7 @@ public class ApiGatewayController {
 
                         HashMap<String, Object> properties = event.getProperties();
                         if (properties.containsKey("changes")) {
-                            recentChanges.add(event.getProperties());
+                            recentChanges.add(new ConcurrentHashMap<>(event.getProperties()));
                         }
                     }
                 })
@@ -125,7 +129,7 @@ public class ApiGatewayController {
     }
 
     @GetMapping(value = "/recentChanges")
-    public Flux<HashMap<String, Object>> getRecentChanges() {
+    public Flux<ConcurrentHashMap<String, Object>> getRecentChanges() {
         return Flux.fromIterable(recentChanges.get());
     }
 }

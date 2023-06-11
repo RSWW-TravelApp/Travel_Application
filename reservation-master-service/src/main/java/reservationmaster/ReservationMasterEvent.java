@@ -65,7 +65,7 @@ public class ReservationMasterEvent {
                             sink_validation.tryEmitNext(new ValidatePaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                     event.getUserId(),
-                                    "Reservation successful",
+                                    "Resource Blocking Successful",
                                     "unicast",
                                     new HashMap<>() {}
                             ));
@@ -79,7 +79,7 @@ public class ReservationMasterEvent {
                         sink_successful_reservations.tryEmitNext(new TONotificationEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                         sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                                 event.getUserId(),
-                                "Purchase successful",
+                                "Purchase and Reservation Complete!",
                                 "multicast",
                                 new HashMap<>() {{
                                     put("offerId", event.getOfferId());
@@ -95,16 +95,30 @@ public class ReservationMasterEvent {
     @Bean
     public Function<Flux<RemoveReservationEvent>, Mono<Void>> removeReservation() {
         return flux -> flux
+                .doOnNext(event -> {
+                    if(event.getExpiry()) {
+                        sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                event.getUser_id(),
+                                "Resources Unblocked", //TODO CAUSE OF FAIL
+                                "unicast",
+                                new HashMap<>() {
+                                }
+                        ));
+                    }
+                    else {
+                        sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                                event.getUser_id(),
+                                "Resource Blocking Unsuccessful", //TODO CAUSE OF FAIL
+                                "unicast",
+                                new HashMap<>() {
+                                }
+                        ));
+                    }
+                })
                 .flatMap(event -> reservationMasterService.addEvent(new ReservationNested(event.getReservation_id(),null, null, null,null,null,null, true,null,null,"CancelReservation")))
                 .doOnNext(event -> {
                     System.out.println("Cancelling reservation:" + event.getReservationId());
                     event.setReserved(false);
-                    sink_notify_client.tryEmitNext(new ClientNotificationEvent(
-                            event.getUserId(),
-                            "Reservation failed", //TODO CAUSE OF FAIL
-                            "unicast",
-                            new HashMap<>() {}
-                    ));
                 })
                 .doOnNext(event ->{
                     sink_refunds.tryEmitNext(new RefundPaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
@@ -125,7 +139,7 @@ public class ReservationMasterEvent {
                     sink_successful_reservations.tryEmitNext(new TONotificationEvent(event.getPrice(), event.getUserId(), event.getOfferId(), event.getFlightId(), event.getPaymentId(), event.getReservationId(), event.getTravellers()));
                     sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                             event.getUserId(),
-                            "Purchase successful",
+                            "Purchase and Reservation Complete!",
                             "multicast",
                             new HashMap<>() {{
                                 put("offerId", event.getOfferId());
