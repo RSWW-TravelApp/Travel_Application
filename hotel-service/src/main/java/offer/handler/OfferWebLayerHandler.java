@@ -11,6 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -47,19 +48,17 @@ public class OfferWebLayerHandler {
     }
     public Mono<ServerResponse> getHotelStats(ServerRequest request) {
         return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                        Flux.fromIterable(offerService.getCurrentHotelsTop10Names()),
-                        String.class
+                        Mono.just(offerService.getCurrentHotelsTop10Names()),
+                        List.class
                 );
     }
 
     public Mono<ServerResponse> getRoomStats(ServerRequest request) {
         return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                        Flux.fromIterable(offerService.getCurrentRoomsTop10Names()),
-                        String.class
+                        Mono.just(offerService.getCurrentRoomsTop10Names()),
+                        List.class
                 );
     }
 

@@ -26,7 +26,10 @@ async function createNotificationListener() {
                 updateOfferPostCard(properties);
             } else if (properties.flightId !== undefined) {
                 updateFlightInfo(properties);
-                showNotification("Picked flight offer\nhas been modified");
+                const pickedFlightId = getSearchRequestParams(['flightId'])['flightId'];
+                if (pickedFlightId === properties.flightId) {
+                    showNotification("Picked flight offer\nhas been modified");
+                }
             }
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {

@@ -11,7 +11,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: createFlightHandle;deleteFlightHandle;updateFlightHandle
+        definition: createFlightHandle;deleteFlightHandle;updateFlightHandle;notifyClient
       bindings:
         createFlightHandle-in-0:
           destination: cqrs_flights_create
@@ -21,6 +21,9 @@ spring:
           group: 0
         updateFlightHandle-in-0:
           destination: cqrs_flights_update
+          group: 0
+        notifyClient-out-0:
+          destination: notify_client
           group: 0
 
   rabbitmq:
