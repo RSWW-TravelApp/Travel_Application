@@ -40,15 +40,13 @@ function buildOfferInfo(offerItem) {
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.max_children_to_18}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "People up to 18"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.room_type}`, {'class': 'svg-button', 'id': 'room_type'}, "Room type"),
         labeledSquareProperty(0, 0, 20 + offerItem.meals.length * 10, 25, 2, 2, `${offerItem.meals}`, {'class': 'svg-button', 'id': 'meals'}, "Meals"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${Math.round(offerItem.price)}`, {'class': 'svg-button', 'id': 'price'}, "Price $"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.price.toFixed(2)}`, {'class': 'svg-button', 'id': 'price'}, "Price $"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.available}`, {'class': 'svg-button', 'id': 'availability'}, "Availability")
     ])
 }
 
 function buildSelectedFlightInfo(flightItem) {
     buildFlightInfo(flightItem)
-    appendChildren(document.getElementById('flightDataDate'), [
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${flightItem.available_seats}`, {'class': 'svg-button', 'id': 'availableSeats'}, "Available seats")])
     setAttributes(document.getElementById("flightId"), {'value': flightItem.flightId});
     setAttributes(document.getElementById("flightArrivalCountry"), {'value': flightItem.arrival_country});
     setAttributes(document.getElementById("flightDate"), {'value': flightItem.date});
