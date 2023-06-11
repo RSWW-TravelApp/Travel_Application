@@ -1,0 +1,3 @@
+offerId,hotel_name,image,stars,country,city,start_date,end_date,max_adults,max_children_to_3,max_children_to_10,max_children_to_18,meals,room_type,price,available
+647b36466d07a51c408a9145,LION ,https://www.coraltravel.pl/hotels_min/10/11851/6575/bułgaria-burgas-lion-wokol-basss.jpg,4,Bułgaria,Burgas,24/05/2023,04/07/2023,3,0,2,1,breakfastAndDinner,medium,26125,true
+647b36466d07a51c408a9146,LION ,https://www.coraltravel.pl/hotels_min/10/11851/6575/bułgaria-burgas-lion-wokol-basss.jpg,4,Bułgaria,Burgas,29/11/2023,08/01/2024,4,0,2,0,breakfastAndDinner,apartment,27500,true
