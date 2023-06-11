@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Offers</title>
+  <div id="notificationDiv" counter=0><ul id="notifications" style="position: fixed; right: 50%"></ul></div>
   <h1>Check out our offers</h1>
   <div hidden id="gateway-config"> [[${@environment.getProperty('api-gateway.uri')}]]</div>
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
@@ -11,6 +12,7 @@
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
 <body onload="fetchOffers(); fetchChosenFlight(); setFilterStartingValues(); disableNullFields(); createNotificationListener()">
+
 <main>
   <div id="userInfo" style="float:right"></div>
   <h3> Find a journey from your dreams!</h3>
@@ -77,6 +79,29 @@
       .svg-button:hover path{
           fill: lightgray;
       }
+  </style>
+  <style>
+    .svg-button:hover path{
+      fill: lightgray;
+    }
+    @keyframes fade {
+      0% {
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+    .notification {
+      opacity: 0;
+      animation: fade 5s ease-in-out;
+    }
   </style>
 </main>
 </body>

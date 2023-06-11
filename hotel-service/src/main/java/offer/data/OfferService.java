@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,7 +14,10 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 
 @Service
 public class OfferService {
@@ -21,9 +25,65 @@ public class OfferService {
     private OfferRepository offerRepository;
     private ReactiveMongoTemplate reactiveMongoTemplate;
 
+    private List<Pair<String,Integer>> currentRoomsTop10 = new ArrayList<>();
+    private List<Pair<String,Integer>> currentHotelsTop10 = new ArrayList<>();
+
     public OfferService(OfferRepository offerRepository, ReactiveMongoTemplate reactiveMongoTemplate) {
         this.offerRepository = offerRepository;
         this.reactiveMongoTemplate = reactiveMongoTemplate;
+    }
+
+    public List<Pair<String,Integer>> getCurrentRoomsTop10() {
+        return currentRoomsTop10;
+    }
+
+    public String getCurrentRoomsTop10String() {
+        return getString(currentRoomsTop10);
+    }
+
+    public List<Pair<String,Integer>> getCurrentHotelsTop10() {
+        return currentHotelsTop10;
+    }
+
+    public List<String> getCurrentRoomsTop10Names()
+    {
+        return getNames(currentRoomsTop10);
+    }
+
+    public List<String> getCurrentHotelsTop10Names()
+    {
+        return getNames(currentHotelsTop10);
+    }
+
+    public String getCurrentHotelsTop10String() {
+        return getString(currentHotelsTop10);
+    }
+
+    private List<String> getNames(List<Pair<String, Integer>> list)
+    {
+        List<String> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++)
+        {
+            temp.add(list.get(i).getFirst());
+        }
+        return temp;
+    }
+
+    private String getString(List<Pair<String,Integer>> list) {
+        StringBuilder temp = new StringBuilder();
+        for (int i = 0; i < list.size(); i++)
+        {
+            temp.append(i + 1).append(". ").append(list.get(i).getFirst()).append("\n");
+        }
+        return temp.toString();
+    }
+
+    public void setCurrentRoomsTop10(List<Pair<String, Integer>> currentRoomsTop10) {
+        this.currentRoomsTop10 = currentRoomsTop10;
+    }
+
+    public void setCurrentHotelsTop10(List<Pair<String, Integer>> currentHotelsTop10) {
+        this.currentHotelsTop10 = currentHotelsTop10;
     }
 
     public Mono<Offer> createOffer(Offer offer) {

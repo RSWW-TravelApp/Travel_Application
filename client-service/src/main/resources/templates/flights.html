@@ -10,10 +10,16 @@
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
-<body onload="fetchDestinations(); setFilterStartingValues(); disableNullFields(); createNotificationListener()">
+<body onload="fetchDestinations(); setFilterStartingValues(); disableNullFields(); createNotificationListener(); createRecentChangesButton(); createStatisticsButton()">
 <main>
   <div id="container">
-    <div id="userInfo" style="float:right"></div>
+    <div id="leftBarMenu" style="float:right">
+      <div id="userInfo" style="float:right"></div>
+      <ul style="list-style-type:none; position:relative; top:20px">
+        <li><div id="recentChanges" style="float:right"></div></li>
+        <li><div id="statistics" style="float:right"></div></li>
+      </ul>
+    </div>
     <div class="search_bar">
       <h3> Find a journey from your dreams!</h3>
       <div class="filter">

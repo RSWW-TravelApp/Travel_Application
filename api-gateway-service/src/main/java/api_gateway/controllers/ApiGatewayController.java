@@ -1,5 +1,6 @@
 package api_gateway.controllers;
 
+import api_gateway.statistics.CircularList;
 import events.Saga.ClientNotificationEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 public class ApiGatewayController {
     private Map<String, String> users = new HashMap<>();
     private Map<String, Sinks.Many<ClientNotificationEvent>> SSEConnections = new HashMap<>();
+    private CircularList<HashMap<String, Object>> recentChanges = new CircularList<>(10);
 
     private void sendUnicastNotification(ClientNotificationEvent event) {
         Sinks.Many<ClientNotificationEvent> connection = SSEConnections.get(event.getUserId());
@@ -39,6 +41,11 @@ public class ApiGatewayController {
                     }
                     else if (Objects.equals(event.getType(), "multicast")) {
                         sendMulticastNotification(event);
+
+                        HashMap<String, Object> properties = event.getProperties();
+                        if (properties.containsKey("changes")) {
+                            recentChanges.add(event.getProperties());
+                        }
                     }
                 })
                 .then();
@@ -115,5 +122,10 @@ public class ApiGatewayController {
         System.out.println(flightId);
         System.out.println(status);
         return Mono.just("Successful purchase");
+    }
+
+    @GetMapping(value = "/recentChanges")
+    public Flux<HashMap<String, Object>> getRecentChanges() {
+        return Flux.fromIterable(recentChanges.get());
     }
 }

@@ -35,15 +35,18 @@ public class ReservationEvent {
                                     event.getTravellers(),
                                     event.getPaymentId(),
                                     Boolean.parseBoolean(event.getIsReserved()))
-                                )).then();
+                                ))
+                .log("Create Reservation")
+                .then();
     }
 
     @Bean
     public Function<Flux<DeleteReservationEvent>, Mono<Void>> deleteReservationHandle() {
-        return flux -> flux.flatMap(
+        return flux -> flux.doOnNext(a -> System.out.println("Delete id: " + a.getId())).flatMap(
                         event ->
                                 reservationService.deleteReservationById(event.getId())
                 )
+                .log("Delete Reservation")
                 .then();
     }
 
@@ -65,6 +68,7 @@ public class ReservationEvent {
                                 )
                 )
                 .doOnNext(a -> System.out.println("Update Done"))
+                .log("Update Reservation")
                 .then();
     }
 }

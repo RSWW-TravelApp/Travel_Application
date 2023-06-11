@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-import travelagency.data.FlightNested;
-import travelagency.data.Offer;
-import travelagency.data.OfferNested;
-import travelagency.data.TravelAgencyService;
+import travelagency.data.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -30,9 +30,74 @@ public class TravelAgencyEvent {
     public static final Sinks.Many<CreateOfferEvent> sink_CQRS_offers_create = Sinks.many().multicast().onBackpressureBuffer();
     public static final Sinks.Many<DeleteOfferEvent> sink_CQRS_offers_delete = Sinks.many().multicast().onBackpressureBuffer();
     public static final Sinks.Many<UpdateOfferEvent> sink_CQRS_offers_update = Sinks.many().multicast().onBackpressureBuffer();
+    public static final Sinks.Many<ClientNotificationEvent> sink_notify_client = Sinks.many().multicast().onBackpressureBuffer();
     public TravelAgencyEvent(TravelAgencyService travelAgencyService) {
         this.travelAgencyService = travelAgencyService;
     }
+
+    @Bean
+    public Function<Flux<UpdateOfferEvent>, Mono<Void>> modifyOffer() {
+        return event -> event.flatMap(update -> {
+            sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                    "",
+                    "TO offer modification",
+                    "multicast",
+                    new HashMap<>() {{
+                        put("groups", new String[]{"all"});
+                        put("offerId", update.getId());
+                        put("changes", update.getMap());
+                    }}
+            ));
+
+            return travelAgencyService.addEventOffer(new OfferNested(
+                    update.getId(),
+                    update.getHotel_name().orElse(null),
+                    update.getImage().orElse(null),
+                    update.getCountry().orElse(null),
+                    update.getCity().orElse(null),
+                    update.getStars().orElse(null),
+                    update.getStart_date().map(LocalDate::parse).orElse(null),
+                    update.getEnd_date().map(LocalDate::parse).orElse(null),
+                    update.getRoom_type().orElse(null),
+                    update.getMax_adults().orElse(null),
+                    update.getMax_children_to_3().orElse(null),
+                    update.getMax_children_to_10().orElse(null),
+                    update.getMax_children_to_18().orElse(null),
+                    update.getMeals().orElse(null),
+                    update.getPrice().orElse(null),
+                    update.getAvailable().map(Boolean::parseBoolean).orElse(null),
+                    "TO_Update_Offer_Event"
+            ));
+        }).log("Offer has been updated by Tour Operator").then();
+    }
+
+    @Bean
+    public Function<Flux<UpdateFlightEvent>, Mono<Void>> modifyFlight() {
+        return event -> event.flatMap(update -> {
+            sink_notify_client.tryEmitNext(new ClientNotificationEvent(
+                    "",
+                    "TO flight modification",
+                    "multicast",
+                    new HashMap<>() {{
+                        put("groups", new String[]{"all"});
+                        put("flightId", update.getId());
+                        put("changes", update.getMap());
+                    }}
+            ));
+
+            return travelAgencyService.addEventFlight(new FlightNested(
+                    update.getId(),
+                    update.getDeparture_country().orElse(null),
+                    update.getDeparture_city().orElse(null),
+                    update.getArrival_country().orElse(null),
+                    update.getArrival_city().orElse(null),
+                    update.getAvailable_seats().orElse(null),
+                    update.getDate().map(LocalDate::parse).orElse(null),
+                    "TO_Update_Flight_Event"
+            ));
+        }).log("Flight has been updated by Tour Operator").then();
+    }
+
     @Bean
     public Function<Flux<BlockResourcesEvent>, Flux<RequirePaymentEvent>> blockResources() {
         return flux -> flux
@@ -101,7 +166,8 @@ public class TravelAgencyEvent {
                 .doOnNext(a -> {
                     System.out.println("Reservation of Resources, successful, pushing events.");
                 })
-                .map(event -> new RequirePaymentEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()));
+                .map(event -> new RequirePaymentEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
+                .log("Blocking Resources");
     }
 
     @Bean
@@ -140,7 +206,8 @@ public class TravelAgencyEvent {
                             "UnblockResourcesEvent")).switchIfEmpty(Mono.empty()
                     ).subscribe();
                 })
-                .map(event -> new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()));
+                .map(event -> new RemoveReservationEvent(event.getPrice(),event.getUser_id(), event.getOfferId(),event.getFlight_id(),event.getPayment_id(),event.getReservation_id(),event.getSeatsNeeded()))
+                .log("Unblocking Resources");
     }
 
     @Bean
@@ -170,6 +237,10 @@ public class TravelAgencyEvent {
     @Bean
     public Supplier<Flux<UpdateOfferEvent>> updateOfferCQRSHandle() {
         return sink_CQRS_offers_update::asFlux;
+    }
+    @Bean
+    public Supplier<Flux<ClientNotificationEvent>> notifyClient() {
+        return sink_notify_client::asFlux;
     }
 
 }

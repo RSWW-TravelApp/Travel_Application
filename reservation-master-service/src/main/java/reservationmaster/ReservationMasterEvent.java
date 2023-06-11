@@ -16,7 +16,6 @@ import reservationmaster.data.ReservationNested;
 import java.util.HashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.Map;
 
 
 @Component
@@ -45,7 +44,7 @@ public class ReservationMasterEvent {
                         reservationMasterService.createReservation(new Reservation(null,event.getUser_id(),event.getOfferId(), event.getFlight_id(), event.getPayment_id(), Boolean.parseBoolean(event.getIs_paid()),false,event.getSeatsNeeded(), event.getPrice(),false))
                 )
                 .map(event -> new BlockResourcesEvent(event.getPrice(),event.getUserId(),event.getOfferId(), event.getFlightId(), event.getPaymentId(),event.getReservationId(), event.getTravellers()))
-                .doOnNext(event -> System.out.println("Created reservation with ID" + event.getReservation_id()));
+                .doOnNext(event -> System.out.println("Created reservation with ID" + event.getReservation_id())).log("Make Reservation");
     }
 
     @Bean
@@ -89,6 +88,7 @@ public class ReservationMasterEvent {
                         ));
 
                 })
+                .log("Confirming Reservation")
                 .then();
     }
 
@@ -109,6 +109,7 @@ public class ReservationMasterEvent {
                 .doOnNext(event ->{
                     sink_refunds.tryEmitNext(new RefundPaymentEvent(event.getPrice(),event.getUserId(),event.getOfferId(),event.getFlightId(),event.getPaymentId(),event.getReservationId(),event.getTravellers()));
                 })
+                .log("Removing Reservation")
                 .then();
     }
 
@@ -132,6 +133,7 @@ public class ReservationMasterEvent {
                             }}
                     ));
                 })
+                .log("Receiving Payment")
                 .then();
     }
 

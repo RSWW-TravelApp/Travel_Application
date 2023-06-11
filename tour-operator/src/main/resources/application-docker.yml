@@ -6,11 +6,19 @@ spring:
     name: tour-operator
   cloud:
     stream:
+      poller:
+        fixed-delay: 10000
       function:
-        definition: receivePaymentNotif
+        definition: receivePaymentNotif; modifyOffer; modifyFLight
       bindings:
         receivePaymentNotif-in-0:
           destination: to_notif_purchases
+          group: 0
+        modifyOffer-out-0:
+          destination: to_offer_modifications
+          group: 0
+        modifyFLight-out-0:
+          destination: to_flight_modifications
           group: 0
 
   rabbitmq:
@@ -18,3 +26,6 @@ spring:
     password: guest
     host: ${RABBITMQ_HOST_ADDRESS}
     port: 5672
+
+path-to-offer-ids-file: /application/offers_ids.txt
+path-to-flight-ids-file: /application/flights_ids.txt
