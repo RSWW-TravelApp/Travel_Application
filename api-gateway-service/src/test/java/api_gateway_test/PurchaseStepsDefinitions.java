@@ -88,6 +88,14 @@ public class PurchaseStepsDefinitions {
             // Assert number of flights found equals to number of buttons with flightId
             assertEquals(number, webFlightsListLength);
 
+            String targetValue = "647b30916d07a5770ab5ab35";
+            for (WebElement element : webFlightsList) {
+                String value = element.getAttribute("value");
+                if (value.equals(targetValue)) {
+                    webFlightsList.remove(element);
+                }
+            }
+
             if (webFlightsListLength > 0){
                 // Choose random flight from the list of all available flights on the website
                 int randomIndex = random.nextInt(webFlightsList.size());
@@ -103,6 +111,43 @@ public class PurchaseStepsDefinitions {
                 return;
             }
         } // while
+    }
+
+    @When("^User choose specific flight$")
+    public void choose_specific_flight() throws Throwable {
+        TimeUnit.SECONDS.sleep(3);
+
+        String flightsCounter = webDriver.findElement(By.id("flightsCounter")).getText();
+        int spaceIndex = flightsCounter.indexOf(" ");
+        String numberString = flightsCounter.substring(0, spaceIndex);
+        int number = Integer.parseInt(numberString);
+        System.out.println(number + " flights found");
+
+        String flightId = "647b30916d07a5770ab5ab35";
+
+        List<WebElement> webFlightsList = webDriver.findElements(By.xpath("//button[@name='flightId']"));
+        int webFlightsListLength = webFlightsList.size();
+        System.out.println("Number of available flights: " + webFlightsListLength);
+
+        // Assert number of flights found equals to number of buttons with flightId
+        assertEquals(number, webFlightsListLength);
+
+        if (webFlightsListLength > 0){
+            webDriver.findElement(By.xpath("//button[@value='" + flightId + "']")).click();
+        } else{
+            System.out.println("No flight with such id exists: " + flightId);
+            TimeUnit.SECONDS.sleep(5);
+            webDriver.close();
+            return;
+        }
+    }
+
+    @And("^User enter Adults number$")
+    public void enter_adults_number() throws Throwable {
+        WebElement maxAdultsInput = webDriver.findElement(By.id("max_adults"));
+        maxAdultsInput.clear();
+        maxAdultsInput.sendKeys("3");
+        webDriver.findElement(By.cssSelector("form#form button")).click();
     }
 
     @And("^User enter Room type and Stars$")
@@ -131,6 +176,7 @@ public class PurchaseStepsDefinitions {
             System.out.println(number + " offers found");
 
             List<WebElement> webOffersList = webDriver.findElements(By.xpath("//button[@name='flightId']"));
+
             int webOffersListLength = webOffersList.size();
             System.out.println("Number of available offers: " + webOffersListLength);
 
@@ -167,6 +213,7 @@ public class PurchaseStepsDefinitions {
         TimeUnit.SECONDS.sleep(2);
         Alert alert = webDriver.switchTo().alert();
         alert.accept();
+        TimeUnit.SECONDS.sleep(5);
     }
 
     @Then("^User Purchase the Offer after 1 min and fail$")
@@ -184,6 +231,7 @@ public class PurchaseStepsDefinitions {
         TimeUnit.SECONDS.sleep(2);
         Alert alert = webDriver.switchTo().alert();
         alert.accept();
+        TimeUnit.SECONDS.sleep(5);
     }
 
     @Then("^User failed to Purchase the Offer$")
@@ -194,9 +242,23 @@ public class PurchaseStepsDefinitions {
         alert.accept();
     }
 
+    @Then("^User tries to Purchase the Offer again$")
+    public void try_again_to_purchase_the_offer() throws Throwable {
+        webDriver.findElement(By.cssSelector("button[onclick*='purchaseOffer(\\'success\\')']")).click();
+        TimeUnit.SECONDS.sleep(2);
+        Alert alert = webDriver.switchTo().alert();
+        alert.accept();
+        TimeUnit.SECONDS.sleep(5);
+    }
 
-
-
+    @Then("^User failed to Purchase the Offer because of lack of available seats in a plane$")
+    public void try_to_purchase_when_lack_seats() throws Throwable{
+        webDriver.findElement(By.cssSelector("button[onclick*='purchaseOffer(\\'success\\')']")).click();
+        TimeUnit.SECONDS.sleep(2);
+        Alert alert = webDriver.switchTo().alert();
+        alert.accept();
+        TimeUnit.SECONDS.sleep(5);
+    }
 
 
 }
