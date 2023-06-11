@@ -19,11 +19,11 @@ async function fetchReservations(el) {
                 });
                 const form = createElement('form', {'action': `/offers/${item.offerId}?flightId=${item.flightId}`});
                 const button = createElement('button', {
-                    'name': 'offerId',
-                    'value': data.offerId,
+                    'name': 'flightId',
+                    'value': item.flightId,
                     'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
                 });
-                const postCard = squareFrame(0, 0, 300, 100, 2, 2, txt = `Resrvation ID: ${item.reservationId}\nOffer ID: ${item.offerId}\nFlight ID: ${item.flightId}`, {'class': 'svg-button'});
+                const postCard = squareFrame(0, 0, 300, 100, 2, 2, txt = `Resrvation ID: ${item.reservationId}\nOffer ID: ${item.offerId}\nFlight ID: ${item.flightId}\nPaid: ${item.isPaid}\nCancelled: ${item.isCancelled}`, {'class': 'svg-button'});
                 appendChildren(button, [postCard]);
                 appendChildren(form, [button]);
                 appendChildren(reservationItem, [form]);
