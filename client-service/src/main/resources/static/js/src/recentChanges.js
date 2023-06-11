@@ -1,10 +1,10 @@
 function getListEntry(item) {
     const id = item.flightId !== undefined ? item.flightId : item.offerId;
     let txt = item.flightId !== undefined ?
-        `flight with id ${id} changed:\n${getChangesString(item.changes)}` :
-        `offer with id ${id} changed:\n${getChangesString(item.changes)}`
+        `${item.timestamp}\nflight with id ${id} changed:\n${getChangesString(item.changes)}` :
+        `${item.timestamp}\noffer with id ${id} changed:\n${getChangesString(item.changes)}`
     const listEntry = createElement('li', {"style": "color: transparent"});
-    const postCard = squareFrame(0, 0, 400, 25 * (Object.keys(item.changes).length + 1), 2, 2, txt,
+    const postCard = squareFrame(0, 0, 400, 25 * (Object.keys(item.changes).length + 2), 2, 2, txt,
         {"id": `${id}`, "class": "svg-button", "style": "fill: lightgray"});
     appendChildren(listEntry, [postCard])
     return listEntry;
