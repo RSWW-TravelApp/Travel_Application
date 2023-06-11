@@ -47,6 +47,12 @@ async function fetchOffers(el) {
                     'city': item.city,
                     'hotel_name': item.hotel_name
                 });
+                const img = createElement('img',{
+                   'src': item.image,
+                    'width': 100,
+                    'height': 100
+                });
+
                 const form = createElement('form', {'action': `/offers/${item.offerId}`});
                 const button = createElement('button', {
                     'name': 'flightId',
@@ -55,7 +61,7 @@ async function fetchOffers(el) {
                 });
                 const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`${item.country}\n${item.city}\n${item.hotel_name}`, {'class': 'svg-button'});
 
-                appendChildren(button, [postCard]);
+                appendChildren(button, [postCard,img]);
                 appendChildren(form, [button]);
                 appendChildren(offerItem, [form]);
                 appendChildren(listOfOffers, [offerItem]);
