@@ -115,8 +115,8 @@ async function reserveOffer() {
         showAlert("You cannot reserve offer for 0 people");
         return;
     }
-    const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
-    const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
+    const availableSeats = Number(document.getElementById('flightCapacity').getElementsByTagName('tspan')[0].textContent)
+    const price = Number(document.getElementById('price-label').getElementsByTagName('tspan')[0].textContent)
     if (isNaN(availableSeats) || isNaN(price)) {
         showAlert("Specified offer or flight does not exist");
         return;
@@ -171,8 +171,8 @@ async function purchaseOffer(status) {
         showAlert("You cannot purchase offer for 0 people");
         return;
     }
-    const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
-    const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
+    const availableSeats = Number(document.getElementById('flightCapacity').getElementsByTagName('tspan')[0].textContent)
+    const price = Number(document.getElementById('price-label').getElementsByTagName('tspan')[0].textContent)
     if (isNaN(availableSeats) || isNaN(price)) {
         showAlert("Specified offer or flight does not exist");
         return;
