@@ -129,17 +129,19 @@ public class OfferService {
         }
         if(start_date != null){
             LocalDateTime startOfDay = start_date.atStartOfDay();
-            query.addCriteria(Criteria.where("start_date").gte(startOfDay));
+            LocalDateTime endOfDay = start_date.atTime(LocalTime.MAX);
+            query.addCriteria(Criteria.where("start_date").gte(startOfDay).lt(endOfDay));
         }
         if(end_date != null){
+            LocalDateTime startOfDay = end_date.atStartOfDay();
             LocalDateTime endOfDay = end_date.atTime(LocalTime.MAX);
-            query.addCriteria(Criteria.where("end_date").lte(endOfDay));
+            query.addCriteria(Criteria.where("end_date").gte(startOfDay).lt(endOfDay));
         }
         if(room_type != null){
             query.addCriteria(Criteria.where("room_type").is(room_type));
         }
         if(stars != null){
-            query.addCriteria(Criteria.where("stars").gte(stars));
+            query.addCriteria(Criteria.where("stars").is(stars));
         }
         if(max_adults != null){
             query.addCriteria(Criteria.where("max_adults").gte(max_adults));

@@ -37,8 +37,8 @@ function buildOfferInfo(offerItem) {
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.max_children_to_10}`, {'class': 'svg-button', 'id': 'ppl10plusInfo'}, "People up to 10"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.max_children_to_18}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "People up to 18"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.room_type}`, {'class': 'svg-button', 'id': 'room_type'}, "Room type"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.meals}`, {'class': 'svg-button', 'id': 'meals'}, "Meals"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.price}`, {'class': 'svg-button', 'id': 'price'}, "Price"),
+        labeledSquareProperty(0, 0, 20 + offerItem.meals.length * 10, 25, 2, 2, `${offerItem.meals}`, {'class': 'svg-button', 'id': 'meals'}, "Meals"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.price}$`, {'class': 'svg-button', 'id': 'price'}, "Price"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.available}`, {'class': 'svg-button', 'id': 'availability'}, "Availability")
     ])
 }
