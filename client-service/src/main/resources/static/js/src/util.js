@@ -242,8 +242,16 @@ function buildFlightInfo(flightItem) {
         anotherLabeledProperty,
         squareFrame(0, 0, 100, 25, 2, 2, `${flightItem.arrival_city}`, {'class': 'svg-button', 'id': 'arrivalCityInfo'})
     ]);
+
     const flightDataDateContainer = document.getElementById('flightDataDate');
     appendChildren(flightDataDateContainer, [
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${flightItem.date}`, {'class': 'svg-button', 'id': 'dateInfo'}, "Flight date")
     ]);
+
+    const flightDataCapacityContainer = document.getElementById('flightCapacity');
+    flightDataDateContainer.getAttribute('id');
+    appendChildren(flightDataCapacityContainer, [
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${flightItem.available_seats}`, {'class': 'svg-button', 'id': 'capacityInfo'}, "Available Seats")
+    ]);
+
 }
