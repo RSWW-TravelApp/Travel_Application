@@ -10,7 +10,7 @@
   <script type="text/javascript" th:src="@{/js/src/util.js}"></script>
   <script type="text/javascript" th:src="@{/js/src/defaultObjects.js}"></script>
 </head>
-<body onload="fetchDestinations(); setFilterStartingValues(); disableNullFields(); createNotificationListener(); createRecentChangesButton(); createStatisticsButton()">
+<body onload="fetchDestinations(); setFilterStartingValues(); disableNullFields(); createNotificationListener(); createRecentChangesButton(); createStatisticsButton(); createReservationsButton()">
 <main>
   <div id="container">
     <div id="leftBarMenu" style="float:right">
@@ -18,6 +18,7 @@
       <ul style="list-style-type:none; position:relative; top:20px">
         <li><div id="recentChanges" style="float:right"></div></li>
         <li><div id="statistics" style="float:right"></div></li>
+        <li><div id="reservations" style="float:right"></div></li>
       </ul>
     </div>
     <div class="search_bar">
@@ -39,9 +40,9 @@
     <p id="flightsCounter"></p>
   </div>
   <style>
-      .svg-button:hover path{
-          fill: lightgray;
-      }
+    .svg-button:hover path{
+      fill: lightgray;
+    }
   </style>
 </main>
 </body>
