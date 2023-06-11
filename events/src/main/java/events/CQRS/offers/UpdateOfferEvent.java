@@ -1,5 +1,6 @@
 package events.CQRS.offers;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 public class UpdateOfferEvent{
@@ -20,7 +21,9 @@ public class UpdateOfferEvent{
     private final Double price;
     private final String available;
 
-    public UpdateOfferEvent(String id, String hotel_name, String image, String country, String city, Integer stars, String start_date, String end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, String available) {
+    private String TO_generated;
+
+    public UpdateOfferEvent(String id, String hotel_name, String image, String country, String city, Integer stars, String start_date, String end_date, String room_type, Integer max_adults, Integer max_children_to_3, Integer max_children_to_10, Integer max_children_to_18, String meals, Double price, String available){
         this.id = id;
         this.hotel_name = hotel_name;
         this.image = image;
@@ -37,10 +40,69 @@ public class UpdateOfferEvent{
         this.meals = meals;
         this.price = price;
         this.available = available;
+        this.TO_generated = "false";
+    }
+
+    public void setTO_generated(String TO_generated) {
+        this.TO_generated = TO_generated;
+    }
+
+    public HashMap<String, Object> getMap() {
+        return new HashMap<>() {{
+            if (getHotel_name().orElse(null) != null) {
+                put("hotel_name", getHotel_name());
+            }
+            if (getCity().orElse(null) != null) {
+                put("city", getCity());
+            }
+            if (getCountry().orElse(null) != null) {
+                put("country", getCountry());
+            }
+            if (getAvailable().orElse(null) != null) {
+                put("available", getAvailable());
+            }
+            if (getEnd_date().orElse(null) != null) {
+                put("end_date", getEnd_date());
+            }
+            if (getStart_date().orElse(null) != null) {
+                put("start_date", getStart_date());
+            }
+            if (getImage().orElse(null) != null) {
+                put("image", getImage());
+            }
+            if (getMax_adults().orElse(null) != null) {
+                put("max_adults", getMax_adults());
+            }
+            if (getMax_children_to_3().orElse(null) != null) {
+                put("max_children_to_3", getMax_children_to_3());
+            }
+            if (getMax_children_to_10().orElse(null) != null) {
+                put("max_children_to_10", getMax_children_to_10());
+            }
+            if (getMax_children_to_18().orElse(null) != null) {
+                put("max_children_to_18", getMax_children_to_18());
+            }
+            if (getMeals().orElse(null) != null) {
+                put("meals", getMeals());
+            }
+            if (getPrice().orElse(null) != null) {
+                put("price", getPrice());
+            }
+            if (getRoom_type().orElse(null) != null) {
+                put("room_type", getRoom_type());
+            }
+            if (getStars().orElse(null) != null) {
+                put("stars", getStars());
+            }
+        }};
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getTO_generated() {
+        return TO_generated;
     }
 
     public Optional<String> getHotel_name() {

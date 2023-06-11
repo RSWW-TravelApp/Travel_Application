@@ -45,6 +45,23 @@ public class OfferWebLayerHandler {
                 )
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
+    public Mono<ServerResponse> getHotelStats(ServerRequest request) {
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        Flux.fromIterable(offerService.getCurrentHotelsTop10Names()),
+                        String.class
+                );
+    }
+
+    public Mono<ServerResponse> getRoomStats(ServerRequest request) {
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        Flux.fromIterable(offerService.getCurrentRoomsTop10Names()),
+                        String.class
+                );
+    }
 
     public Mono<ServerResponse> createOffer(ServerRequest request) {
         Mono<Offer> offer = request.bodyToMono(Offer.class);
@@ -64,21 +81,21 @@ public class OfferWebLayerHandler {
 
         return updatedOffer
                 .flatMap(offer -> {
-                    String hotel_name = offer.getHotel_name().orElse(null);
-                    String image = offer.getImage().orElse(null);
-                    String country = offer.getCountry().orElse(null);
-                    String city = offer.getCity().orElse(null);
-                    Integer stars = offer.getStars().orElse(null);
-                    LocalDate start_date = offer.getStart_date().orElse(null);
-                    LocalDate end_date = offer.getEnd_date().orElse(null);
-                    String room_type = offer.getRoom_type().orElse(null);
-                    Integer max_adults = offer.getMax_adults().orElse(null);
-                    Integer max_children_to_3 = offer.getMax_children_to_3().orElse(null);
-                    Integer max_children_to_10 = offer.getMax_children_to_10().orElse(null);
-                    Integer max_children_to_18 = offer.getMax_children_to_18().orElse(null);
-                    String meals = offer.getMeals().orElse(null);
-                    Double price = offer.getPrice().orElse(null);
-                    Boolean available = offer.getAvailable().orElse(null);
+                    String hotel_name = offer.getHotel_name();
+                    String image = offer.getImage();
+                    String country = offer.getCountry();
+                    String city = offer.getCity();
+                    Integer stars = offer.getStars();
+                    LocalDate start_date = offer.getStart_date();
+                    LocalDate end_date = offer.getEnd_date();
+                    String room_type = offer.getRoom_type();
+                    Integer max_adults = offer.getMax_adults();
+                    Integer max_children_to_3 = offer.getMax_children_to_3();
+                    Integer max_children_to_10 = offer.getMax_children_to_10();
+                    Integer max_children_to_18 = offer.getMax_children_to_18();
+                    String meals = offer.getMeals();
+                    Double price = offer.getPrice();
+                    Boolean available = offer.getAvailable();
 
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)

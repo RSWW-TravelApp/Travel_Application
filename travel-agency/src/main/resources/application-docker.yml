@@ -11,7 +11,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: blockResources; unblockResources; createFlightCQRSHandle; createOfferCQRSHandle; deleteFlightCQRSHandle; deleteOfferCQRSHandle; updateFlightCQRSHandle; updateOfferCQRSHandle; cancelReservation
+        definition: blockResources; unblockResources; createFlightCQRSHandle; createOfferCQRSHandle; deleteFlightCQRSHandle; deleteOfferCQRSHandle; updateFlightCQRSHandle; updateOfferCQRSHandle; cancelReservation; modifyOffer; modifyFlight; notifyClient
       bindings:
         blockResources-in-0:
           destination: sage_block_resources
@@ -45,6 +45,15 @@ spring:
           group: 0
         updateOfferCQRSHandle-out-0:
           destination: cqrs_offers_update
+          group: 0
+        modifyOffer-in-0:
+          destination: to_offer_modifications
+          group: 0
+        modifyFlight-in-0:
+          destination: to_flight_modifications
+          group: 0
+        notifyClient-out-0:
+          destination: notify_client
           group: 0
 
   rabbitmq:

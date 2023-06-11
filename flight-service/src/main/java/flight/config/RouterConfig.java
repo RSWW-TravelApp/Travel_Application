@@ -21,7 +21,10 @@ public class RouterConfig {
     RouterFunction<ServerResponse> createFlight(FlightWebLayerHandler handler) {
         return route(POST("/flights"), handler::createFlight);
     }
-
+    @Bean
+    RouterFunction<ServerResponse> getStatsHotels(FlightWebLayerHandler handler) {
+        return route(GET("/statistics/flights/destinations"), handler::getDestinationStats);
+    }
     @Bean
     RouterFunction<ServerResponse> getFlightById(FlightWebLayerHandler handler) {
         return route(GET("/flights/{flightId}"), handler::getFlightById);

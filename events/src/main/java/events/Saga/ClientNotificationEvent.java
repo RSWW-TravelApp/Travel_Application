@@ -7,9 +7,9 @@ public class ClientNotificationEvent {
     private String userId;
     private String message;
     private String type;
-    private HashMap<String, String> properties;
+    private HashMap<String, Object> properties;
 
-    public ClientNotificationEvent(String userId, String message, String type, HashMap<String, String> properties) {
+    public ClientNotificationEvent(String userId, String message, String type, HashMap<String, Object> properties) {
         this.userId = userId;
         this.message = message;
         this.type = type;
@@ -43,11 +43,11 @@ public class ClientNotificationEvent {
         this.message = message;
     }
 
-    public Map<String, String> getProperties() {
+    public HashMap<String, Object> getProperties() {
         return properties;
     }
 
-    public void setProperties(HashMap<String, String> properties) {
+    public void setProperties(HashMap<String, Object> properties) {
         this.properties = properties;
     }
 }
