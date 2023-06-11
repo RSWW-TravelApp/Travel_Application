@@ -171,7 +171,7 @@ public class PurchaseStepsDefinitions {
 
     @Then("^User Purchase the Offer after 1 min and fail$")
     public void purchase_the_offer_after_min() throws Throwable {
-        Thread.sleep(60000);
+        TimeUnit.SECONDS.sleep(60);
         webDriver.findElement(By.cssSelector("button[onclick*='purchaseOffer(\\'success\\')']")).click();
         TimeUnit.SECONDS.sleep(2);
         Alert alert = webDriver.switchTo().alert();
