@@ -15,6 +15,7 @@ import reactor.core.publisher.Sinks;
 import travelagency.data.*;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -38,6 +39,7 @@ public class TravelAgencyEvent {
     @Bean
     public Function<Flux<UpdateOfferEvent>, Mono<Void>> modifyOffer() {
         return event -> event.flatMap(update -> {
+            String timestamp = java.time.LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).toString().replace("T", " ");
             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                     "",
                     "TO offer modification",
@@ -46,6 +48,7 @@ public class TravelAgencyEvent {
                         put("groups", new String[]{"all"});
                         put("offerId", update.getId());
                         put("changes", update.getMap());
+                        put("timestamp", timestamp);
                     }}
             ));
 
@@ -74,6 +77,7 @@ public class TravelAgencyEvent {
     @Bean
     public Function<Flux<UpdateFlightEvent>, Mono<Void>> modifyFlight() {
         return event -> event.flatMap(update -> {
+            String timestamp = java.time.LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).toString().replace("T", " ");
             sink_notify_client.tryEmitNext(new ClientNotificationEvent(
                     "",
                     "TO flight modification",
@@ -82,6 +86,7 @@ public class TravelAgencyEvent {
                         put("groups", new String[]{"all"});
                         put("flightId", update.getId());
                         put("changes", update.getMap());
+                        put("timestamp", timestamp);
                     }}
             ));
 
