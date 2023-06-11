@@ -26,7 +26,7 @@ async function createNotificationListener() {
                 updateOfferPostCard(properties);
             } else if (properties.flightId !== undefined) {
                 updateFlightInfo(properties);
-                showNotification("Picked flight offer\nhas been modified");
+                showNotification("Picked flight \nhas been modified");
             }
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {
@@ -46,7 +46,8 @@ async function fetchOffers(el) {
                     'id': item.offerId,
                     'country': item.country,
                     'city': item.city,
-                    'hotel_name': item.hotel_name
+                    'hotel_name': item.hotel_name,
+                    'price': item.price
                 });
                 const img = createElement('img',{
                    'src': item.image,
@@ -60,7 +61,7 @@ async function fetchOffers(el) {
                     'value': flightId,
                     'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
                 });
-                const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`${item.country}\n${item.city}\n${item.hotel_name}`, {'class': 'svg-button'});
+                const postCard = squareFrame(0, 0, 250, 100, 2, 2, txt=`${item.country}\n${item.city}\n${item.hotel_name}\n$${item.price.toFixed(2)}`, {'class': 'svg-button'});
 
                 appendChildren(button, [postCard,img]);
                 appendChildren(form, [button]);
