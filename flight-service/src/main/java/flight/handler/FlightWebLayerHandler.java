@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -70,8 +71,8 @@ public class FlightWebLayerHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                        Flux.fromIterable(flightService.getCurrentRoomsTop10Names()),
-                        String.class
+                        Mono.just(flightService.getCurrentRoomsTop10Names()),
+                        List.class
                 );
     }
     public Mono<ServerResponse> createFlight(ServerRequest request) {

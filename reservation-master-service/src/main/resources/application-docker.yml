@@ -15,7 +15,7 @@ spring:
           requireValidation-out-0:
             producer:
               autoBindDlq: true
-              ttl: 20000
+              ttl: 60000
               deadLetterExchange: delay-topic
               deadLetterQueueName: delay-topic.test
               deadLetterExchangeType: topic

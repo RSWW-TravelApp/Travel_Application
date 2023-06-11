@@ -78,11 +78,16 @@ async function fetchFlightDetails() {
   .catch(error => buildSelectedFlightInfo(defaultFlightItem));
 }
 
+function showAlert(message) {
+    alert(message);
+    document.getElementById('actionResult').textContent = message;
+}
+
 function validateSeatsInput(HtmlId) {
     const seatsInput = Number(document.getElementById(HtmlId).value);
     const seatsMax = Number(document.getElementById(HtmlId).getAttribute('max'));
     if (isNaN(seatsInput) || seatsInput > seatsMax) {
-        alert(`Seats for ${HtmlId} has wrong value or is greater than maximum: ${seatsMax}`);
+        showAlert(`Seats for ${HtmlId} has wrong value or is greater than maximum: ${seatsMax}`);
         return false;
     }
     return true;
@@ -106,14 +111,18 @@ async function reserveOffer() {
         }
     }
     const seatsNeeded = getSeatsNeeded();
-    const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
-    const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
+    if (seatsNeeded === 0) {
+        showAlert("You cannot reserve offer for 0 people");
+        return;
+    }
+    const availableSeats = Number(document.getElementById('flightCapacity').getElementsByTagName('tspan')[0].textContent)
+    const price = Number(document.getElementById('price-label').getElementsByTagName('tspan')[0].textContent)
     if (isNaN(availableSeats) || isNaN(price)) {
-        alert("Specified offer or flight does not exist");
+        showAlert("Specified offer or flight does not exist");
         return;
     }
     if (!userId) {
-        alert("Please log in to reserve")
+        showAlert("Please log in to reserve")
         return;
     }
     await fetch(getEffectiveGatewayUri() + '/reservations' + `?userId=${userId}&offerId=${offerId}&flightId=${flightId}&isReserved=true&isCancelled=false`,{method: "GET"})
@@ -121,14 +130,11 @@ async function reserveOffer() {
         .then(response => {
             if (response.length !== 0) {
                 if (response[0].isPaid === false) {
-                    alert("Your reservation is already active");
                     throw new Error("Your reservation is already active");
                 }
-                alert("You already purchased this offer");
                 throw new Error("You already purchased this offer");
             }
             if (seatsNeeded > availableSeats) {
-                alert("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
                 throw new Error("Specified offer configuration cannot be reserved cause there is lack of available seats in a plane");
             }
 
@@ -148,7 +154,7 @@ async function reserveOffer() {
         })
         .then(response => response.text())
         .then(response => { alert("Reservation is processing"); })
-        .catch(error => { document.getElementById('actionResult').textContent = error.message; });
+        .catch(error => showAlert(error.message));
 }
 
 async function purchaseOffer(status) {
@@ -161,14 +167,18 @@ async function purchaseOffer(status) {
         }
     }
     const seatsNeeded = getSeatsNeeded();
-    const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
-    const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
+    if (seatsNeeded === 0) {
+        showAlert("You cannot purchase offer for 0 people");
+        return;
+    }
+    const availableSeats = Number(document.getElementById('flightCapacity').getElementsByTagName('tspan')[0].textContent)
+    const price = Number(document.getElementById('price-label').getElementsByTagName('tspan')[0].textContent)
     if (isNaN(availableSeats) || isNaN(price)) {
-        alert("Specified offer or flight does not exist");
+        showAlert("Specified offer or flight does not exist");
         return;
     }
     if (!userId) {
-        alert("Please log in to purchase")
+        showAlert("Please log in to purchase")
         return;
     }
     await fetch(getEffectiveGatewayUri() + '/reservations' + `?userId=${userId}&offerId=${offerId}&flightId=${flightId}&isReserved=true&isCancelled=false`,{method: "GET"})
@@ -176,20 +186,17 @@ async function purchaseOffer(status) {
         .then(reservations => {
             if (reservations.length !== 0) {
                 if (reservations[0].isPaid === true) {
-                    alert("You already purchased this offer");
                     throw new Error("You already purchased this offer");
                 }
                 return fetch(getEffectiveGatewayUri() + `/pay?reservationId=${reservations[0].reservationId}`, {method: "GET"})
                     .then(payments => payments.json())
                     .then(payments => {
-                        console.log(payments)
                         return fetch(getEffectiveGatewayUri() + `/pay/${payments[0].paymentId}/${status}` , {
                             method: "PUT",
                             headers: {'Content-Type': 'application/json'}});
                     })
             }
             if (seatsNeeded > availableSeats) {
-                alert("Specified offer configuration cannot be purchased cause there is lack of available seats in a plane");
                 throw new Error("Specified offer configuration cannot be purchased cause there is lack of available seats in a plane");
             }
             // rezerwuje i place
@@ -209,5 +216,5 @@ async function purchaseOffer(status) {
         })
         .then(response => response.text())
         .then(response => { alert("Purchase is processing"); })
-        .catch(error => { document.getElementById('actionResult').textContent = error.message; });
+        .catch(error => showAlert(error.message));
 }
