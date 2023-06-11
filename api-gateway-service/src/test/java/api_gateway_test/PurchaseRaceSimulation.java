@@ -39,7 +39,7 @@ public class PurchaseRaceSimulation {
                     throw new RuntimeException("Either flight or offer wasn't available to purchase so the application ended.");
                 }
 
-                webDriver.quit();
+//                webDriver.quit();
             });
         }
         executorService.shutdown();
@@ -121,12 +121,17 @@ public class PurchaseRaceSimulation {
         TimeUnit.SECONDS.sleep(3);
         Alert alert = webDriver.switchTo().alert();
         alert.accept();
+        System.out.println(" Reservation success for " + username + "! ");
 
         // Purchase the offer
         webDriver.findElement(By.cssSelector("button[onclick*='purchaseOffer(\\'success\\')']")).click();
         TimeUnit.SECONDS.sleep(2);
         Alert alert2 = webDriver.switchTo().alert();
         alert2.accept();
+        System.out.println(" Purchase success! " + username + "! ");
+
+        TimeUnit.SECONDS.sleep(5);
+
     }
 
     public static void logSeleniumBrowserConsoleLogs(WebDriver webDriver) {
