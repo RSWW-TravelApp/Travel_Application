@@ -3,6 +3,9 @@ async function createReservationListener() {
         function(event) {
             const offerId = window.location.pathname.split("/").pop();
             const flightId = getSearchRequestParams(['flightId'])['flightId'];
+            if (event.properties['offerId'] === undefined || event.properties['offerId'] !== offerId) {
+                return;
+            }
             if (event.userId === sessionStorage.getItem("user")) {
                 document.getElementById('eventLogs').textContent += event.message + "\r\n";
                 document.getElementById('actionResult').textContent = event.message;
@@ -16,7 +19,6 @@ async function createReservationListener() {
                 updateFlightInfo(event.properties);
                 showNotification("Picked flight offer\nhas been modified");
             }
-            console.log(event.properties);
             console.log(`[${event.type}] ${event.message}`);},
         function(error) {
             console.log(error);
@@ -38,7 +40,7 @@ function buildOfferInfo(offerItem) {
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.max_children_to_18}`, {'class': 'svg-button', 'id': 'ppl18plusInfo'}, "People up to 18"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.room_type}`, {'class': 'svg-button', 'id': 'room_type'}, "Room type"),
         labeledSquareProperty(0, 0, 20 + offerItem.meals.length * 10, 25, 2, 2, `${offerItem.meals}`, {'class': 'svg-button', 'id': 'meals'}, "Meals"),
-        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.price}$`, {'class': 'svg-button', 'id': 'price'}, "Price"),
+        labeledSquareProperty(0, 0, 100, 25, 2, 2, `${Math.round(offerItem.price)}`, {'class': 'svg-button', 'id': 'price'}, "Price $"),
         labeledSquareProperty(0, 0, 100, 25, 2, 2, `${offerItem.available}`, {'class': 'svg-button', 'id': 'availability'}, "Availability")
     ])
 }
@@ -56,7 +58,17 @@ async function fetchOfferDetails() {
   const id = window.location.pathname.split("/").pop();
   await fetch(getEffectiveGatewayUri() + '/offers/' + id, {method: "GET"})
   .then(response => checkResponse(response))
-  .then(offerItem => buildOfferInfo(offerItem))
+  .then(offerItem => {
+      buildOfferInfo(offerItem);
+      const maxAdults = document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent;
+      const maxPplTo3 = document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent;
+      const maxPplTo10 = document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent;
+      const maxPplTo18 = document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent;
+      document.getElementById('adults').setAttribute('max', maxAdults);
+      document.getElementById('children_to_3').setAttribute('max', maxPplTo3);
+      document.getElementById('children_to_10').setAttribute('max', maxPplTo10);
+      document.getElementById('children_to_18').setAttribute('max', maxPplTo18);
+  })
   .catch(error => buildOfferInfo(defaultOfferItem));
 }
 
@@ -68,14 +80,34 @@ async function fetchFlightDetails() {
   .catch(error => buildSelectedFlightInfo(defaultFlightItem));
 }
 
+function validateSeatsInput(HtmlId) {
+    const seatsInput = Number(document.getElementById(HtmlId).value);
+    const seatsMax = Number(document.getElementById(HtmlId).getAttribute('max'));
+    if (isNaN(seatsInput) || seatsInput > seatsMax) {
+        alert(`Seats for ${HtmlId} has wrong value or is greater than maximum: ${seatsMax}`);
+        return false;
+    }
+    return true;
+}
+
+function getSeatsNeeded() {
+    let seatsNeeded = 0;
+    for (const id of ['adults', 'children_to_3', 'children_to_10', 'children_to_18']) {
+        seatsNeeded += Number(document.getElementById(id).value);
+    }
+    return seatsNeeded;
+}
+
 async function reserveOffer() {
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
     const userId = sessionStorage.getItem("user");
-    const seatsNeeded = Number(document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent) +
-                                Number(document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent) +
-                                Number(document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent) +
-                                Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent)
+    for (const id of ['adults', 'children_to_3', 'children_to_10', 'children_to_18']) {
+        if (!validateSeatsInput(id)) {
+            return
+        }
+    }
+    const seatsNeeded = getSeatsNeeded();
     const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
     const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
     if (isNaN(availableSeats) || isNaN(price)) {
@@ -125,10 +157,12 @@ async function purchaseOffer(status) {
     const offerId = window.location.pathname.split("/").pop();
     const flightId = getSearchRequestParams(['flightId'])['flightId'];
     const userId = sessionStorage.getItem("user");
-    const seatsNeeded = Number(document.getElementById('adultsInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl3plusInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl10plusInfo').getElementsByTagName('tspan')[0].textContent) +
-        Number(document.getElementById('ppl18plusInfo').getElementsByTagName('tspan')[0].textContent)
+    for (const id of ['adults', 'children_to_3', 'children_to_10', 'children_to_18']) {
+        if (!validateSeatsInput(id)) {
+            return
+        }
+    }
+    const seatsNeeded = getSeatsNeeded();
     const availableSeats = Number(document.getElementById('availableSeats').getElementsByTagName('tspan')[0].textContent)
     const price = Number(document.getElementById('price').getElementsByTagName('tspan')[0].textContent)
     if (isNaN(availableSeats) || isNaN(price)) {

@@ -67,7 +67,10 @@ public class ReservationMasterEvent {
                                     event.getUserId(),
                                     "Resource Blocking Successful",
                                     "unicast",
-                                    new HashMap<>() {}
+                                    new HashMap<>() {{
+                                        put("offerId", event.getOfferId());
+                                        put("flightId", event.getFlightId());
+                                    }}
                             ));
                         }
                 )
@@ -101,8 +104,10 @@ public class ReservationMasterEvent {
                                 event.getUser_id(),
                                 "Resources Unblocked", //TODO CAUSE OF FAIL
                                 "unicast",
-                                new HashMap<>() {
-                                }
+                                new HashMap<>() {{
+                                    put("offerId", event.getOfferId());
+                                    put("flightId", event.getFlight_id());
+                                }}
                         ));
                     }
                     else {
@@ -110,8 +115,10 @@ public class ReservationMasterEvent {
                                 event.getUser_id(),
                                 "Resource Blocking Unsuccessful", //TODO CAUSE OF FAIL
                                 "unicast",
-                                new HashMap<>() {
-                                }
+                                new HashMap<>() {{
+                                    put("offerId", event.getOfferId());
+                                    put("flightId", event.getFlight_id());
+                                }}
                         ));
                     }
                 })

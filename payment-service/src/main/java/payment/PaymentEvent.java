@@ -68,7 +68,10 @@ public class PaymentEvent {
                                         event.getUser_id(),
                                         "Purchase window Expired",
                                         "unicast",
-                                        new HashMap<>() {}
+                                        new HashMap<>() {{
+                                            put("offerId", event.getOfferId());
+                                            put("flightId", event.getFlight_id());
+                                        }}
                                 ));
                             })
                             .log("Checking Payment")
@@ -90,7 +93,10 @@ public class PaymentEvent {
                             a.getUserId(),
                             "Purchase Refunded!",
                             "unicast",
-                            new HashMap<>() {}
+                            new HashMap<>() {{
+                                put("offerId", a.getOfferId());
+                                put("flightId", a.getFlightId());
+                            }}
                     ));
                 })
                 .log("Refunding Payment")

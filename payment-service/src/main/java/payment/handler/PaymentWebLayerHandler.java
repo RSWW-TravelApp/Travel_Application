@@ -126,7 +126,10 @@ public class PaymentWebLayerHandler {
                                                 payment.getUserId(),
                                                 "Purchase failed",
                                                 "unicast",
-                                                new HashMap<>() {}
+                                                new HashMap<>() {{
+                                                    put("offerId", payment.getOfferId());
+                                                    put("flightId", payment.getFlightId());
+                                                }}
                                         ));
                                     })
                                     .flatMap(updatedPayment ->
@@ -157,7 +160,10 @@ public class PaymentWebLayerHandler {
                                                     payment.getUserId(),
                                                     "Purchase failed",
                                                     "unicast",
-                                                    new HashMap<>() {}
+                                                    new HashMap<>() {{
+                                                        put("offerId", payment.getOfferId());
+                                                        put("flightId", payment.getFlightId());
+                                                    }}
                                             ));
                                         })
                                         .flatMap(updatedPayment ->
@@ -214,7 +220,10 @@ public class PaymentWebLayerHandler {
                                         event.getUserId(),
                                         "Purchase failed",
                                         "unicast",
-                                        new HashMap<>() {}
+                                        new HashMap<>() {{
+                                            put("offerId", event.getOfferId());
+                                            put("flightId", event.getFlightId());
+                                        }}
                                 ));
                             }).subscribe();
                             return ServerResponse.status(HttpStatus.PAYMENT_REQUIRED)
@@ -252,7 +261,10 @@ public class PaymentWebLayerHandler {
                                             event.getUserId(),
                                             "Purchase failed",
                                             "unicast",
-                                            new HashMap<>() {}
+                                            new HashMap<>() {{
+                                                put("offerId", event.getOfferId());
+                                                put("flightId", event.getFlightId());
+                                            }}
                                     ));
                                 }).subscribe();
 

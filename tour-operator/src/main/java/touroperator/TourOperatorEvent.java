@@ -20,6 +20,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static java.lang.Math.ceil;
+
 @Component
 public class TourOperatorEvent {
     @Value("${path-to-offer-ids-file}")
@@ -118,7 +120,7 @@ public class TourOperatorEvent {
             }
 
             randomNumber = random.nextInt(101);
-            if(randomNumber<10) price = 2000 + (25000 - 2000) * random.nextDouble();
+            if(randomNumber<10) price = ceil(2000 + (25000 - 2000) * random.nextDouble());
             else price = null;
 
             randomNumber = random.nextInt(101);
