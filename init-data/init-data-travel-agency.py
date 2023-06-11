@@ -1,15 +1,8 @@
-import random
 from datetime import datetime
 
 import requests
 import json
 import csv
-from bson.objectid import ObjectId
-
-# TODO Add drop data from db on the beginning
-# TODO Change localhost to mongodb port on cluster (use tunnel)
-# TODO should this be executed only once or each time while starting application (in Dockerfile) ??
-
 
 def csv_to_json(csv_path, json_path, host, port, collection):
     url = f"http://{host}:{port}/{collection}"
@@ -20,16 +13,14 @@ def csv_to_json(csv_path, json_path, host, port, collection):
 
         for row in csvReader:
             if collection == 'flights':
-                row['flightId'] = str(ObjectId())
                 date_str = row['date']
                 date_obj = datetime.strptime(date_str, '%d/%m/%Y').date()
+
                 row['date'] = date_obj.strftime('%Y-%m-%d')
 
             elif collection == 'offers':
-                row['offerId'] = str(ObjectId())
                 date_str_start = row['start_date']
                 date_str_end = row['end_date']
-
                 date_obj_start = datetime.strptime(date_str_start, '%d/%m/%Y').date()
                 date_obj_send = datetime.strptime(date_str_end, '%d/%m/%Y').date()
 
@@ -50,13 +41,11 @@ def csv_to_json(csv_path, json_path, host, port, collection):
         json_file.write(jsonString)
 
 
-
 offers_csv_path = r'hoteleOfertyBaza.csv'
 offers_json_path = r'offers.json'
-csv_to_json(offers_csv_path, offers_json_path, "localhost", 8085, "offers")
+# csv_to_json(offers_csv_path, offers_json_path, "localhost", 8085, "offers")
 
 flights_csv_path = r'lotyOfertyBaza.csv'
 flights_json_path = r'flights.json'
-csv_to_json(flights_csv_path, flights_json_path, "localhost", 8085, "flights")
-
+# csv_to_json(flights_csv_path, flights_json_path, "localhost", 8085, "flights") # 5245 cluster 8085 local
 
