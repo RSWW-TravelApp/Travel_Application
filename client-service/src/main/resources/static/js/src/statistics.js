@@ -28,7 +28,7 @@ function getListEntry(item, place) {
     const listEntry = createElement('li', {"style": "color: transparent"});
     const base_length = 15;
     const additionalLength = item.length > base_length ? item.length - base_length : 0;
-    const postCard = squareFrame(0, 0, (base_length + additionalLength) * 10 , 30, 2, 2, `${place}. ${item}`,
+    const postCard = squareFrame(0, 0, (base_length + additionalLength) * 20 , 30, 2, 2, `${place}. ${item}`,
         {"class": "svg-button", "style": "fill: lightgray"});
     appendChildren(listEntry, [postCard])
     return listEntry;
