@@ -23,7 +23,7 @@ async function fetchReservations(el) {
                     'value': item.flightId,
                     'style': "color: transparent; background-color: transparent; border-color: transparent; cursor: default;"
                 });
-                const postCard = squareFrame(0, 0, 300, 100, 2, 2, txt = `Resrvation ID: ${item.reservationId}\nOffer ID: ${item.offerId}\nFlight ID: ${item.flightId}\nPaid: ${item.isPaid}\nCancelled: ${item.isCancelled}`, {'class': 'svg-button'});
+                const postCard = squareFrame(0, 0, 300, 100, 2, 2, txt = `Reservation ID: ${item.reservationId}\nOffer ID: ${item.offerId}\nFlight ID: ${item.flightId}\nPaid: ${item.isPaid}\nCancelled: ${item.isCancelled}`, {'class': 'svg-button'});
                 appendChildren(button, [postCard]);
                 appendChildren(form, [button]);
                 appendChildren(reservationItem, [form]);
