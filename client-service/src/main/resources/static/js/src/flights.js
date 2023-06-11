@@ -4,7 +4,7 @@ async function createNotificationListener() {
             const properties = event.properties;
             const changedFlightId = properties.flightId;
             const changedFlightPostCard = document.getElementById(changedFlightId);
-            if (!properties.groups.includes("all") || event.type !== "multicast" || properties.changes === undefined
+            if (properties.groups === undefined || !properties.groups.includes("all") || event.type !== "multicast" || properties.changes === undefined
                 || changedFlightPostCard === null || changedFlightId === null) {
                 return;
             }
