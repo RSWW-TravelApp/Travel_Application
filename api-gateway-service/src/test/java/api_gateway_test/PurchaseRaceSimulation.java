@@ -39,7 +39,6 @@ public class PurchaseRaceSimulation {
                     throw new RuntimeException("Either flight or offer wasn't available to purchase so the application ended.");
                 }
 
-//                webDriver.quit();
             });
         }
         executorService.shutdown();
@@ -59,14 +58,11 @@ public class PurchaseRaceSimulation {
             int webFlightsListLength = webFlightsList.size();
             System.out.println(webFlightsListLength + " flights found");
 
-
             if (webFlightsListLength > 0) {
                 int index = 1;
                 WebElement randomFlight = webFlightsList.get(index);
                 String flightId = randomFlight.getAttribute("value");
                 System.out.println("flightId: " + flightId);
-
-
 
                 TimeUnit.SECONDS.sleep(3);
                 webDriver.findElement(By.cssSelector("button[name='flightId'][value='" + flightId + "']")).click();
@@ -133,7 +129,6 @@ public class PurchaseRaceSimulation {
         System.out.println(" Purchase success! " + username + "! ");
 
         TimeUnit.SECONDS.sleep(5);
-
     }
 
     public static void logSeleniumBrowserConsoleLogs(WebDriver webDriver) {

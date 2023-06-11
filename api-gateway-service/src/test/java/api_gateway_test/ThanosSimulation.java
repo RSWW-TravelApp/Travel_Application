@@ -1,9 +1,5 @@
 package api_gateway_test;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -16,13 +12,11 @@ import org.openqa.selenium.logging.LogType;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ThanosSimulation {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\Paulina\\Desktop\\chrome_driver\\chromedriver.exe");
         String url = "http://localhost:10000/";
 
@@ -34,19 +28,23 @@ public class ThanosSimulation {
 
         for (int i = 1; i <= 100; i++) {
             try {
+                System.out.println("=========ROUND " + i + "=========");
                 chooseRandomFlightAndOffer(webDriver, url);
                 purchaseOffer(webDriver);
+                TimeUnit.SECONDS.sleep(1);
                 webDriver.findElement(By.xpath("//button[contains(text(), 'Go back')]")).click();
                 webDriver.findElement(By.xpath("//button[contains(text(), 'Go back')]")).click();
+
             } catch (InterruptedException e) {
                 System.out.println("Either flight or offer wasn't available to purchase.");
             }
         }
+        System.out.println("=========TEST ENDED SUCCESSFULLY=========");
+        TimeUnit.SECONDS.sleep(2);
         webDriver.quit();
     }
 
     public static void chooseRandomFlightAndOffer(WebDriver webDriver, String url) throws InterruptedException {
-//        webDriver.get(url);
         TimeUnit.SECONDS.sleep(2);
 
         while (true) {
@@ -62,7 +60,7 @@ public class ThanosSimulation {
                 String flightId = randomFlight.getAttribute("value");
                 System.out.println("flightId: " + flightId);
 
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(3);
                 webDriver.findElement(By.cssSelector("button[name='flightId'][value='" + flightId + "']")).click();
                 logSeleniumBrowserConsoleLogs(webDriver);
 
@@ -91,9 +89,6 @@ public class ThanosSimulation {
             } else {
                 TimeUnit.SECONDS.sleep(2);
                 System.out.println("No flights available for these parameters " + webFlightsListLength);
-//                TimeUnit.SECONDS.sleep(3);
-//                webDriver.close();
-//                return;
             }
         }
     }
@@ -136,9 +131,6 @@ public class ThanosSimulation {
             System.out.println("OUR Log: " + entry.getLevel() + " " + entry.getMessage());
         }
     }
-
-
-
 
 
 }
