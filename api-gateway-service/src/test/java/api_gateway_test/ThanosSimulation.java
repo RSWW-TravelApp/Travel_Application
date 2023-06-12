@@ -29,10 +29,10 @@ public class ThanosSimulation {
         for (int i = 1; i <= 100; i++) {
             try {
                 System.out.println("=========ROUND " + i + "=========");
-                chooseRandomFlightAndOffer(webDriver, url);
+                chooseRandomFlightAndOffer(webDriver);
                 purchaseOffer(webDriver);
                 TimeUnit.SECONDS.sleep(1);
-                webDriver.findElement(By.xpath("//button[contains(text(), 'Go back')]")).click();
+                webDriver.findElement(By.xpath("//button[contains(text(), 'Go Back')]")).click();
                 webDriver.findElement(By.xpath("//button[contains(text(), 'Go back')]")).click();
 
             } catch (InterruptedException e) {
@@ -44,7 +44,7 @@ public class ThanosSimulation {
         webDriver.quit();
     }
 
-    public static void chooseRandomFlightAndOffer(WebDriver webDriver, String url) throws InterruptedException {
+    public static void chooseRandomFlightAndOffer(WebDriver webDriver) throws InterruptedException {
         TimeUnit.SECONDS.sleep(2);
 
         while (true) {
@@ -97,19 +97,16 @@ public class ThanosSimulation {
         webDriver.get(url);
         webDriver.findElement(By.id("loginInfo")).click();
 
-        // Register the User
+        // Register and Login the User
         webDriver.findElement(By.id("login")).sendKeys(username);
         webDriver.findElement(By.id("password")).sendKeys(password);
         webDriver.findElement(By.cssSelector("button[onclick*='registerUser()']")).click();
 
-        // Login
-        webDriver.findElement(By.id("login")).sendKeys(username);
-        webDriver.findElement(By.id("password")).sendKeys(password);
         webDriver.findElement(By.cssSelector("button[onclick*='loginUser()']")).click();
     }
 
     public static void purchaseOffer(WebDriver webDriver) throws InterruptedException {
-
+        TimeUnit.SECONDS.sleep(2);
         // Reserve the offer
         webDriver.findElement(By.cssSelector("button[onclick*='reserveOffer()']")).click();
         TimeUnit.SECONDS.sleep(3);
@@ -122,7 +119,7 @@ public class ThanosSimulation {
         Alert alert2 = webDriver.switchTo().alert();
         alert2.accept();
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
     }
 
     public static void logSeleniumBrowserConsoleLogs(WebDriver webDriver) {

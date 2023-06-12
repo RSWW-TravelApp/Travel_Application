@@ -38,7 +38,7 @@ public class PurchaseRaceSimulation {
                 } catch (InterruptedException e) {
                     throw new RuntimeException("Either flight or offer wasn't available to purchase so the application ended.");
                 }
-
+                System.out.println("=========TEST ENDED SUCCESSFULLY FOR " + username + "=========");
             });
         }
         executorService.shutdown();
@@ -52,15 +52,16 @@ public class PurchaseRaceSimulation {
          */
         webDriver.get(url);
         TimeUnit.SECONDS.sleep(3);
+        int index_flights = 0;
 
         while(true) {
+            int index_offers = 0;
             List<WebElement> webFlightsList = webDriver.findElements(By.xpath("//button[@name='flightId']"));
             int webFlightsListLength = webFlightsList.size();
             System.out.println(webFlightsListLength + " flights found");
 
             if (webFlightsListLength > 0) {
-                int index = 1;
-                WebElement randomFlight = webFlightsList.get(index);
+                WebElement randomFlight = webFlightsList.get(index_flights);
                 String flightId = randomFlight.getAttribute("value");
                 System.out.println("flightId: " + flightId);
 
@@ -74,7 +75,7 @@ public class PurchaseRaceSimulation {
                 System.out.println(webOffersListLength + " offers found");
 
                 if (webOffersListLength > 0) {
-                    WebElement randomOffer = webOffersList.get(index);
+                    WebElement randomOffer = webOffersList.get(index_offers);
 
                     String offerId = randomOffer.getAttribute("value");
                     System.out.println("offerId: " + offerId);
@@ -86,13 +87,13 @@ public class PurchaseRaceSimulation {
                     System.out.println("No offers available for these parameters " + webOffersListLength);
                     webDriver.findElement(By.xpath("//button[contains(text(), 'Go back')]")).click();
                     logSeleniumBrowserConsoleLogs(webDriver);
+                    index_flights++;
                 }
 
             } else {
                 System.out.println("No flights available for these parameters " + webFlightsListLength);
-                TimeUnit.SECONDS.sleep(3);
+                TimeUnit.SECONDS.sleep(4);
                 webDriver.close();
-                return;
             }
         } // while
     }
@@ -100,14 +101,11 @@ public class PurchaseRaceSimulation {
     public static void performLogin(WebDriver webDriver, String username, String password) {
         webDriver.findElement(By.id("loginInfo")).click();
 
-        // Register the User
+        // Register and Login the User
         webDriver.findElement(By.id("login")).sendKeys(username);
         webDriver.findElement(By.id("password")).sendKeys(password);
         webDriver.findElement(By.cssSelector("button[onclick*='registerUser()']")).click();
 
-        // Login
-        webDriver.findElement(By.id("login")).sendKeys(username);
-        webDriver.findElement(By.id("password")).sendKeys(password);
         webDriver.findElement(By.cssSelector("button[onclick*='loginUser()']")).click();
     }
 
@@ -115,8 +113,9 @@ public class PurchaseRaceSimulation {
         performLogin(webDriver, username, password);
 
         // Reserve the offer
+        TimeUnit.SECONDS.sleep(2);
         webDriver.findElement(By.cssSelector("button[onclick*='reserveOffer()']")).click();
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
         Alert alert = webDriver.switchTo().alert();
         alert.accept();
         System.out.println(" Reservation success for " + username + "! ");
@@ -128,7 +127,7 @@ public class PurchaseRaceSimulation {
         alert2.accept();
         System.out.println(" Purchase success! " + username + "! ");
 
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(2);
     }
 
     public static void logSeleniumBrowserConsoleLogs(WebDriver webDriver) {
