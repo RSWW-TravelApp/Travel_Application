@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="All services" type="CompoundRunConfigurationType">
+    <toRun name="ApiGateway" type="Application" />
+    <toRun name="Client" type="Application" />
+    <toRun name="DiscoveryServer" type="Application" />
+    <toRun name="FlightService" type="Application" />
+    <toRun name="OfferService" type="Application" />
+    <toRun name="PaymentService" type="Application" />
+    <toRun name="ReservationMasterService" type="Application" />
+    <toRun name="ReservationService" type="Application" />
+    <toRun name="Tour Operator" type="Application" />
+    <toRun name="TravelAgency" type="Application" />
+    <method v="2" />
+  </configuration>
+</component>
