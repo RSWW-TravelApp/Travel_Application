@@ -11,6 +11,7 @@
 - Mongodb Server
 - Mongo Shell
 - RabbitMQ
+- Java JDK 17
 - Docker
 - Docker compose plugin
 - python3
